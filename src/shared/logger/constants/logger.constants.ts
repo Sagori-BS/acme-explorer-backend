@@ -1,0 +1,1 @@
+export const LOGGER_OPTIONS_TOKEN = 'LOGGER_OPTIONS';
