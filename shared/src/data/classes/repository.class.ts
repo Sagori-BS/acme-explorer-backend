@@ -3,9 +3,8 @@ import { LoggerService } from '@shared/logger/logger.service';
 import {
   getEntitiesLog,
   createEntityLog,
-  getOneEntityLogMessageFormatter,
+  getOneEntityLogMessageFormatter
 } from '@shared/functions/log-message-builder';
-import { FilterInput } from '@user/graphql/inputs/graphql-filter.input';
 import { updateEntities } from '@shared/functions/update-entities';
 import { BaseRepositoryType } from '../interfaces/base-repository-type.interface';
 import { slugConfigType } from '../types/slugConfig.type';
@@ -13,8 +12,9 @@ import { validateAndGenerateSlug } from '@shared/functions/validate-and-generate
 import { EntityNotFoundError } from '@shared/errors/common/entity-not-found.error';
 import { ClientSession, Error as MongooseErrors } from 'mongoose';
 import { InvalidUserInputError } from '@shared/errors/common/invalid-user-input.error';
-import { mongooseQueryBuilder } from '@user/graphql/advanced-filter/mongo/mongoose-query-builder';
 import { DuplicateKeyError } from '@shared/errors/common/duplicate-key.error';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { mongooseQueryBuilder } from '@shared/graphql/advanced-filter/mongo/mongoose-query-builder';
 
 @Injectable()
 export abstract class Repository<T extends BaseRepositoryType> {
@@ -25,12 +25,12 @@ export abstract class Repository<T extends BaseRepositoryType> {
     protected entityName: string,
     public readonly slugConfig: slugConfigType = {
       keys: ['name'],
-      isUnique: false,
-    },
+      isUnique: false
+    }
   ) {}
 
   private async _getOneEntity(
-    getOneEntityInput: Record<string, any>,
+    getOneEntityInput: Record<string, any>
   ): Promise<T['entity']> {
     let query = this.entityModel.findOne(getOneEntityInput);
 
@@ -48,11 +48,11 @@ export abstract class Repository<T extends BaseRepositoryType> {
   }
 
   public async getOneEntity(
-    getOneEntityInput: Record<string, any>,
+    getOneEntityInput: Record<string, any>
   ): Promise<T['entity']> {
     try {
       this._logger.log(
-        getOneEntityLogMessageFormatter(this.entityName, getOneEntityInput),
+        getOneEntityLogMessageFormatter(this.entityName, getOneEntityInput)
       );
       const entity = await this._getOneEntity(getOneEntityInput);
       return entity;
@@ -63,7 +63,7 @@ export abstract class Repository<T extends BaseRepositoryType> {
   }
 
   public async getAllEntities(
-    filterInput: FilterInput,
+    filterInput: FilterInput
   ): Promise<T['entity'][]> {
     try {
       this._logger.log(getEntitiesLog(this.entityName, filterInput));
@@ -76,7 +76,7 @@ export abstract class Repository<T extends BaseRepositoryType> {
 
       const result: T['entity'][] = await mongooseQueryBuilder(
         query,
-        filterInput,
+        filterInput
       );
 
       return result;
@@ -88,7 +88,7 @@ export abstract class Repository<T extends BaseRepositoryType> {
 
   public async createEntity(
     createEntityInput: T['createEntityInput'],
-    session?: ClientSession,
+    session?: ClientSession
   ): Promise<T['entity']> {
     try {
       this._logger.log(createEntityLog(this.entityName, createEntityInput));
@@ -96,14 +96,14 @@ export abstract class Repository<T extends BaseRepositoryType> {
       const slug = validateAndGenerateSlug(
         this.entityModel,
         this.slugConfig,
-        createEntityInput,
+        createEntityInput
       );
 
       const result = new this.entityModel({
         ...createEntityInput,
         slug,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       });
 
       if (session) return await result.save({ session });
@@ -129,10 +129,9 @@ export abstract class Repository<T extends BaseRepositoryType> {
     }
   }
 
-  //TODO: Fix version field on where (decrease 1) and calling _getOneEntity after save
   public async updateEntity(
     updateEntityInput: T['updateEntityInput'],
-    session?: ClientSession,
+    session?: ClientSession
   ): Promise<T['entity']> {
     try {
       const { data, where } = updateEntityInput;
@@ -146,7 +145,7 @@ export abstract class Repository<T extends BaseRepositoryType> {
           updateEntity['slug'] = validateAndGenerateSlug(
             this.entityModel,
             this.slugConfig,
-            data,
+            data
           );
         }
       }
@@ -164,7 +163,7 @@ export abstract class Repository<T extends BaseRepositoryType> {
       // As the version number changes after the update, the entity couldn't be found
       // if the filter had the version field
       const getUpdatedEntityInput: Record<string, any> = {
-        ...where,
+        ...where
       };
 
       delete getUpdatedEntityInput.version;
@@ -199,12 +198,12 @@ export abstract class Repository<T extends BaseRepositoryType> {
 
   public async deleteEntity(
     deleteEntityInput: Record<string, any>,
-    session?: ClientSession,
+    session?: ClientSession
   ): Promise<T['entity']> {
     try {
       const deleteEntity = {
         deleted: true,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       const result = await this._getOneEntity(deleteEntityInput);

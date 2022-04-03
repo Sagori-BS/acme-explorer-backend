@@ -1,5 +1,5 @@
-import { FilterInput } from '@user/graphql/inputs/graphql-filter.input';
 import { Injectable } from '@nestjs/common';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { BaseServiceType } from '../interfaces/base-service-type.interface';
 
 @Injectable()
@@ -7,14 +7,14 @@ export abstract class Service<T extends BaseServiceType> {
   constructor(private readonly entityRepository: T['entityRepository']) {}
 
   public async getOneEntity(
-    getOneEntityInput: Record<string, any>,
+    getOneEntityInput: Record<string, any>
   ): Promise<T['entity']> {
     getOneEntityInput = { ...getOneEntityInput, deleted: false };
     return this.entityRepository.getOneEntity(getOneEntityInput);
   }
 
   public async getAllEntities(
-    filterInput: FilterInput,
+    filterInput: FilterInput
   ): Promise<T['entity'][]> {
     return this.entityRepository.getAllEntities(filterInput);
   }
@@ -26,13 +26,13 @@ export abstract class Service<T extends BaseServiceType> {
   }
 
   public async createEntity(
-    createEntityInput: T['createEntityInput'],
+    createEntityInput: T['createEntityInput']
   ): Promise<T['entity']> {
     return this.entityRepository.createEntity(createEntityInput);
   }
 
   public async updateEntity(
-    updateEntityInput: T['updateEntityInput'],
+    updateEntityInput: T['updateEntityInput']
   ): Promise<T['entity']> {
     updateEntityInput.where = { ...updateEntityInput.where, deleted: false };
 
@@ -42,7 +42,7 @@ export abstract class Service<T extends BaseServiceType> {
   }
 
   public async deleteEntity(
-    getOneEntityInput: Record<string, any>,
+    getOneEntityInput: Record<string, any>
   ): Promise<T['entity']> {
     getOneEntityInput = { ...getOneEntityInput, deleted: false };
 
