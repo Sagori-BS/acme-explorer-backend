@@ -117,9 +117,11 @@ export class AuthService {
     token: string
   ): Promise<{
     name: string;
+    lastName: string;
     email: string;
     password?: string;
     profilePicture?: string;
+    address?: string;
     socialProvider?: AuthProviders;
   }> {
     try {
@@ -127,13 +129,16 @@ export class AuthService {
         token
       );
 
-      const name = decodedToken.name as string;
+      const userFullName = (decodedToken.name as string).split(' ');
+      const name = userFullName.shift();
+      const lastName = userFullName.join(' ');
       const profilePicture = decodedToken.picture;
       const email = decodedToken.email;
       const socialProvider = decodedToken.firebase.sign_in_provider;
 
       const ret = {
         name,
+        lastName,
         email,
         profilePicture,
         socialProvider: getAuthProvider(socialProvider),

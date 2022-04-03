@@ -105,6 +105,7 @@ describe(`${entityName}Service`, () => {
       //Arrange
       const createUserInput: CreateUserInput = {
         name: faker.name.firstName(),
+        lastName: faker.name.lastName(),
         password: faker.internet.password(),
         role: UserRoles.EXPLORER,
         email: faker.internet.email(),
@@ -121,16 +122,21 @@ describe(`${entityName}Service`, () => {
     });
 
     it('should call the send method of the client class', async () => {
+      // Arrange
       const input: CreateUserInput = {
-        name: 'Test',
+        name: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        password: faker.internet.password(),
         role: UserRoles.EXPLORER,
-        password: '1234567890',
-        email: 'test@test.com',
+        email: faker.internet.email(),
         socialProvider: AuthProviders.Local,
         authType: AuthType.PASSWORD
       };
 
+      // Act
       await userService.createEntity(input);
+
+      // Assert
       expect(pubSubClient.send).toHaveBeenCalled();
     });
   });

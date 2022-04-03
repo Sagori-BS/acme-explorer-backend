@@ -12,12 +12,13 @@ import { loggerService } from '@shared/logger/mock/logger.service';
 import { EntityNotFoundError } from '@shared/errors/common/entity-not-found.error';
 import { CreateUserInput } from '../graphql/inputs/create-user.input';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
+import * as faker from 'faker';
 
 const entityName = User.name;
 
 describe(`${entityName}Repository`, () => {
   let userRepository: UserRepository;
-  let userModel: Model<User>;
+  let entityModel: Model<User>;
 
   const credentialService = {
     createCredential: jest.fn()
@@ -42,15 +43,17 @@ describe(`${entityName}Repository`, () => {
   };
 
   const createUser = async (email: string) => {
-    const entity = new userModel({
-      name: 'John',
+    const entity = new entityModel({
+      name: faker.lorem.word(5),
+      lastName: faker.lorem.word(5),
       email,
       socialProvider: AuthProviders.Local,
       authType: AuthType.PASSWORD,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     });
-    return await entity.save();
+
+    return entity.save();
   };
 
   beforeAll(async () => {
@@ -86,17 +89,22 @@ describe(`${entityName}Repository`, () => {
     }).compile();
 
     userRepository = testModule.get<UserRepository>(UserRepository);
-    userModel = testModule.get<Model<User>>(getModelToken(User.name));
+    entityModel = testModule.get<Model<User>>(getModelToken(User.name));
   });
 
   afterEach(async () => {
-    userModel.deleteMany({});
+    await entityModel.deleteMany({});
   });
 
   describe(`getOne${entityName}`, () => {
     it('should return the entity if the given id match an existing user entity', async () => {
+      // Arrange
       const user = await createUser('test@test.com');
+
+      // Act
       const result = await userRepository.getOneEntity({ id: user.id });
+
+      // Assert
       expect(result.id).toEqual(user.id);
     });
 
@@ -120,12 +128,15 @@ describe(`${entityName}Repository`, () => {
     });
 
     it(`should return an array with one element if there is one ${entityName} entity stored in the database`, async () => {
+      // Arrange
       const entity = await createUser('test@test2.com');
 
+      // Act
       const result = await userRepository.getAllEntities({
         where: { id: entity.id }
       });
 
+      // Assert
       expect(result.length).toEqual(1);
       expect(result[0].id).toEqual(entity.id);
     });
@@ -133,38 +144,51 @@ describe(`${entityName}Repository`, () => {
 
   describe(`delete${entityName}`, () => {
     it(`should throw an error if an id of a non-existing ${entityName} entity is provided`, async () => {
+      // Arrange
       const id = new Types.ObjectId().toHexString();
+
+      // Act
       const result = userRepository.deleteEntity({ id });
 
+      // Assert
       await expect(result).rejects.toThrow(EntityNotFoundError);
     });
 
     it(`should mark as deleted the ${entityName} entity that match with the given id`, async () => {
+      // Arrange
       const entity = await createUser('test@test3.com');
+
+      // Act
       const result = await userRepository.deleteEntity({
         id: entity.id
       });
 
+      // Assert
       expect(result.deleted).toBe(true);
     });
   });
 
   describe(`create${entityName}`, () => {
     it(`should create an ${entityName} entity given a valid input`, async () => {
+      // Arrange
       const createEntityInput: CreateUserInput = {
-        email: 'test@test4.com',
-        name: 'test',
-        password: 'test',
+        email: faker.internet.email().toLowerCase(),
+        name: faker.lorem.word(6),
+        lastName: faker.lorem.word(5),
+        password: faker.lorem.word(8),
         socialProvider: AuthProviders.Local,
         authType: AuthType.PASSWORD,
         role: UserRoles.EXPLORER
       };
+
+      // Act
       const result = await userRepository.createEntity(createEntityInput);
 
       const expectedValue = {
         ...result.toObject()
       };
 
+      // Assert
       expect(expectedValue).toMatchObject(createEntityInput);
       expect(credentialService.createCredential).toHaveBeenCalled();
     });
@@ -172,6 +196,7 @@ describe(`${entityName}Repository`, () => {
 
   describe(`update${entityName}`, () => {
     it(`should throw an error if an id of a not existing ${entityName} entity is provided`, async () => {
+      // Arrange
       const id = new Types.ObjectId().toHexString();
       const input = { name: 'test2' };
 
@@ -179,11 +204,16 @@ describe(`${entityName}Repository`, () => {
         where: { id },
         data: input
       };
+
+      // Act
       const result = userRepository.updateEntity(updateEntityInput);
+
+      // Assert
       await expect(result).rejects.toThrow(EntityNotFoundError);
     });
 
     it(`should update the ${entityName} entity that match the given id, if valid fields are provided`, async () => {
+      // Arrange
       const entity = await createUser('test@test34.com');
 
       const input = { name: 'test2' };
@@ -193,8 +223,10 @@ describe(`${entityName}Repository`, () => {
         data: input
       };
 
+      // Act
       const result = await userRepository.updateEntity(updateEntityInput);
 
+      // Assert
       expect(entity).not.toMatchObject(input);
       expect(result).toMatchObject(input);
     });

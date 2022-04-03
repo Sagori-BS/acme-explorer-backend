@@ -121,6 +121,8 @@
     "moduleNameMapper": {
       "@shared/(.*)": "<rootDir>/shared/src/$1",
       "@shared": "<rootDir>/shared/src",
+      "@common/common/(.*)": "<rootDir>/shared/src/$1",
+      "@common/common": "<rootDir>/shared/src",
       "@user/(.*)": "<rootDir>/apps/user/src/$1",
       "@user/": "<rootDir>/apps/user/src/",
       "@notification/(.*)": "<rootDir>/apps/notification/src/$1",
