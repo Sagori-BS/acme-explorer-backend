@@ -9,9 +9,9 @@ describe('HttpExceptionHandler', () => {
   const host: any = {
     switchToHttp: () => ({
       getResponse: () => ({
-        status,
-      }),
-    }),
+        status
+      })
+    })
   };
 
   let httpExceptionHandler: HttpExceptionHandler;
@@ -61,6 +61,4 @@ describe('HttpExceptionHandler', () => {
 
     expect(result).toEqual({ ...expectedError });
   });
-
-  it.todo('should send a response using the provided error code');
 });

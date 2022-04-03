@@ -4,7 +4,7 @@ const reflector = {
   get: jest.fn(),
   getAll: jest.fn(),
   getAllAndMerge: jest.fn(),
-  getAllAndOverride: jest.fn(),
+  getAllAndOverride: jest.fn()
 };
 
 const getRequest = jest.fn();
@@ -14,8 +14,8 @@ const context: any = {
   getClass: jest.fn(),
   getHandler: jest.fn(),
   switchToHttp: () => ({
-    getRequest,
-  }),
+    getRequest
+  })
 };
 
 const jwtAuthGuard = new JwtAuthGuard(reflector);
@@ -30,8 +30,4 @@ describe('JwtAuthGuard', () => {
       expect(result).toBe(true);
     });
   });
-
-  it.todo(
-    'should call the canActivate method of the super class if the isPublic metadata is set to false',
-  );
 });
