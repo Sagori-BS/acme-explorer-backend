@@ -5,18 +5,18 @@ import { IGetEmailTemplate } from '../../interfaces/get-email-template.interface
 import { verifyEmailTemplate } from '../../templates/verify-email.template';
 
 export const getConfirmEmailTemplate = (
-  confirmUserAccountPayload: ConfirmUserAccountPayload,
+  confirmUserAccountPayload: ConfirmUserAccountPayload
 ): IGetEmailTemplate => {
   confirmUserAccountPayload.url = generateLink(
     confirmUserAccountPayload.url,
-    EmailTypes.CONFIRM_ACCOUNT,
+    EmailTypes.CONFIRM_ACCOUNT
   );
 
-  const emailTitle = `NFTS Confirm your email!!`;
+  const emailTitle = `Acme Explorer Confirm your email!!`;
   const emailTemplate = verifyEmailTemplate(confirmUserAccountPayload);
 
   return {
     emailTitle,
-    emailTemplate,
+    emailTemplate
   };
 };

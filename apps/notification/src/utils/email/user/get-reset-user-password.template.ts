@@ -12,7 +12,7 @@ export const getResetUserPasswordTemplate = (
     EmailTypes.RESET_PASSWORD,
   );
 
-  const emailTitle = `NFTS reset your password!!`;
+  const emailTitle = `Acme Explorer reset your password!!`;
   const emailTemplate = resetPasswordTemplate(resetUserPasswordPayload);
 
   return {

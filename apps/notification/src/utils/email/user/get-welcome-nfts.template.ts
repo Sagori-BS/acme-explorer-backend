@@ -3,14 +3,14 @@ import { IGetEmailTemplate } from '../../interfaces/get-email-template.interface
 import { welcomeMessageTemplate } from '../../templates/welcome-message.template';
 
 export const getWelcomeNFTSMarketTemplate = (
-  welcomeUserPayload: WelcomeUserPayload,
+  welcomeUserPayload: WelcomeUserPayload
 ): IGetEmailTemplate => {
   const { name } = welcomeUserPayload;
-  const emailTitle = `Welcome to NFTS Market!! ${name}`;
+  const emailTitle = `Welcome to Acme Explorer!! ${name}`;
   const emailTemplate = welcomeMessageTemplate(welcomeUserPayload);
 
   return {
     emailTitle,
-    emailTemplate,
+    emailTemplate
   };
 };
