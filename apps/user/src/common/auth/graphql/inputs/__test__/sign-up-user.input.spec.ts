@@ -4,8 +4,9 @@ import * as faker from 'faker';
 const signUpUserInput: SignUpUserInput = {
   name: faker.name.firstName(),
   email: faker.internet.email(),
+  lastName: faker.name.lastName(),
   password: faker.internet.password(),
-  profilePicture: faker.internet.url(),
+  profilePicture: faker.internet.url()
 };
 
 describe('SignUpUserInput', () => {
@@ -16,11 +17,11 @@ describe('SignUpUserInput', () => {
   });
 
   describe('SignUpUserInput invalid inputs', () => {
-    describe('name field errors', () => {
+    describe('name', () => {
       it('should return error when name is undefined', () => {
         const input = {
           ...signUpUserInput,
-          name: undefined,
+          name: undefined
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -34,7 +35,7 @@ describe('SignUpUserInput', () => {
       it('should return error when name is null', () => {
         const input = {
           ...signUpUserInput,
-          name: null,
+          name: null
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -48,7 +49,7 @@ describe('SignUpUserInput', () => {
       it('should return error when name is invalid', () => {
         const input = {
           ...signUpUserInput,
-          name: faker.datatype.string(300),
+          name: faker.datatype.string(300)
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -60,11 +61,52 @@ describe('SignUpUserInput', () => {
       });
     });
 
-    describe('email field errors', () => {
+    describe('lastName', () => {
+      it('should return error when lastName is undefined', () => {
+        const input = {
+          ...signUpUserInput,
+          lastName: undefined
+        };
+
+        const result = SignUpUserInput.validationSchema.validate(input);
+
+        expect(result.error).toBeDefined();
+        expect(result.error.isJoi).toBeTruthy();
+        expect(result.error.message).toContain(`lastName`);
+      });
+
+      it('should return error when lastName is null', () => {
+        const input = {
+          ...signUpUserInput,
+          lastName: null
+        };
+
+        const result = SignUpUserInput.validationSchema.validate(input);
+
+        expect(result.error).toBeDefined();
+        expect(result.error.isJoi).toBeTruthy();
+        expect(result.error.message).toContain(`lastName`);
+      });
+
+      it('should return error when lastName is invalid', () => {
+        const input = {
+          ...signUpUserInput,
+          lastName: faker.datatype.string(300)
+        };
+
+        const result = SignUpUserInput.validationSchema.validate(input);
+
+        expect(result.error).toBeDefined();
+        expect(result.error.isJoi).toBeTruthy();
+        expect(result.error.message).toContain(`lastName`);
+      });
+    });
+
+    describe('email', () => {
       it('should return error when email is undefined', () => {
         const input = {
           ...signUpUserInput,
-          email: undefined,
+          email: undefined
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -78,7 +120,7 @@ describe('SignUpUserInput', () => {
       it('should return error when email is null', () => {
         const input = {
           ...signUpUserInput,
-          email: null,
+          email: null
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -92,7 +134,7 @@ describe('SignUpUserInput', () => {
       it('should return error when email is invalid', () => {
         const input = {
           ...signUpUserInput,
-          email: 'missingdotcom@test',
+          email: 'missingdotcom@test'
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -104,11 +146,11 @@ describe('SignUpUserInput', () => {
       });
     });
 
-    describe('password field errors', () => {
+    describe('password', () => {
       it('should return error when password is undefined', () => {
         const input = {
           ...signUpUserInput,
-          password: undefined,
+          password: undefined
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -122,7 +164,7 @@ describe('SignUpUserInput', () => {
       it('should return error when password is null', () => {
         const input = {
           ...signUpUserInput,
-          password: null,
+          password: null
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -136,7 +178,7 @@ describe('SignUpUserInput', () => {
       it('should return error when password is invalid', () => {
         const input = {
           ...signUpUserInput,
-          password: faker.datatype.string(300),
+          password: faker.datatype.string(300)
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -148,11 +190,11 @@ describe('SignUpUserInput', () => {
       });
     });
 
-    describe('profilePicture field errors', () => {
+    describe('profilePicture', () => {
       it('should return error when profilePicture is null', () => {
         const input = {
           ...signUpUserInput,
-          profilePicture: null,
+          profilePicture: null
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
@@ -166,7 +208,7 @@ describe('SignUpUserInput', () => {
       it('should return error when profilePicture is invalid', () => {
         const input = {
           ...signUpUserInput,
-          profilePicture: faker.lorem.word(), // not a url
+          profilePicture: faker.lorem.word() // not a url
         };
 
         const result = SignUpUserInput.validationSchema.validate(input);
