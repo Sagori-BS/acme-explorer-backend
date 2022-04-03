@@ -32,24 +32,24 @@ describe(`AuthService`, () => {
 
   const credentialService = {
     getCredentialByIdOrEmail: jest.fn(),
-    updateCredential: jest.fn(),
+    updateCredential: jest.fn()
   };
 
   const tokensService = {
     signAccessToken: jest.fn(),
     createAndSignRefreshToken: jest.fn(),
     refreshAccessToken: jest.fn(),
-    revokeRefreshToken: jest.fn(),
+    revokeRefreshToken: jest.fn()
   };
 
   const userService = {
-    getOneEntity: jest.fn(),
+    getOneEntity: jest.fn()
   };
 
   const authTokenService = {
     createAuthToken: jest.fn().mockReturnValue({ token: 'test@gmail.com' }),
     resetUserPassword: jest.fn(),
-    validateAuthToken: jest.fn(),
+    validateAuthToken: jest.fn()
   };
 
   const payload = { id: 'id', email: 'test@gmail.com', roles: ['test'] };
@@ -58,9 +58,9 @@ describe(`AuthService`, () => {
     localSignUpUser: jest.fn().mockReturnValue(payload),
     socialSignUp: jest.fn().mockReturnValue({
       user: payload,
-      isNew: true,
+      isNew: true
     }),
-    blockUser: jest.fn(),
+    blockUser: jest.fn()
   };
 
   const createUser = async () => {
@@ -71,7 +71,7 @@ describe(`AuthService`, () => {
       socialProvider: AuthProviders.Local,
       authType: AuthType.PASSWORD,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     });
 
     return await entity.save();
@@ -82,51 +82,51 @@ describe(`AuthService`, () => {
       imports: [
         LoggerModule.register({
           destination: LoggerDestination.STD_OUT,
-          isGlobal: true,
+          isGlobal: true
         }),
         mongooseModuleTesting.instance,
         MongooseModule.forFeature([
           {
             name: User.name,
-            schema: UserSchema,
-          },
-        ]),
+            schema: UserSchema
+          }
+        ])
       ],
       providers: [
         {
           provide: CredentialService,
-          useValue: credentialService,
+          useValue: credentialService
         },
         {
           provide: AuthTokenService,
-          useValue: authTokenService,
+          useValue: authTokenService
         },
         {
           provide: AuthRepository,
-          useValue: authRepository,
+          useValue: authRepository
         },
         {
           provide: PUB_SUB_CLIENT_TOKEN,
-          useValue: pubSubClient,
+          useValue: pubSubClient
         },
         {
           provide: TokensService,
-          useValue: tokensService,
+          useValue: tokensService
         },
         {
           provide: FirebaseAdminService,
-          useValue: firebaseAdminService,
+          useValue: firebaseAdminService
         },
         {
           provide: LoggerService,
-          useValue: loggerService,
+          useValue: loggerService
         },
         {
           provide: UserService,
-          useValue: userService,
+          useValue: userService
         },
-        AuthService,
-      ],
+        AuthService
+      ]
     }).compile();
 
     authService = testModule.get<AuthService>(AuthService);
@@ -143,14 +143,14 @@ describe(`AuthService`, () => {
       const password = faker.internet.password(8);
 
       credentialService.getCredentialByIdOrEmail.mockReturnValueOnce({
-        password: 'password',
+        password: 'password'
       });
 
       await authService.validateCredential(email, password);
 
       expect(credentialService.getCredentialByIdOrEmail).toHaveBeenCalled();
       expect(credentialService.getCredentialByIdOrEmail).toHaveBeenCalledWith({
-        email,
+        email
       });
     });
 
@@ -172,7 +172,7 @@ describe(`AuthService`, () => {
       const password = faker.internet.password(8);
 
       credentialService.getCredentialByIdOrEmail.mockReturnValueOnce({
-        blocked: true,
+        blocked: true
       });
 
       const result = authService.validateCredential(email, password);
@@ -195,20 +195,20 @@ describe(`AuthService`, () => {
   describe(`unblockUser`, () => {
     it(`should call the updateCredential method of the CredentialService`, async () => {
       credentialService.updateCredential.mockReturnValueOnce({
-        blocked: false,
+        blocked: false
       });
       const email = faker.internet.email();
 
       const updateCredentialInput: UpdateCredentialInput = {
         where: { email },
-        data: { blocked: false },
+        data: { blocked: false }
       };
 
       await authService.unblockUser({ email });
 
       expect(credentialService.updateCredential).toHaveBeenCalled();
       expect(credentialService.updateCredential).toHaveBeenLastCalledWith(
-        updateCredentialInput,
+        updateCredentialInput
       );
     });
   });
@@ -216,20 +216,20 @@ describe(`AuthService`, () => {
   describe(`socialSignUp`, () => {
     it(`should call the auth.verifyIdToken method of the firebaseAdminService`, async () => {
       const socialSignInInput = {
-        token: 'test',
+        token: 'test'
       };
 
       await authService.socialSignUp(socialSignInInput);
 
       expect(firebaseAdminService.auth.verifyIdToken).toHaveBeenCalled();
       expect(firebaseAdminService.auth.verifyIdToken).toHaveBeenLastCalledWith(
-        socialSignInInput.token,
+        socialSignInInput.token
       );
     });
 
     it(`should call the socialSignUp method of the auth repository`, async () => {
       const socialSignInInput = {
-        token: 'test',
+        token: 'test'
       };
 
       await authService.socialSignUp(socialSignInInput);
@@ -239,20 +239,20 @@ describe(`AuthService`, () => {
 
     it(`should call the verifyIdToken of the firebase admin service`, async () => {
       const socialSignInInput = {
-        token: 'test',
+        token: 'test'
       };
 
       await authService.socialSignUp(socialSignInInput);
 
       expect(firebaseAdminService.auth.verifyIdToken).toHaveBeenCalled();
       expect(firebaseAdminService.auth.verifyIdToken).toHaveBeenLastCalledWith(
-        socialSignInInput.token,
+        socialSignInInput.token
       );
     });
 
     it(`should call the signAccessToken method of the tokensService`, async () => {
       const socialSignInInput = {
-        token: 'test',
+        token: 'test'
       };
 
       const user = await createUser();
@@ -267,7 +267,7 @@ describe(`AuthService`, () => {
 
     it(`should call the send method of the client`, async () => {
       const socialSignInInput = {
-        token: 'test',
+        token: 'test'
       };
 
       await authService.socialSignUp(socialSignInInput);
@@ -280,14 +280,14 @@ describe(`AuthService`, () => {
     it(`should call the resetUserPassword method of the AuthTokenService`, async () => {
       const createAuthTokenInput: CreateAuthTokenInput = {
         email: 'test@test.com',
-        origin: 'local',
+        origin: 'local'
       };
 
       await authService.resetUserPassword(createAuthTokenInput);
 
       expect(authTokenService.resetUserPassword).toHaveBeenCalled();
       expect(authTokenService.resetUserPassword).toHaveBeenLastCalledWith(
-        createAuthTokenInput,
+        createAuthTokenInput
       );
     });
   });
@@ -296,14 +296,14 @@ describe(`AuthService`, () => {
     it(`should call the validateAuthToken method of the AuthTokenService`, async () => {
       const validateTokenInput: ValidateAuthTokenInput = {
         token: 'token',
-        origin: 'local',
+        origin: 'local'
       };
 
       await authService.validateAuthToken(validateTokenInput);
 
       expect(authTokenService.validateAuthToken).toHaveBeenCalled();
       expect(authTokenService.validateAuthToken).toHaveBeenLastCalledWith(
-        validateTokenInput,
+        validateTokenInput
       );
     });
   });
@@ -322,27 +322,29 @@ describe(`AuthService`, () => {
   describe(`signUpUser`, () => {
     it(`should call the localSignUpUser method of the AuthRepository`, async () => {
       const signUpUserInput: SignUpUserInput = {
-        email: 'test@test.com',
-        name: 'test',
+        email: faker.internet.email(),
+        name: faker.lorem.word(5),
+        lastName: faker.lorem.word(5)
       };
 
       const expectedValue = {
         ...signUpUserInput,
         authType: AuthType.PASSWORD,
-        socialProvider: AuthProviders.Local,
+        socialProvider: AuthProviders.Local
       };
       await authService.signUpUser(signUpUserInput);
 
       expect(authRepository.localSignUpUser).toHaveBeenCalled();
       expect(authRepository.localSignUpUser).toHaveBeenCalledWith(
-        expectedValue,
+        expectedValue
       );
     });
 
     it(`should call the signAccessToken method of the tokensService`, async () => {
       const signUpUserInput: SignUpUserInput = {
-        email: 'test@test.com',
-        name: 'test',
+        email: faker.internet.email(),
+        name: faker.lorem.word(5),
+        lastName: faker.lorem.word(5)
       };
 
       const user = await createUser();
@@ -357,8 +359,9 @@ describe(`AuthService`, () => {
 
     it(`should call the createAuthToken of the authTokenService`, async () => {
       const signUpUserInput: SignUpUserInput = {
-        email: 'test@test.com',
-        name: 'test',
+        email: faker.internet.email(),
+        name: faker.lorem.word(5),
+        lastName: faker.lorem.word(5)
       };
 
       await authService.signUpUser(signUpUserInput);
@@ -368,8 +371,9 @@ describe(`AuthService`, () => {
 
     it(`should call the send method of the client`, async () => {
       const signUpUserInput: SignUpUserInput = {
-        email: 'test@test.com',
-        name: 'test',
+        email: faker.internet.email(),
+        name: faker.lorem.word(5),
+        lastName: faker.lorem.word(5)
       };
 
       await authService.signUpUser(signUpUserInput);

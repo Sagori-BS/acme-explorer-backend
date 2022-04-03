@@ -8,7 +8,7 @@ import { SignUpUserInput } from '../graphql/inputs/sign-up-user.input';
 import { ErrorMessage } from '@shared/errors/enums/error-message-types.enum';
 import {
   InvalidFunctionInputError,
-  TestFailedError,
+  TestFailedError
 } from '@shared/errors/errors';
 import { AuthProviders, AuthType } from '../utils/auth-providers.enum';
 import { loggerService } from '@shared/logger/mock/logger.service';
@@ -18,7 +18,7 @@ import { Types } from 'mongoose';
 import * as faker from 'faker';
 import {
   CredentialSchema,
-  Credential,
+  Credential
 } from '../../credential/database/credential.entity';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerService } from '@shared/logger/logger.service';
@@ -28,7 +28,7 @@ import { UserRepository } from '../../user/user.repository';
 
 describe('AuthRepository', () => {
   const credentialService = {
-    createCredential: jest.fn(),
+    createCredential: jest.fn()
   };
 
   const credentialRepository = {
@@ -36,11 +36,11 @@ describe('AuthRepository', () => {
     createCredential: jest.fn(),
     updateCredential: jest.fn(),
     updateCredentialPassword: jest.fn(),
-    deleteCredential: jest.fn(),
+    deleteCredential: jest.fn()
   };
 
   const userRepository = {
-    getOneEntity: jest.fn(),
+    getOneEntity: jest.fn()
   };
 
   let authRepository: AuthRepository;
@@ -55,33 +55,33 @@ describe('AuthRepository', () => {
         MongooseModule.forFeature([
           {
             name: User.name,
-            schema: UserSchema,
+            schema: UserSchema
           },
           {
             name: Credential.name,
-            schema: CredentialSchema,
-          },
-        ]),
+            schema: CredentialSchema
+          }
+        ])
       ],
       providers: [
         AuthRepository,
         {
           provide: CredentialService,
-          useValue: credentialService,
+          useValue: credentialService
         },
         {
           provide: CredentialRepository,
-          useValue: credentialRepository,
+          useValue: credentialRepository
         },
         {
           provide: UserRepository,
-          useValue: userRepository,
+          useValue: userRepository
         },
         {
           provide: LoggerService,
-          useValue: loggerService,
-        },
-      ],
+          useValue: loggerService
+        }
+      ]
     }).compile();
 
     authRepository = testModule.get<AuthRepository>(AuthRepository);
@@ -95,9 +95,10 @@ describe('AuthRepository', () => {
   describe('localSignUp', () => {
     it('throws an error if the authType field is not set', async done => {
       const input: SignUpUserInput = {
-        email: 'email@email.com',
-        name: 'userName',
-        socialProvider: AuthProviders.Local,
+        email: faker.internet.email(),
+        name: faker.lorem.word(5),
+        lastName: faker.lorem.word(5),
+        socialProvider: AuthProviders.Local
       };
 
       try {
@@ -112,9 +113,10 @@ describe('AuthRepository', () => {
 
     it('throws an error if the socialProvider field is not set', async done => {
       const input: SignUpUserInput = {
-        email: 'email@email.com',
-        name: 'userName',
-        authType: AuthType.PASSWORD,
+        email: faker.internet.email(),
+        name: faker.lorem.word(5),
+        lastName: faker.lorem.word(5),
+        authType: AuthType.PASSWORD
       };
 
       try {
@@ -131,9 +133,10 @@ describe('AuthRepository', () => {
   describe('socialSignUp', () => {
     it('throws an error if the authType field is not set', async () => {
       const input: SignUpUserInput = {
-        email: 'email@email.com',
-        name: faker.name.firstName(),
-        socialProvider: AuthProviders.Local,
+        email: faker.internet.email(),
+        name: faker.lorem.word(5),
+        lastName: faker.lorem.word(5),
+        socialProvider: AuthProviders.Local
       };
 
       const res = authRepository.socialSignUp(input);
@@ -143,9 +146,10 @@ describe('AuthRepository', () => {
 
     it('throws an error if the socialProvider field is not set', async () => {
       const input: SignUpUserInput = {
-        email: 'email@email.com',
-        name: 'userName',
-        socialProvider: AuthProviders.Local,
+        email: faker.internet.email(),
+        name: faker.lorem.word(5),
+        lastName: faker.lorem.word(5),
+        socialProvider: AuthProviders.Local
       };
 
       const res = authRepository.socialSignUp(input);
@@ -159,7 +163,7 @@ describe('AuthRepository', () => {
       email: faker.internet.email(),
       userId: new Types.ObjectId().toString(),
       newPassword: faker.internet.password(),
-      oldPassword: faker.internet.password(),
+      oldPassword: faker.internet.password()
     };
 
     it('should call the updateCredentialPassword method of the credentialRepository', async () => {
@@ -167,15 +171,15 @@ describe('AuthRepository', () => {
         where: { email: updateUserPasswordInput.email },
         data: {
           password: updateUserPasswordInput.newPassword,
-          oldPassword: updateUserPasswordInput.oldPassword,
-        },
+          oldPassword: updateUserPasswordInput.oldPassword
+        }
       };
 
       await authRepository.updateUserPassword(updateUserPasswordInput);
 
       expect(credentialRepository.updateCredentialPassword).toHaveBeenCalled();
       expect(
-        credentialRepository.updateCredentialPassword,
+        credentialRepository.updateCredentialPassword
       ).toHaveBeenCalledWith(updateCredentialPasswordInput, expect.anything());
     });
   });
