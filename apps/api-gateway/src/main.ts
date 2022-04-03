@@ -11,16 +11,16 @@ async function bootstrap() {
 
   app.enableCors();
 
-  // app.use(
-  //   '/profilePicture',
-  //   createProxyMiddleware({
-  //     target: configService.get(EnvKey.CLOUD_FUNCTION),
-  //     changeOrigin: true,
-  //     pathRewrite: {
-  //       '^/profilePicture': '',
-  //     },
-  //   }),
-  // );
+  app.use(
+    '/profilePicture',
+    createProxyMiddleware({
+      target: configService.get(EnvKey.UPLOAD),
+      changeOrigin: true,
+      pathRewrite: {
+        '^/profilePicture': ''
+      }
+    })
+  );
 
   await app.listen(configService.get(EnvKey.PORT));
 }

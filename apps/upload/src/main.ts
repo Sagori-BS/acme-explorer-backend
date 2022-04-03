@@ -4,9 +4,9 @@ import { LoggerService } from '@common/common/logger/logger.service';
 import { PUB_SUB_CLIENT_TOKEN } from '@common/common/microservices/pub-sub/constants/pub-sub-client.constants';
 import { PubSubClient } from '@common/common/microservices/pub-sub/pub-sub-client';
 import { GoogleCloudPubSubServer } from '@common/common/microservices/pub-sub/pub-sub-server';
-import { MongoSanitizeInterceptor } from '@common/common/mongo/interceptors/mongo-sanitize.interceptor';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { MongoSanitizeInterceptor } from '@shared/mongo/interceptors/mongo-sanitize.interceptor';
 import { AppModule } from './app.module';
 import { EnvKey } from './config/env-key.enum';
 
@@ -16,10 +16,12 @@ async function bootstrap() {
 
   app.useLogger(loggerService);
 
+  app.enableCors();
+
   app.useGlobalInterceptors(new MongoSanitizeInterceptor());
 
   app.useGlobalFilters(
-    new CustomExceptionsFilter(loggerService, new HttpExceptionHandler()),
+    new CustomExceptionsFilter(loggerService, new HttpExceptionHandler())
   );
 
   const pubSubClient: PubSubClient = app.get(PUB_SUB_CLIENT_TOKEN);
@@ -27,7 +29,7 @@ async function bootstrap() {
   const configService: ConfigService = app.get(ConfigService);
 
   app.connectMicroservice({
-    strategy: new GoogleCloudPubSubServer(pubSubClient),
+    strategy: new GoogleCloudPubSubServer(pubSubClient)
   });
 
   await app.startAllMicroservices();

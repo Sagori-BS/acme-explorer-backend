@@ -1,11 +1,10 @@
 apiVersion: skaffold/v1beta14
 kind: Config
-build:
-  artifacts:
-  - image: bujosa/acme
-  local:
-    push: true
 deploy:
   kubectl:
     manifests:
-    - k8s.yml
+    - k8s/user.yml
+    - k8s/notification.yml
+    - k8s/api-gateway.yml
+    - k8s/upload.yml
+    - k8s/pubsub.yml
