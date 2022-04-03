@@ -1,4 +1,4 @@
-import { GraphqlSortOperationEnum } from '@user/graphql/advanced-filter/enum/graphql-sort-operation.enum';
+import { GraphqlSortOperationEnum } from '@shared/graphql/advanced-filter/enum/graphql-sort-operation.enum';
 import { Types } from 'mongoose';
 import { lookupStageBuilder } from '../lookup-stage-builder.util';
 import * as faker from 'faker';
@@ -30,7 +30,7 @@ describe('LookupStageBuilder', () => {
 
   const successCase1NotNested = () => {
     const filterOptions = {
-      model: [new Types.ObjectId(), new Types.ObjectId()],
+      model: [new Types.ObjectId(), new Types.ObjectId()]
     };
 
     return [filterOptions, {}];
@@ -38,11 +38,11 @@ describe('LookupStageBuilder', () => {
 
   const successCase2NotNested = () => {
     const filterOptions = {
-      model: [new Types.ObjectId(), new Types.ObjectId()],
+      model: [new Types.ObjectId(), new Types.ObjectId()]
     };
 
     const sortOptions = {
-      model: GraphqlSortOperationEnum.asc,
+      model: GraphqlSortOperationEnum.asc
     };
 
     return [filterOptions, sortOptions];
@@ -56,14 +56,14 @@ describe('LookupStageBuilder', () => {
 
       // assert
       expect(res).toEqual([]);
-    },
+    }
   );
 
   const successCase1Nested = () => {
     const filterOptions = {
       model: {
-        name: 'Toyota',
-      },
+        name: 'Toyota'
+      }
     };
 
     const expectedResult = [
@@ -72,9 +72,9 @@ describe('LookupStageBuilder', () => {
           from: 'model',
           localField: 'model',
           foreignField: '_id',
-          as: 'model',
-        },
-      },
+          as: 'model'
+        }
+      }
     ];
 
     return [filterOptions, {}, expectedResult];
@@ -82,13 +82,13 @@ describe('LookupStageBuilder', () => {
 
   const successCase2Nested = () => {
     const filterOptions = {
-      model: [new Types.ObjectId(), new Types.ObjectId()],
+      model: [new Types.ObjectId(), new Types.ObjectId()]
     };
 
     const sortOptions = {
       model: {
-        slug: GraphqlSortOperationEnum.asc,
-      },
+        slug: GraphqlSortOperationEnum.asc
+      }
     };
 
     const expectedResult = [
@@ -97,9 +97,9 @@ describe('LookupStageBuilder', () => {
           from: 'model',
           localField: 'model',
           foreignField: '_id',
-          as: 'model',
-        },
-      },
+          as: 'model'
+        }
+      }
     ];
 
     return [filterOptions, sortOptions, expectedResult];
@@ -113,20 +113,20 @@ describe('LookupStageBuilder', () => {
 
       // assert
       expect(res).toEqual(expectedResult);
-    },
+    }
   );
 
   const successCaseBothNested = () => {
     const filterOptions = {
       brand: {
-        name: 'Toyota',
-      },
+        name: 'Toyota'
+      }
     };
 
     const sortOptions = {
       model: {
-        slug: GraphqlSortOperationEnum.asc,
-      },
+        slug: GraphqlSortOperationEnum.asc
+      }
     };
 
     const expectedResult = [
@@ -135,17 +135,17 @@ describe('LookupStageBuilder', () => {
           from: 'brand',
           localField: 'brand',
           foreignField: '_id',
-          as: 'brand',
-        },
+          as: 'brand'
+        }
       },
       {
         $lookup: {
           from: 'model',
           localField: 'model',
           foreignField: '_id',
-          as: 'model',
-        },
-      },
+          as: 'model'
+        }
+      }
     ];
 
     return [filterOptions, sortOptions, expectedResult];
@@ -156,14 +156,14 @@ describe('LookupStageBuilder', () => {
     (
       filterOptions: Record<string, any>,
       sortOptions: Record<string, any>,
-      expectedResult: any[],
+      expectedResult: any[]
     ) => {
       // act
       const res = lookupStageBuilder([], filterOptions, sortOptions);
 
       // assert
       expect(res).toEqual(expectedResult);
-    },
+    }
   );
 
   const successCaseBothNestedWithSameKey = () => {
@@ -171,14 +171,14 @@ describe('LookupStageBuilder', () => {
 
     const filterOptions = {
       model: {
-        slug_in: [model],
-      },
+        slug_in: [model]
+      }
     };
 
     const sortOptions = {
       model: {
-        slug: GraphqlSortOperationEnum.asc,
-      },
+        slug: GraphqlSortOperationEnum.asc
+      }
     };
 
     const expectedResult = [
@@ -187,9 +187,9 @@ describe('LookupStageBuilder', () => {
           from: 'model',
           localField: 'model',
           foreignField: '_id',
-          as: 'model',
-        },
-      },
+          as: 'model'
+        }
+      }
     ];
 
     return [filterOptions, sortOptions, expectedResult];
@@ -200,13 +200,13 @@ describe('LookupStageBuilder', () => {
     (
       filterOptions: Record<string, any>,
       sortOptions: Record<string, any>,
-      expectedResult: any[],
+      expectedResult: any[]
     ) => {
       // act
       const res = lookupStageBuilder([], filterOptions, sortOptions);
 
       // assert
       expect(res).toEqual(expectedResult);
-    },
+    }
   );
 });

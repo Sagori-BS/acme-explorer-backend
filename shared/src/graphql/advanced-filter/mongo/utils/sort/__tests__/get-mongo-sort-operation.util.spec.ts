@@ -2,8 +2,8 @@ import { MissingRequiredParametersError } from '@shared/errors/common/missing-re
 import { InvalidMongoSortOperarationError } from '@shared/errors/filters/invalid-mongo-sort-operation.error';
 import {
   GraphqlSortOperation,
-  GraphqlSortOperationEnum,
-} from '@user/graphql/advanced-filter/enum/graphql-sort-operation.enum';
+  GraphqlSortOperationEnum
+} from '@shared/graphql/advanced-filter/enum/graphql-sort-operation.enum';
 import { MongoSortOperationEnum } from '../../../enum/mongo-sort-operation.enum';
 import { getMongoSortOperation } from '../get-mongo-sort-operation.util';
 
@@ -11,21 +11,21 @@ describe('GetMongoSortOpertion', () => {
   it('should throw an error if given null', () => {
     // arrange & act & assert
     expect(() => getMongoSortOperation(null)).toThrow(
-      MissingRequiredParametersError,
+      MissingRequiredParametersError
     );
   });
 
   it('should throw an error if given undefined', () => {
     // arrange & act & assert
     expect(() => getMongoSortOperation(undefined)).toThrow(
-      MissingRequiredParametersError,
+      MissingRequiredParametersError
     );
   });
 
   it('should throw an error if given an empty string', () => {
     // arrange & act & assert
     expect(() => getMongoSortOperation(<GraphqlSortOperation>'')).toThrow(
-      MissingRequiredParametersError,
+      MissingRequiredParametersError
     );
   });
 
@@ -34,14 +34,14 @@ describe('GetMongoSortOpertion', () => {
     input => {
       // arrange & act & assert
       expect(() => getMongoSortOperation(<GraphqlSortOperation>input)).toThrow(
-        InvalidMongoSortOperarationError,
+        InvalidMongoSortOperarationError
       );
-    },
+    }
   );
 
   it.each([
     [GraphqlSortOperationEnum.asc, MongoSortOperationEnum.asc],
-    [GraphqlSortOperationEnum.desc, MongoSortOperationEnum.desc],
+    [GraphqlSortOperationEnum.desc, MongoSortOperationEnum.desc]
   ])(
     'should return the correct mongo sort operation given a valid input',
     (input, expectedResult) => {
@@ -50,6 +50,6 @@ describe('GetMongoSortOpertion', () => {
 
       // assert
       expect(res).toEqual(expectedResult);
-    },
+    }
   );
 });

@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 import { AuthTokenRepository } from '../auth-token.repository';
 import { AuthToken, AuthTokenSchema } from '../database/auth-token.entity';
 import { CreateAuthTokenInternalInput } from '../dtos/create-auth-token-internal.input';
-import { AuthTokenTypes } from '@user/graphql/enums/auth-token-types.enum';
+import { AuthTokenTypes } from '@shared/graphql/enums/auth-token-types.enum';
 import { EntryNotFoundException } from '@shared/errors/errors';
 import { createUnhashedToken } from '../utils/create-unhashed-token';
 import { hashToken } from '../utils/hash-token';
@@ -17,7 +17,7 @@ describe(`${entityName} Repository`, () => {
   const createEntityInput: CreateAuthTokenInternalInput = {
     email: 'test@email.com',
     type: AuthTokenTypes.RESET_PASSWORD,
-    origin: 'N/A',
+    origin: 'N/A'
   };
 
   const createAuthToken = async () => {
@@ -28,7 +28,7 @@ describe(`${entityName} Repository`, () => {
       ...createEntityInput,
       token,
       updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
     });
 
     return await entity.save();
@@ -39,7 +39,7 @@ describe(`${entityName} Repository`, () => {
       Entity: AuthToken,
       EntitySchema: AuthTokenSchema,
       EntityRepository: AuthTokenRepository,
-      createEntityInput,
+      createEntityInput
     });
 
     entityModel = config.entityModel;
@@ -68,7 +68,7 @@ describe(`${entityName} Repository`, () => {
 
       //Act
       const result = await entityRepository.getAuthTokenByToken({
-        token: authToken.token,
+        token: authToken.token
       });
 
       //Assert
@@ -83,7 +83,7 @@ describe(`${entityName} Repository`, () => {
 
       const expectedResult = {
         ...createEntityInput,
-        token: result.token,
+        token: result.token
       };
 
       //Assert
@@ -124,12 +124,12 @@ describe(`${entityName} Repository`, () => {
 
       //Act
       const result = await entityRepository.updateAuthToken({
-        token: entity.token,
+        token: entity.token
       });
 
       const expectedResult = {
         ...entity.toObject(),
-        completed: true,
+        completed: true
       };
       delete expectedResult.updatedAt;
 

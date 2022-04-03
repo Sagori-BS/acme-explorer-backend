@@ -1,4 +1,4 @@
-import { AuthTokenTypes } from '@user/graphql/enums/auth-token-types.enum';
+import { AuthTokenTypes } from '@shared/graphql/enums/auth-token-types.enum';
 
 export type AuthTokenType = {
   id: string;

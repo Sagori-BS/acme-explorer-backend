@@ -1,4 +1,4 @@
-import { GraphqlSortOperationEnum } from '@user/graphql/advanced-filter/enum/graphql-sort-operation.enum';
+import { GraphqlSortOperationEnum } from '@shared/graphql/advanced-filter/enum/graphql-sort-operation.enum';
 import { MongoSortOperationEnum } from '../../../enum/mongo-sort-operation.enum';
 import { sortAggregationPipelineBuilder } from '../sort-aggregation-pipeline-builder';
 
@@ -31,16 +31,16 @@ describe('SortAggregationPipelineBuilder', () => {
     //   arrange
     const sortOptions = {
       year: GraphqlSortOperationEnum.asc,
-      title: GraphqlSortOperationEnum.desc,
+      title: GraphqlSortOperationEnum.desc
     };
 
     const exptectedResult = [
       {
         $sort: {
           year: MongoSortOperationEnum.asc,
-          title: MongoSortOperationEnum.desc,
-        },
-      },
+          title: MongoSortOperationEnum.desc
+        }
+      }
     ];
 
     // act
@@ -54,16 +54,16 @@ describe('SortAggregationPipelineBuilder', () => {
     //   arrange
     const sortOptions = {
       brand: {
-        slug: GraphqlSortOperationEnum.asc,
-      },
+        slug: GraphqlSortOperationEnum.asc
+      }
     };
 
     const exptectedResult = [
       {
         $sort: {
-          'brand.slug': MongoSortOperationEnum.asc,
-        },
-      },
+          'brand.slug': MongoSortOperationEnum.asc
+        }
+      }
     ];
 
     // act

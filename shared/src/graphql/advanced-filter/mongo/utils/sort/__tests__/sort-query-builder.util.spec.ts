@@ -1,6 +1,6 @@
 import { InvalidGqlSortOperationError } from '@shared/errors/filters/invalid-gql-sort-operation.error';
 import { InvalidSortQueryError } from '@shared/errors/filters/invalid-sort-query.error';
-import { GraphqlSortOperationEnum } from '@user/graphql/advanced-filter/enum/graphql-sort-operation.enum';
+import { GraphqlSortOperationEnum } from '@shared/graphql/advanced-filter/enum/graphql-sort-operation.enum';
 import { MongoSortOperationEnum } from '../../../enum/mongo-sort-operation.enum';
 import { sortQueryBuilder } from '../sort-query-builder.util';
 
@@ -33,7 +33,7 @@ describe('SortQueryBuilder', () => {
     // arrange
     const input = {
       price: 'dasc',
-      year: 'desc',
+      year: 'desc'
     };
 
     // act & assert
@@ -44,7 +44,7 @@ describe('SortQueryBuilder', () => {
     // arrange
     const input = {
       price: { basePrice: GraphqlSortOperationEnum.asc },
-      model: { slug: GraphqlSortOperationEnum.desc },
+      model: { slug: GraphqlSortOperationEnum.desc }
     };
 
     // act & assert
@@ -55,7 +55,7 @@ describe('SortQueryBuilder', () => {
     // arrange
     const input = {
       price: { basePrice: GraphqlSortOperationEnum.asc },
-      model: GraphqlSortOperationEnum.desc,
+      model: GraphqlSortOperationEnum.desc
     };
 
     // act & assert
@@ -66,12 +66,12 @@ describe('SortQueryBuilder', () => {
     // arrange
     const input = {
       price: 'asc',
-      year: 'desc',
+      year: 'desc'
     };
 
     const expectedResult = {
       price: MongoSortOperationEnum.asc,
-      year: MongoSortOperationEnum.desc,
+      year: MongoSortOperationEnum.desc
     };
 
     // act
@@ -85,12 +85,12 @@ describe('SortQueryBuilder', () => {
     //   arrange
     const input = {
       brand: {
-        slug: GraphqlSortOperationEnum.asc,
-      },
+        slug: GraphqlSortOperationEnum.asc
+      }
     };
 
     const exptectedResult = {
-      'brand.slug': MongoSortOperationEnum.asc,
+      'brand.slug': MongoSortOperationEnum.asc
     };
 
     // act
