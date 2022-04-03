@@ -25,7 +25,7 @@ export class User extends Document implements IBaseEntity, IUser {
   @Prop({
     required: true,
     type: String,
-    default: UserRoles.CLIENT,
+    default: UserRoles.EXPLORER,
     enum: Object.values(UserRoles),
   })
   role: UserRoles;
