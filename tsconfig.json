@@ -18,6 +18,12 @@
       "@shared/*": [
         "shared/src/*"
       ],
+      "@common/common": [
+        "common/common/src"
+      ],
+      "@common/common/*": [
+        "shared/src/*"
+      ],
       "@user/": [
         "apps/user/src/"
       ],
