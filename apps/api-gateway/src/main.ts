@@ -12,50 +12,6 @@ async function bootstrap() {
   app.enableCors();
 
   app.use(
-    '/wallet',
-    createProxyMiddleware({
-      target: configService.get(EnvKey.WALLET_SERVICE),
-      changeOrigin: true,
-      pathRewrite: {
-        '^/wallet': '',
-      },
-    }),
-  );
-
-  app.use(
-    '/upload',
-    createProxyMiddleware({
-      target: configService.get(EnvKey.UPLOAD_SERVICE),
-      changeOrigin: true,
-      pathRewrite: {
-        '^/upload': '',
-      },
-    }),
-  );
-
-  app.use(
-    '/catalogue',
-    createProxyMiddleware({
-      target: configService.get(EnvKey.CATALOGUE_SERVICE),
-      changeOrigin: true,
-      pathRewrite: {
-        '^/catalogue': '',
-      },
-    }),
-  );
-
-  app.use(
-    '/buy',
-    createProxyMiddleware({
-      target: configService.get(EnvKey.BUY_SERVICE),
-      changeOrigin: true,
-      pathRewrite: {
-        '^/buy': '',
-      },
-    }),
-  );
-
-  app.use(
     '/profilePicture',
     createProxyMiddleware({
       target: configService.get(EnvKey.CLOUD_FUNCTION),
