@@ -314,19 +314,6 @@ describe('CreateUserInput', () => {
     });
 
     describe('role', () => {
-      it('should return error when role is undefined', () => {
-        const input = {
-          ...createEntityInput,
-          role: undefined
-        };
-
-        const result = CreateEntityInput.validationSchema.validate(input);
-
-        expect(result.error).toBeDefined();
-        expect(result.error.isJoi).toBeTruthy();
-        expect(result.error.name).toBe('ValidationError');
-      });
-
       it('should return error when roles is empty', () => {
         const input = {
           ...createEntityInput,
