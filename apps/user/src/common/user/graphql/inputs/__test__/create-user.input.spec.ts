@@ -6,8 +6,8 @@ const createUserInput = {
   profilePicture: faker.internet.url(),
   name: faker.name.firstName(),
   password: faker.internet.password(),
-  role: UserRoles.CLIENT,
-  email: faker.internet.email(),
+  role: UserRoles.EXPLORER,
+  email: faker.internet.email()
 };
 
 describe('CreateUserInput', () => {
@@ -22,7 +22,7 @@ describe('CreateUserInput', () => {
       it('should return error when profilePicture is null', () => {
         const input = {
           ...createUserInput,
-          profilePicture: null,
+          profilePicture: null
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -36,7 +36,7 @@ describe('CreateUserInput', () => {
       it('should return error when profilePicture is invalid', () => {
         const input = {
           ...createUserInput,
-          profilePicture: 'not a url',
+          profilePicture: 'not a url'
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -52,7 +52,7 @@ describe('CreateUserInput', () => {
       it('should return error when name is undefined', () => {
         const input = {
           ...createUserInput,
-          name: undefined,
+          name: undefined
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -66,7 +66,7 @@ describe('CreateUserInput', () => {
       it('should return error when name is null', () => {
         const input = {
           ...createUserInput,
-          name: null,
+          name: null
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -80,7 +80,7 @@ describe('CreateUserInput', () => {
       it('should return error when name is invalid', () => {
         const input = {
           ...createUserInput,
-          name: '',
+          name: ''
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -96,7 +96,7 @@ describe('CreateUserInput', () => {
       it('should return error when password is undefined', () => {
         const input = {
           ...createUserInput,
-          password: undefined,
+          password: undefined
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -110,7 +110,7 @@ describe('CreateUserInput', () => {
       it('should return error when password is null', () => {
         const input = {
           ...createUserInput,
-          password: null,
+          password: null
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -124,7 +124,7 @@ describe('CreateUserInput', () => {
       it('should return error when password is invalid', () => {
         const input = {
           ...createUserInput,
-          password: 'hello',
+          password: 'hello'
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -140,7 +140,7 @@ describe('CreateUserInput', () => {
       it('should return error when role is undefined', () => {
         const input = {
           ...createUserInput,
-          role: undefined,
+          role: undefined
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -153,7 +153,7 @@ describe('CreateUserInput', () => {
       it('should return error when roles is empty', () => {
         const input = {
           ...createUserInput,
-          role: '',
+          role: ''
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -166,7 +166,7 @@ describe('CreateUserInput', () => {
       it('should return error when role is null', () => {
         const input = {
           ...createUserInput,
-          role: null,
+          role: null
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -179,7 +179,7 @@ describe('CreateUserInput', () => {
       it('should return error when roles is invalid', () => {
         const input = {
           ...createUserInput,
-          role: faker.lorem.word(),
+          role: faker.lorem.word()
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -194,7 +194,7 @@ describe('CreateUserInput', () => {
       it('should return error when email is undefined', () => {
         const input = {
           ...createUserInput,
-          email: undefined,
+          email: undefined
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -208,7 +208,7 @@ describe('CreateUserInput', () => {
       it('should return error when email is null', () => {
         const input = {
           ...createUserInput,
-          email: null,
+          email: null
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -222,7 +222,7 @@ describe('CreateUserInput', () => {
       it('should return error when email is empty', () => {
         const input = {
           ...createUserInput,
-          email: '',
+          email: ''
         };
 
         const result = CreateUserInput.validationSchema.validate(input);
@@ -236,7 +236,7 @@ describe('CreateUserInput', () => {
       it('should return error when email is invalid', () => {
         const input = {
           ...createUserInput,
-          email: '@gmail..com',
+          email: '@gmail..com'
         };
 
         const result = CreateUserInput.validationSchema.validate(input);

@@ -10,7 +10,7 @@ describe('RolesGuard', () => {
     get: jest.fn(),
     getAll: jest.fn(),
     getAllAndMerge: jest.fn(),
-    getAllAndOverride: jest.fn(),
+    getAllAndOverride: jest.fn()
   };
 
   const getRequest = jest.fn();
@@ -19,15 +19,15 @@ describe('RolesGuard', () => {
     getType: jest.fn().mockReturnValue('http'),
     getHandler: () => undefined,
     switchToHttp: () => ({
-      getRequest,
-    }),
+      getRequest
+    })
   };
 
   const correctTestCases = [
-    [UserRoles.ADMIN, [UserRoles.CLIENT, UserRoles.ADMIN]],
+    [UserRoles.ADMIN, [UserRoles.MANAGER, UserRoles.ADMIN]]
   ];
 
-  const failedTestCases = [[UserRoles.CLIENT, [UserRoles.ADMIN]]];
+  const failedTestCases = [[UserRoles.MANAGER, [UserRoles.ADMIN]]];
 
   beforeAll(() => {
     rolesGuard = new RolesGuard(reflector);
@@ -65,8 +65,8 @@ describe('RolesGuard', () => {
 
         getRequest.mockReturnValueOnce({
           user: {
-            role: userRole,
-          },
+            role: userRole
+          }
         });
 
         //Act
@@ -74,7 +74,7 @@ describe('RolesGuard', () => {
 
         //Assert
         expect(result).toBe(true);
-      },
+      }
     );
 
     it.each(failedTestCases)(
@@ -85,8 +85,8 @@ describe('RolesGuard', () => {
 
         getRequest.mockReturnValueOnce({
           user: {
-            role: userRole,
-          },
+            role: userRole
+          }
         });
 
         //Act
@@ -94,7 +94,7 @@ describe('RolesGuard', () => {
 
         //Assert
         expect(result).toThrow(UnauthorizedRoleError);
-      },
+      }
     );
   });
 });

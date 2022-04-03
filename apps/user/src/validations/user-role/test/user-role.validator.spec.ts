@@ -1,3 +1,4 @@
+import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { _validateUserRole } from '../user-role.validator';
 
 describe('UserRole', () => {
@@ -25,14 +26,14 @@ describe('UserRole', () => {
       const res = _validateUserRole(val);
 
       expect(res).toEqual(false);
-    },
+    }
   );
 
-  it.each([['client'], ['ADMIN']])(
+  it.each([[UserRoles.ADMIN], [UserRoles.EXPLORER]])(
     'should return true given a valid user role = "%s"',
     val => {
       const res = _validateUserRole(val);
       expect(res).toEqual(true);
-    },
+    }
   );
 });
