@@ -1,4 +1,3 @@
-import { validateUrlWithJoi } from '@common/common/validations/common/internet/url/url.validator';
 import * as joi from 'joi';
 
 export const validateEnv = joi.object({
@@ -13,7 +12,5 @@ export const validateEnv = joi.object({
   AWS_SECRET_KEY: joi.string().required(),
   AWS_REGION: joi.string().required(),
   BUCKET_NAME: joi.string().required(),
-  SPACE_ENDPOINT: joi.string().required(),
-  REMOVE_BG_KEY: joi.string().required(),
-  BG_IMAGE_URL: validateUrlWithJoi.required(),
+  SPACE_ENDPOINT: joi.string().required()
 });

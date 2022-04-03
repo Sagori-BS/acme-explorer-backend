@@ -31,15 +31,17 @@ spec:
       imagePullSecrets:
       - name: regcred
       containers:
-      - image: bujosa/nfts-market:api-gateway
+      - image: bujosa/acme-explorer:api-gateway
         name: api-gateway
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
  
 ---
 
 apiVersion: v1
 kind: Service
-metadata:
-  name: notification-service
 spec:
   type: ClusterIP
   ports:
@@ -67,17 +69,17 @@ spec:
       imagePullSecrets:
       - name: regcred
       containers:
-      - image: bujosa/nfts-market:notification
+      - image: bujosa/acme-explorer:notification
         name: notification-service
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
 
 ---
 
 apiVersion: v1
 kind: Service
-metadata:
-  name: user-service
-  annotations:
-    dev.okteto.com/auto-ingress: "true"
 spec:
   type: ClusterIP
   ports:
@@ -105,5 +107,51 @@ spec:
       imagePullSecrets:
       - name: regcred
       containers:
-      - image: bujosa/nfts-market:user
+      - image: bujosa/acme-explorer:user
         name: user-service
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pubsub-emulator
+spec:
+  type: ClusterIP
+  ports:
+  - name: "pubsub-emulator"
+    port: 8085
+  selector:
+    app: pubsub-emulator
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pubsub-emulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pubsub-emulator
+  template:
+    metadata:
+      labels:
+        app: pubsub-emulator
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - image: knarz/pubsub-emulator
+        name: pubsub-emulator
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
+ 
+---

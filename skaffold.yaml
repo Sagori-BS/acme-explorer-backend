@@ -2,7 +2,7 @@ apiVersion: skaffold/v1beta14
 kind: Config
 build:
   artifacts:
-  - image: bujosa/ntfs
+  - image: bujosa/acme
   local:
     push: true
 deploy:

@@ -57,6 +57,19 @@ COPY --from=user-pre-build /usr/src/app/env/ ./env/
 COPY --from=user-pre-build /usr/src/app/dist/apps/user/ ./dist/apps/user/
 CMD ["dist/apps/user/main.js"]
 
+# BUILD UPLOAD-SERVICE
+FROM node:14-alpine AS upload-pre-build
+WORKDIR /usr/src/app
+COPY --from=base /usr/src/app/ .
+COPY --from=base /usr/apps/upload ./apps/upload
+RUN ["npm", "run", "build", "upload"]
+
+FROM gcr.io/distroless/nodejs AS upload
+WORKDIR /usr/src/app
+COPY --from=prod_node_modules /usr/src/app/node_modules/ ./node_modules/
+COPY --from=upload-pre-build /usr/src/app/env/ ./env/
+COPY --from=upload-pre-build /usr/src/app/dist/apps/upload/ ./dist/apps/upload/
+CMD ["dist/apps/upload/main.js"]
 
 
 

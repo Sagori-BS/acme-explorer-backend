@@ -13,7 +13,7 @@ services:
     depends_on:
       - pubsub-emulator
     ports:
-      - '4000:3000'
+      - '5000:3000'
     env_file: ./env/.api-gateway.env
 
   user-service:
@@ -29,7 +29,7 @@ services:
       - pubsub-emulator
       - api-gateway
     ports:
-      - '4001:3000'
+      - '5001:3000'
   
   notification-service:
     container_name: 'notification-service'
@@ -43,7 +43,21 @@ services:
     depends_on:
       - pubsub-emulator
     ports:
-      - '4002:3000'
+      - '5002:3000'
+
+  upload-service:
+    container_name: 'upload-service'
+    restart: 'always'
+    build:
+      target: upload
+      context: .
+      dockerfile: ./Dockerfile
+    external_links:
+      - pubsub-emulator
+    depends_on:
+      - pubsub-emulator
+    ports:
+      - '5003:3000'
 
   pubsub-emulator:
     image: knarz/pubsub-emulator
