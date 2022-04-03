@@ -20,7 +20,7 @@ describe(`${entityName}Repository`, () => {
   let userModel: Model<User>;
 
   const credentialService = {
-    createCredential: jest.fn(),
+    createCredential: jest.fn()
   };
 
   const credentialRepository = {
@@ -28,7 +28,7 @@ describe(`${entityName}Repository`, () => {
     createCredential: jest.fn(),
     updateCredential: jest.fn(),
     updateCredentialPassword: jest.fn(),
-    deleteCredential: jest.fn(),
+    deleteCredential: jest.fn()
   };
 
   const connection = {
@@ -37,8 +37,8 @@ describe(`${entityName}Repository`, () => {
       endSession: jest.fn(),
       abortTransaction: jest.fn(),
       commitTransaction: jest.fn(),
-      id: 'test',
-    }),
+      id: 'test'
+    })
   };
 
   const createUser = async (email: string) => {
@@ -48,7 +48,7 @@ describe(`${entityName}Repository`, () => {
       socialProvider: AuthProviders.Local,
       authType: AuthType.PASSWORD,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     });
     return await entity.save();
   };
@@ -60,29 +60,29 @@ describe(`${entityName}Repository`, () => {
         MongooseModule.forFeature([
           {
             name: User.name,
-            schema: UserSchema,
-          },
-        ]),
+            schema: UserSchema
+          }
+        ])
       ],
       providers: [
         {
           provide: CredentialService,
-          useValue: credentialService,
+          useValue: credentialService
         },
         {
           provide: CredentialRepository,
-          useValue: credentialRepository,
+          useValue: credentialRepository
         },
         {
           provide: Connection,
-          useValue: connection,
+          useValue: connection
         },
         {
           provide: LoggerService,
-          useValue: loggerService,
+          useValue: loggerService
         },
-        UserRepository,
-      ],
+        UserRepository
+      ]
     }).compile();
 
     userRepository = testModule.get<UserRepository>(UserRepository);
@@ -102,7 +102,7 @@ describe(`${entityName}Repository`, () => {
 
     it('should throws an error if the user dont exist', async () => {
       const result = userRepository.getOneEntity({
-        id: new Types.ObjectId().toHexString(),
+        id: new Types.ObjectId().toHexString()
       });
 
       await expect(result).rejects.toThrow(EntityNotFoundError);
@@ -112,7 +112,7 @@ describe(`${entityName}Repository`, () => {
   describe('getAllUsers', () => {
     it(`should return an empty array if there are no ${entityName}s entities stored in the database`, async () => {
       const result = await userRepository.getAllEntities({
-        where: { id: 'est' },
+        where: { id: 'est' }
       });
 
       expect(result.length).toBe(0);
@@ -123,7 +123,7 @@ describe(`${entityName}Repository`, () => {
       const entity = await createUser('test@test2.com');
 
       const result = await userRepository.getAllEntities({
-        where: { id: entity.id },
+        where: { id: entity.id }
       });
 
       expect(result.length).toEqual(1);
@@ -142,7 +142,7 @@ describe(`${entityName}Repository`, () => {
     it(`should mark as deleted the ${entityName} entity that match with the given id`, async () => {
       const entity = await createUser('test@test3.com');
       const result = await userRepository.deleteEntity({
-        id: entity.id,
+        id: entity.id
       });
 
       expect(result.deleted).toBe(true);
@@ -157,12 +157,12 @@ describe(`${entityName}Repository`, () => {
         password: 'test',
         socialProvider: AuthProviders.Local,
         authType: AuthType.PASSWORD,
-        role: UserRoles.CLIENT,
+        role: UserRoles.EXPLORER
       };
       const result = await userRepository.createEntity(createEntityInput);
 
       const expectedValue = {
-        ...result.toObject(),
+        ...result.toObject()
       };
 
       expect(expectedValue).toMatchObject(createEntityInput);
@@ -177,7 +177,7 @@ describe(`${entityName}Repository`, () => {
 
       const updateEntityInput = {
         where: { id },
-        data: input,
+        data: input
       };
       const result = userRepository.updateEntity(updateEntityInput);
       await expect(result).rejects.toThrow(EntityNotFoundError);
@@ -190,7 +190,7 @@ describe(`${entityName}Repository`, () => {
 
       const updateEntityInput = {
         where: { id: entity.id },
-        data: input,
+        data: input
       };
 
       const result = await userRepository.updateEntity(updateEntityInput);

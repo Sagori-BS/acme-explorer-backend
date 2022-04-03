@@ -1,4 +1,3 @@
-import { AuthTokenTypes } from '@user/graphql/enums/auth-token-types.enum';
 import { AuthTokenRepository } from '../auth-token.repository';
 import { AuthTokenService } from '../auth-token.service';
 import { AuthToken } from '../database/auth-token.entity';
@@ -10,6 +9,7 @@ import { hashToken } from '../utils/hash-token';
 import { CreateAuthTokenInput } from '../graphql/inputs/create-auth-token.input';
 import { pubSubClient } from '@shared/config/clients/mock/pub-sub-client';
 import { PUB_SUB_CLIENT_TOKEN } from '@shared/microservices/pub-sub/constants/pub-sub-client.constants';
+import { AuthTokenTypes } from '@shared/graphql/enums/auth-token-types.enum';
 
 describe('AuthTokenService', () => {
   const entityName = AuthToken.name;
@@ -18,13 +18,13 @@ describe('AuthTokenService', () => {
   const createEntityInput: CreateAuthTokenInternalInput = {
     email: 'test@email.com',
     type: AuthTokenTypes.RESET_PASSWORD,
-    origin: 'N/A',
+    origin: 'N/A'
   };
 
   const entityRepository = {
     getAuthTokenByToken: jest.fn(),
     createAuthToken: jest.fn(),
-    updateAuthToken: jest.fn(),
+    updateAuthToken: jest.fn()
   };
 
   const credentialService = {
@@ -32,7 +32,7 @@ describe('AuthTokenService', () => {
     createCredential: jest.fn(),
     updateCredential: jest.fn(),
     deleteCredential: jest.fn(),
-    resetPassword: jest.fn(),
+    resetPassword: jest.fn()
   };
 
   const unhashedToken = createUnhashedToken();
@@ -43,18 +43,18 @@ describe('AuthTokenService', () => {
       providers: [
         {
           provide: AuthTokenRepository,
-          useValue: entityRepository,
+          useValue: entityRepository
         },
         {
           provide: PUB_SUB_CLIENT_TOKEN,
-          useValue: pubSubClient,
+          useValue: pubSubClient
         },
         {
           provide: CredentialService,
-          useValue: credentialService,
+          useValue: credentialService
         },
-        AuthTokenService,
-      ],
+        AuthTokenService
+      ]
     }).compile();
 
     entityService = testModule.get<AuthTokenService>(AuthTokenService);
@@ -66,7 +66,7 @@ describe('AuthTokenService', () => {
 
       expect(entityRepository.getAuthTokenByToken).toHaveBeenCalled();
       expect(entityRepository.getAuthTokenByToken).toHaveBeenCalledWith({
-        token: unhashedToken,
+        token: unhashedToken
       });
     });
   });
@@ -77,7 +77,7 @@ describe('AuthTokenService', () => {
 
       expect(entityRepository.createAuthToken).toHaveBeenCalled();
       expect(entityRepository.createAuthToken).toHaveBeenCalledWith(
-        createEntityInput,
+        createEntityInput
       );
     });
   });
@@ -88,7 +88,7 @@ describe('AuthTokenService', () => {
 
       expect(entityRepository.updateAuthToken).toHaveBeenCalled();
       expect(entityRepository.updateAuthToken).toHaveBeenCalledWith({
-        token: unhashedToken,
+        token: unhashedToken
       });
     });
   });
@@ -97,7 +97,7 @@ describe('AuthTokenService', () => {
     it(`should return false if unvalid token is provided`, async () => {
       const result = await entityService.validateAuthToken({
         token: unhashedToken,
-        origin: 'NA',
+        origin: 'NA'
       });
 
       expect(result).toBe(false);
@@ -106,17 +106,17 @@ describe('AuthTokenService', () => {
     it(`should call the getAuthTokenByToken and updateAuthToken method of the ${entityName}Repository if valid token is provided`, async () => {
       entityRepository.getAuthTokenByToken.mockReturnValueOnce({
         token,
-        type: AuthTokenTypes.CONFIRM_ACCOUNT,
+        type: AuthTokenTypes.CONFIRM_ACCOUNT
       });
 
       await entityService.validateAuthToken({
         token: unhashedToken,
-        origin: 'NA',
+        origin: 'NA'
       });
 
       expect(entityRepository.getAuthTokenByToken).toHaveBeenCalled();
       expect(entityRepository.getAuthTokenByToken).toHaveBeenCalledWith({
-        token,
+        token
       });
 
       expect(entityRepository.updateAuthToken).toHaveBeenCalled();
@@ -126,12 +126,12 @@ describe('AuthTokenService', () => {
     it(`should return true if valid token is provided`, async () => {
       entityRepository.getAuthTokenByToken.mockReturnValueOnce({
         token,
-        type: AuthTokenTypes.CONFIRM_ACCOUNT,
+        type: AuthTokenTypes.CONFIRM_ACCOUNT
       });
 
       const result = await entityService.validateAuthToken({
         token: unhashedToken,
-        origin: 'NA',
+        origin: 'NA'
       });
 
       expect(result).toBe(true);
@@ -142,13 +142,13 @@ describe('AuthTokenService', () => {
     it(`should call the createAuthToken method of the ${entityName}Repository, and the send method of the pub-sub client if valid input is provided`, async () => {
       const authToken = {
         ...createEntityInput,
-        token,
+        token
       };
 
       entityRepository.createAuthToken.mockReturnValueOnce(authToken);
 
       await entityService.resetUserPassword(
-        <CreateAuthTokenInput>createEntityInput,
+        <CreateAuthTokenInput>createEntityInput
       );
 
       expect(entityRepository.createAuthToken).toHaveBeenCalled();
@@ -158,12 +158,12 @@ describe('AuthTokenService', () => {
     it(`should return true if valid input is provided`, async () => {
       const authToken = {
         ...createEntityInput,
-        token,
+        token
       };
       entityRepository.createAuthToken.mockReturnValueOnce(authToken);
 
       const result = await entityService.resetUserPassword(
-        <CreateAuthTokenInput>createEntityInput,
+        <CreateAuthTokenInput>createEntityInput
       );
 
       expect(result).toBe(true);

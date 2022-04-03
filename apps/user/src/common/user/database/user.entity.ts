@@ -10,7 +10,7 @@ import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 
 @Schema({
   optimisticConcurrency: true,
-  versionKey: 'version',
+  versionKey: 'version'
 })
 export class User extends Document implements IBaseEntity, IUser {
   @Prop()
@@ -26,7 +26,7 @@ export class User extends Document implements IBaseEntity, IUser {
     required: true,
     type: String,
     default: UserRoles.EXPLORER,
-    enum: Object.values(UserRoles),
+    enum: Object.values(UserRoles)
   })
   role: UserRoles;
 
@@ -34,14 +34,14 @@ export class User extends Document implements IBaseEntity, IUser {
     required: true,
     unique: true,
     validate: validateEmail,
-    lowercase: true,
+    lowercase: true
   })
   email: string;
 
   @Prop({
     required: true,
     type: String,
-    enum: Object.values(AuthProviders),
+    enum: Object.values(AuthProviders)
   })
   socialProvider: AuthProviders;
 

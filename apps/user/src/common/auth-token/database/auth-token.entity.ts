@@ -3,11 +3,11 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { IAuthToken } from '../interfaces/entities/auth-token-entity.interface';
 import { validateToken } from '@user/validations/token/token.validator';
 import { validateEmail } from '@user/validations/email/email.validator';
-import { AuthTokenTypes } from '@user/graphql/enums/auth-token-types.enum';
+import { AuthTokenTypes } from '@shared/graphql/enums/auth-token-types.enum';
 
 @Schema({
   optimisticConcurrency: true,
-  versionKey: 'version',
+  versionKey: 'version'
 })
 export class AuthToken extends Document implements IAuthToken {
   @Prop()
@@ -28,7 +28,7 @@ export class AuthToken extends Document implements IAuthToken {
   @Prop({
     required: true,
     type: String,
-    enum: Object.values(AuthTokenTypes),
+    enum: Object.values(AuthTokenTypes)
   })
   type: AuthTokenTypes;
 

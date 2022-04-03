@@ -7,7 +7,7 @@ import { User } from '../user/database/user.entity';
 import { SignUpUserInput } from './graphql/inputs/sign-up-user.input';
 import {
   InvalidFunctionInputError,
-  InvalidSignInMethodError,
+  InvalidSignInMethodError
 } from '@shared/errors/errors';
 import { AuthType } from './utils/auth-providers.enum';
 import { BlockUserType } from './graphql/types/block-user.type';
@@ -26,15 +26,14 @@ export class AuthRepository {
     private readonly logger: LoggerService,
     private readonly credentialRepository: CredentialRepository,
     private readonly userRepository: UserRepository,
-
     @InjectModel(User.name)
     private readonly userModel: Model<User>,
     @InjectConnection()
-    private readonly connection: Connection,
+    private readonly connection: Connection
   ) {}
 
   public async localSignUpUser(
-    signUpUserInput: SignUpUserInput,
+    signUpUserInput: SignUpUserInput
   ): Promise<User> {
     const session = await this.connection.startSession();
     session.startTransaction();
@@ -50,7 +49,7 @@ export class AuthRepository {
 
       await this.credentialRepository.createCredential(
         { email, password },
-        session,
+        session
       );
 
       delete signUpUserInput.password;
@@ -58,7 +57,7 @@ export class AuthRepository {
       const user = new this.userModel({
         ...signUpUserInput,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       });
 
       await user.save({ session });
@@ -75,7 +74,7 @@ export class AuthRepository {
   }
 
   public async socialSignUp(
-    signUpUserInput: SignUpUserInput,
+    signUpUserInput: SignUpUserInput
   ): Promise<{ user: User; isNew: boolean }> {
     let isNew = false;
 
@@ -92,7 +91,7 @@ export class AuthRepository {
         user = new this.userModel({
           ...signUpUserInput,
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         });
 
         isNew = true;
@@ -112,14 +111,14 @@ export class AuthRepository {
   }
 
   public async blockUser(
-    blockUserInput: BlockUserInput,
+    blockUserInput: BlockUserInput
   ): Promise<BlockUserType> {
     const session = await this.connection.startSession();
     session.startTransaction();
 
     try {
       const user = await this.userModel.findOne({
-        email: blockUserInput.email,
+        email: blockUserInput.email
       });
 
       if (!user) {
@@ -129,13 +128,13 @@ export class AuthRepository {
       const updateCredentialInput: UpdateCredentialInput = {
         where: { email: user.email },
         data: {
-          blocked: true,
-        },
+          blocked: true
+        }
       };
 
       const credential = await this.credentialRepository.updateCredential(
         updateCredentialInput,
-        session,
+        session
       );
 
       await session.commitTransaction();
@@ -151,7 +150,7 @@ export class AuthRepository {
   }
 
   public async updateUserPassword(
-    updateUserPassword: UpdateUserPasswordInput,
+    updateUserPassword: UpdateUserPasswordInput
   ): Promise<UpdateUserPasswordType> {
     const session = await this.connection.startSession();
     session.startTransaction();
@@ -163,13 +162,13 @@ export class AuthRepository {
         where: { email },
         data: {
           password: newPassword,
-          oldPassword,
-        },
+          oldPassword
+        }
       };
 
       const credential = await this.credentialRepository.updateCredentialPassword(
         updateCredentialPasswordInput,
-        session,
+        session
       );
 
       await session.commitTransaction();

@@ -9,7 +9,7 @@ import { CommonEnvKey } from '@shared/config/common-env-key.enum';
 export class TokensService {
   constructor(
     private jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
 
   async signAccessToken(user: User) {
@@ -19,7 +19,7 @@ export class TokensService {
 
     const signOptions: JwtSignOptions = {
       expiresIn: this.configService.get(CommonEnvKey.ACCESS_TOKEN_EXPIRES_IN),
-      secret: this.configService.get(CommonEnvKey.ACCESS_TOKEN_SECRET),
+      secret: this.configService.get(CommonEnvKey.ACCESS_TOKEN_SECRET)
     };
 
     const accessToken = this.jwtService.sign(payload, signOptions);

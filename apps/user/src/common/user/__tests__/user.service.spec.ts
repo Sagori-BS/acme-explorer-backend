@@ -5,18 +5,18 @@ import { Types } from 'mongoose';
 import { CreateUserInput } from '../graphql/inputs/create-user.input';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { AuthProviders, AuthType } from '../../auth/utils/auth-providers.enum';
-import { FilterInput } from '@user/graphql/inputs/graphql-filter.input';
 import { UpdateUserInput } from '../graphql/inputs/update-user.input';
 import { pubSubClient } from '@shared/config/clients/mock/pub-sub-client';
 import { User } from '../database/user.entity';
 import { PUB_SUB_CLIENT_TOKEN } from '@shared/microservices/pub-sub/constants/pub-sub-client.constants';
 import * as faker from 'faker';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 
 const userMock = {
   id: new Types.ObjectId().toHexString(),
   name: faker.name.firstName(),
   version: 0,
-  email: faker.internet.email(),
+  email: faker.internet.email()
 };
 
 const userRepository = {
@@ -24,7 +24,7 @@ const userRepository = {
   createEntity: jest.fn().mockReturnValue(userMock),
   updateEntity: jest.fn().mockReturnValue(userMock),
   deleteEntity: jest.fn().mockReturnValue(userMock),
-  getOneEntity: jest.fn().mockReturnValue(userMock),
+  getOneEntity: jest.fn().mockReturnValue(userMock)
 };
 
 const entityName = User.name;
@@ -38,13 +38,13 @@ describe(`${entityName}Service`, () => {
         UserService,
         {
           provide: PUB_SUB_CLIENT_TOKEN,
-          useValue: pubSubClient,
+          useValue: pubSubClient
         },
         {
           provide: UserRepository,
-          useValue: userRepository,
-        },
-      ],
+          useValue: userRepository
+        }
+      ]
     }).compile();
 
     userService = testModule.get<UserService>(UserService);
@@ -67,7 +67,7 @@ describe(`${entityName}Service`, () => {
       //Arrange
       const filterInput: FilterInput = {
         limit: 5,
-        start: 35,
+        start: 35
       };
 
       //Act
@@ -84,7 +84,7 @@ describe(`${entityName}Service`, () => {
       //Arrange
       const filterInput: FilterInput = {
         limit: 5,
-        start: 35,
+        start: 35
       };
 
       //Act
@@ -95,7 +95,7 @@ describe(`${entityName}Service`, () => {
       expect(userRepository.getAllEntities).toHaveBeenCalledWith({
         limit: 5,
         start: 35,
-        where: { deleted: false },
+        where: { deleted: false }
       });
     });
   });
@@ -106,10 +106,10 @@ describe(`${entityName}Service`, () => {
       const createUserInput: CreateUserInput = {
         name: faker.name.firstName(),
         password: faker.internet.password(),
-        role: UserRoles.CLIENT,
+        role: UserRoles.EXPLORER,
         email: faker.internet.email(),
         socialProvider: AuthProviders.Local,
-        authType: AuthType.PASSWORD,
+        authType: AuthType.PASSWORD
       };
 
       //Act
@@ -123,11 +123,11 @@ describe(`${entityName}Service`, () => {
     it('should call the send method of the client class', async () => {
       const input: CreateUserInput = {
         name: 'Test',
-        role: UserRoles.CLIENT,
+        role: UserRoles.EXPLORER,
         password: '1234567890',
         email: 'test@test.com',
         socialProvider: AuthProviders.Local,
-        authType: AuthType.PASSWORD,
+        authType: AuthType.PASSWORD
       };
 
       await userService.createEntity(input);
@@ -140,11 +140,11 @@ describe(`${entityName}Service`, () => {
       //Arrange
       const updateUserInput: UpdateUserInput = {
         where: {
-          id: userMock.id,
+          id: userMock.id
         },
         data: {
-          profilePicture: faker.internet.url(),
-        },
+          profilePicture: faker.internet.url()
+        }
       };
 
       //Act
@@ -159,9 +159,9 @@ describe(`${entityName}Service`, () => {
       //Arrange
       const updateUserInput: UpdateUserInput = {
         where: {
-          id: userMock.id,
+          id: userMock.id
         },
-        data: {},
+        data: {}
       };
 
       //Act
@@ -184,7 +184,7 @@ describe(`${entityName}Service`, () => {
       expect(userRepository.deleteEntity).toHaveBeenCalled();
       expect(userRepository.deleteEntity).toHaveBeenCalledWith({
         id,
-        deleted: false,
+        deleted: false
       });
     });
 

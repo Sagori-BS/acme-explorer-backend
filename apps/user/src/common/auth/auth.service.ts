@@ -6,7 +6,6 @@ import { AuthenticationType } from './graphql/types/authentication.type';
 import { CredentialService } from '../credential/credential.service';
 import * as bcrypt from 'bcryptjs';
 import { AuthTokenService } from '../auth-token/auth-token.service';
-import { AuthTokenTypes } from '@user/graphql/enums/auth-token-types.enum';
 import { createUserPayload } from './utils/create-user.payload';
 import { SocialSignInInput } from '../user/graphql/inputs/social-sign-in.input';
 import { CreateAuthTokenInput } from '../auth-token/graphql/inputs/create-auth-token.input';
@@ -21,11 +20,11 @@ import { BlockUserType } from './graphql/types/block-user.type';
 import { BlockedUserError } from './errors/blocked-user.error';
 import { BlockUserInput } from './graphql/inputs/block-user.input';
 import { UpdateCredentialInput } from '../credential/graphql/inputs/update-credential.input';
-import { UserService } from '../user/user.service';
 import { UpdateUserPasswordInput } from './graphql/inputs/update-user-password.input';
 import { UpdateUserPasswordType } from './graphql/types/updated-user-password.type';
 import { LoggerService } from '@shared/logger/logger.service';
 import { UserEvents } from '@shared/events/user/user.events';
+import { AuthTokenTypes } from '@shared/graphql/enums/auth-token-types.enum';
 
 @Injectable()
 export class AuthService {
@@ -37,16 +36,15 @@ export class AuthService {
     private credentialService: CredentialService,
     private authTokenService: AuthTokenService,
     private firebaseAdminService: FirebaseAdminService,
-    private userService: UserService,
     private readonly logger: LoggerService,
 
-    @Inject(PUB_SUB_CLIENT_TOKEN) private readonly client: PubSubClient,
+    @Inject(PUB_SUB_CLIENT_TOKEN) private readonly client: PubSubClient
   ) {}
 
   public async validateCredential(email: string, password: string) {
     try {
       const credential = await this.credentialService.getCredentialByIdOrEmail({
-        email,
+        email
       });
 
       if (credential.blocked) {
@@ -66,7 +64,7 @@ export class AuthService {
   }
 
   public async signUpUser(
-    signUpUserInput: SignUpUserInput,
+    signUpUserInput: SignUpUserInput
   ): Promise<AuthenticationType> {
     signUpUserInput.authType = AuthType.PASSWORD;
     signUpUserInput.socialProvider = AuthProviders.Local;
@@ -77,7 +75,7 @@ export class AuthService {
 
     const authToken = await this.authTokenService.createAuthToken({
       email: user.email,
-      type: AuthTokenTypes.CONFIRM_ACCOUNT,
+      type: AuthTokenTypes.CONFIRM_ACCOUNT
     });
 
     const createdUser = createUserPayload(user, authToken.token);
@@ -94,14 +92,14 @@ export class AuthService {
   }
 
   public async socialSignUp(
-    socialSignInInput: SocialSignInInput,
+    socialSignInInput: SocialSignInInput
   ): Promise<AuthenticationType> {
     const { token } = socialSignInInput;
 
     const userSignInPayload = await this.validateSocialLogin(token);
 
     const { user, isNew } = await this.authRepository.socialSignUp(
-      userSignInPayload,
+      userSignInPayload
     );
 
     const accessToken = await this.tokensService.signAccessToken(user);
@@ -116,7 +114,7 @@ export class AuthService {
   }
 
   private async validateSocialLogin(
-    token: string,
+    token: string
   ): Promise<{
     name: string;
     email: string;
@@ -126,7 +124,7 @@ export class AuthService {
   }> {
     try {
       const decodedToken = await this.firebaseAdminService.auth.verifyIdToken(
-        token,
+        token
       );
 
       const name = decodedToken.name as string;
@@ -139,7 +137,7 @@ export class AuthService {
         email,
         profilePicture,
         socialProvider: getAuthProvider(socialProvider),
-        authType: AuthType.SOCIAL,
+        authType: AuthType.SOCIAL
       };
 
       return ret;
@@ -150,43 +148,41 @@ export class AuthService {
   }
 
   public async resetUserPassword(
-    createAuthTokenInput: CreateAuthTokenInput,
+    createAuthTokenInput: CreateAuthTokenInput
   ): Promise<boolean> {
-    return await this.authTokenService.resetUserPassword(createAuthTokenInput);
+    return this.authTokenService.resetUserPassword(createAuthTokenInput);
   }
 
   public async blockUser(
-    blockUserInput: BlockUserInput,
+    blockUserInput: BlockUserInput
   ): Promise<BlockUserType> {
-    return await this.authRepository.blockUser(blockUserInput);
+    return this.authRepository.blockUser(blockUserInput);
   }
 
   public async unblockUser(
-    unblockUserInput: BlockUserInput,
+    unblockUserInput: BlockUserInput
   ): Promise<BlockUserType> {
     const updateCredentialInput: UpdateCredentialInput = {
       where: { email: unblockUserInput.email },
-      data: { blocked: false },
+      data: { blocked: false }
     };
 
     const result = await this.credentialService.updateCredential(
-      updateCredentialInput,
+      updateCredentialInput
     );
 
     return { blocked: result.blocked };
   }
 
   public async validateAuthToken(
-    validateTokenInput: ValidateAuthTokenInput,
+    validateTokenInput: ValidateAuthTokenInput
   ): Promise<boolean> {
-    return await this.authTokenService.validateAuthToken(validateTokenInput);
+    return this.authTokenService.validateAuthToken(validateTokenInput);
   }
 
   public async updateUserPassword(
-    updateUserPasswordInput: UpdateUserPasswordInput,
+    updateUserPasswordInput: UpdateUserPasswordInput
   ): Promise<UpdateUserPasswordType> {
-    return await this.authRepository.updateUserPassword(
-      updateUserPasswordInput,
-    );
+    return this.authRepository.updateUserPassword(updateUserPasswordInput);
   }
 }

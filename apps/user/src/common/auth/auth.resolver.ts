@@ -1,5 +1,4 @@
 import { Resolver, Args, Mutation } from '@nestjs/graphql';
-import { GraphQlFieldNames } from '@user/graphql/enums/graphql-label-types.enum';
 import { AuthService } from './auth.service';
 import { SignUpUserInput } from './graphql/inputs/sign-up-user.input';
 import { AuthenticationType } from './graphql/types/authentication.type';
@@ -24,19 +23,20 @@ import { UpdateUserPasswordInput } from './graphql/inputs/update-user-password.i
 import { UpdateUserPasswordType } from './graphql/types/updated-user-password.type';
 import { JwtPayload } from '@shared/auth/interfaces/jwt-payload.interface';
 import { JwtAuthGuard } from '@shared/auth/guards/jwt-auth.guard';
+import { GraphQlFieldNames } from '@shared/graphql/enums/graphql-label-types.enum';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly userService: UserService,
-    private readonly authService: AuthService,
+    private readonly authService: AuthService
   ) {}
 
   @Public()
   @Mutation(_of => AuthenticationType)
   public async signUpUser(
     @Args(GraphQlFieldNames.INPUT_FIELD)
-    signUpUserInput: SignUpUserInput,
+    signUpUserInput: SignUpUserInput
   ): Promise<AuthenticationType> {
     return await this.authService.signUpUser(signUpUserInput);
   }
@@ -47,7 +47,7 @@ export class AuthResolver {
   public async signInUser(
     @Args(GraphQlFieldNames.INPUT_FIELD)
     signInUserInput: CreateCredentialInput,
-    @CurrentUser() user: UserEntity,
+    @CurrentUser() user: UserEntity
   ): Promise<AuthenticationType> {
     return await this.authService.signInUser(user);
   }
@@ -56,7 +56,7 @@ export class AuthResolver {
   @Mutation(_of => AuthenticationType)
   public async socialSignIn(
     @Args(GraphQlFieldNames.INPUT_FIELD)
-    socialSignInInput: SocialSignInInput,
+    socialSignInInput: SocialSignInInput
   ): Promise<AuthenticationType> {
     return await this.authService.socialSignUp(socialSignInInput);
   }
@@ -65,7 +65,7 @@ export class AuthResolver {
   @Mutation(_of => Boolean)
   public async resetUserPassword(
     @Args(GraphQlFieldNames.INPUT_FIELD)
-    createAuthTokenInput: CreateAuthTokenInput,
+    createAuthTokenInput: CreateAuthTokenInput
   ): Promise<boolean> {
     return await this.authService.resetUserPassword(createAuthTokenInput);
   }
@@ -75,7 +75,7 @@ export class AuthResolver {
     @CurrentUser()
     jwtPayload: JwtPayload,
     @Args(GraphQlFieldNames.INPUT_FIELD)
-    updateUserPassword: UpdateUserPasswordInput,
+    updateUserPassword: UpdateUserPasswordInput
   ): Promise<UpdateUserPasswordType> {
     updateUserPassword.email = jwtPayload.email;
     updateUserPassword.userId = jwtPayload.id;
@@ -87,7 +87,7 @@ export class AuthResolver {
   @Mutation(_of => Boolean)
   public async validateToken(
     @Args(GraphQlFieldNames.INPUT_FIELD)
-    validateTokenInput: ValidateAuthTokenInput,
+    validateTokenInput: ValidateAuthTokenInput
   ): Promise<boolean> {
     return await this.authService.validateAuthToken(validateTokenInput);
   }
@@ -98,11 +98,11 @@ export class AuthResolver {
     @CurrentUser()
     jwtPayload: JwtPayload,
     @Args(GraphQlFieldNames.INPUT_FIELD)
-    updateUserPayload: UpdateUserPayload,
+    updateUserPayload: UpdateUserPayload
   ): Promise<User> {
     const updateUserInput: UpdateUserInput = {
       where: { id: jwtPayload.id },
-      data: updateUserPayload,
+      data: updateUserPayload
     };
 
     return await this.userService.updateEntity(updateUserInput);
@@ -112,7 +112,7 @@ export class AuthResolver {
   @Mutation(_of => BlockUserType)
   public async blockUser(
     @Args(GraphQlFieldNames.INPUT_FIELD)
-    blockUserInput: BlockUserInput,
+    blockUserInput: BlockUserInput
   ): Promise<BlockUserType> {
     return await this.authService.blockUser(blockUserInput);
   }
@@ -121,7 +121,7 @@ export class AuthResolver {
   @Mutation(_of => BlockUserType)
   public async unblockUser(
     @Args(GraphQlFieldNames.INPUT_FIELD)
-    unblockUserInput: BlockUserInput,
+    unblockUserInput: BlockUserInput
   ): Promise<BlockUserType> {
     return await this.authService.unblockUser(unblockUserInput);
   }

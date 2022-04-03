@@ -1,4 +1,3 @@
-import { AuthTokenTypes } from '@user/graphql/enums/auth-token-types.enum';
 import { Inject, Injectable } from '@nestjs/common';
 import { CredentialService } from '../credential/credential.service';
 import { AuthTokenRepository } from './auth-token.repository';
@@ -14,60 +13,61 @@ import { PUB_SUB_CLIENT_TOKEN } from '@shared/microservices/pub-sub/constants/pu
 import { AuthTokenType } from './types/auth-token.type';
 import { resetUserPasswordPayload } from './utils/reset-user-password.payload';
 import { NotificationEvents } from '@shared/events/notification/notification.events';
+import { AuthTokenTypes } from '@shared/graphql/enums/auth-token-types.enum';
 
 @Injectable()
 export class AuthTokenService {
   constructor(
     private readonly authTokenRepository: AuthTokenRepository,
     private readonly credentailService: CredentialService,
-    @Inject(PUB_SUB_CLIENT_TOKEN) private readonly client: PubSubClient,
+    @Inject(PUB_SUB_CLIENT_TOKEN) private readonly client: PubSubClient
   ) {}
 
   public async getAuthTokenByToken(
-    getAuthTokenByTokenInput: GetAuthTokenByTokenInput,
+    getAuthTokenByTokenInput: GetAuthTokenByTokenInput
   ): Promise<AuthToken> {
     return this.authTokenRepository.getAuthTokenByToken(
-      getAuthTokenByTokenInput,
+      getAuthTokenByTokenInput
     );
   }
 
   public async createAuthToken(
-    createAuthTokenInternalInput: CreateAuthTokenInternalInput,
+    createAuthTokenInternalInput: CreateAuthTokenInternalInput
   ): Promise<AuthTokenType> {
     return this.authTokenRepository.createAuthToken(
-      createAuthTokenInternalInput,
+      createAuthTokenInternalInput
     );
   }
 
   public async updateAuthToken(
-    updateAuthTokenInput: GetAuthTokenByTokenInput,
+    updateAuthTokenInput: GetAuthTokenByTokenInput
   ): Promise<AuthToken> {
     return this.authTokenRepository.updateAuthToken(updateAuthTokenInput);
   }
 
   public async validateAuthToken(
-    validateAuthTokenInput: ValidateAuthTokenInput,
+    validateAuthTokenInput: ValidateAuthTokenInput
   ): Promise<boolean> {
     try {
       const token = hashToken(validateAuthTokenInput.token);
 
       const result = await this.authTokenRepository.getAuthTokenByToken({
-        token,
+        token
       });
 
       if (result.type === AuthTokenTypes.RESET_PASSWORD) {
         await this.credentailService.updatePassword({
           where: { email: result.email },
-          data: { password: validateAuthTokenInput.password },
+          data: { password: validateAuthTokenInput.password }
         });
       } else if (result.type === AuthTokenTypes.CONFIRM_ACCOUNT) {
         await this.credentailService.updateCredential({
           where: {
-            email: result.email,
+            email: result.email
           },
           data: {
-            confirmed: true,
-          },
+            confirmed: true
+          }
         });
       }
 
@@ -84,7 +84,7 @@ export class AuthTokenService {
   }
 
   public async resetUserPassword(
-    createAuthTokenInput: CreateAuthTokenInput,
+    createAuthTokenInput: CreateAuthTokenInput
   ): Promise<boolean> {
     const createAuthTokenInternalInput = new CreateAuthTokenInternalInput();
 
@@ -98,7 +98,7 @@ export class AuthTokenService {
 
     await this.client.send(
       { type: NotificationEvents.ResetUserPassword },
-      resetUserPassword,
+      resetUserPassword
     );
 
     return true;
