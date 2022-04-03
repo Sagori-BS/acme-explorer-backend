@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pubsub-emulator
+spec:
+  type: ClusterIP
+  ports:
+  - name: pubsub-emulator
+    protocol: TCP
+    port: 8085
+    targetPort: 8085
+    
+  selector:
+    app: pubsub-emulator
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pubsub-emulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pubsub-emulator
+  template:
+    metadata:
+      labels:
+        app: pubsub-emulator
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - image: knarz/pubsub-emulator
+        name: pubsub-emulator
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
