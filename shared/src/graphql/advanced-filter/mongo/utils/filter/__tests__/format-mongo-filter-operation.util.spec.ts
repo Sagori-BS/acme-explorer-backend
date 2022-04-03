@@ -3,7 +3,7 @@ import { formatMongoFilterOperation } from '../format-mongo-filter-operation.uti
 import * as faker from 'faker';
 import { MissingRequiredParametersError } from '@shared/errors/common/missing-required-parameters.error';
 import { MongoFilterOperationEnum } from '../../../enum/mongo-filter-operation.enum';
-import { GraphqlFilterOperationEnum } from '@user/graphql/advanced-filter/enum/graphql-filter-operation.enum';
+import { GraphqlFilterOperationEnum } from '@shared/graphql/advanced-filter/enum/graphql-filter-operation.enum';
 
 const firstSuccessCase = () => {
   const value = faker.datatype.string();
@@ -15,7 +15,7 @@ const firstSuccessCase = () => {
     gqlOperation: GraphqlFilterOperationEnum.eq,
     mongoOperation: MongoFilterOperationEnum.$eq,
     value,
-    fieldName,
+    fieldName
   };
 
   return [input, expectedResult];
@@ -30,12 +30,12 @@ describe('FormatMongoOperation', () => {
       gqlOperation: GraphqlFilterOperationEnum.contains,
       mongoOperation: null,
       value: faker.random.alphaNumeric(),
-      fieldName,
+      fieldName
     };
 
     // act & assert
     expect(() => formatMongoFilterOperation(input)).toThrow(
-      MissingRequiredParametersError,
+      MissingRequiredParametersError
     );
   });
 
@@ -47,12 +47,12 @@ describe('FormatMongoOperation', () => {
       gqlOperation: GraphqlFilterOperationEnum.contains,
       mongoOperation: undefined,
       value: faker.random.alphaNumeric(),
-      fieldName,
+      fieldName
     };
 
     // act & assert
     expect(() => formatMongoFilterOperation(input)).toThrow(
-      MissingRequiredParametersError,
+      MissingRequiredParametersError
     );
   });
 
@@ -64,12 +64,12 @@ describe('FormatMongoOperation', () => {
       gqlOperation: null,
       mongoOperation: MongoFilterOperationEnum.$eq,
       value: faker.random.alphaNumeric(),
-      fieldName,
+      fieldName
     };
 
     // act & assert
     expect(() => formatMongoFilterOperation(input)).toThrow(
-      MissingRequiredParametersError,
+      MissingRequiredParametersError
     );
   });
 
@@ -81,12 +81,12 @@ describe('FormatMongoOperation', () => {
       gqlOperation: undefined,
       mongoOperation: MongoFilterOperationEnum.$eq,
       value: faker.random.alphaNumeric(),
-      fieldName,
+      fieldName
     };
 
     // act & assert
     expect(() => formatMongoFilterOperation(input)).toThrow(
-      MissingRequiredParametersError,
+      MissingRequiredParametersError
     );
   });
 
@@ -96,12 +96,12 @@ describe('FormatMongoOperation', () => {
       gqlOperation: GraphqlFilterOperationEnum.contains,
       mongoOperation: MongoFilterOperationEnum.$eq,
       value: faker.random.alphaNumeric(),
-      fieldName: null,
+      fieldName: null
     };
 
     // act & assert
     expect(() => formatMongoFilterOperation(input)).toThrow(
-      MissingRequiredParametersError,
+      MissingRequiredParametersError
     );
   });
 
@@ -111,12 +111,12 @@ describe('FormatMongoOperation', () => {
       gqlOperation: GraphqlFilterOperationEnum.contains,
       mongoOperation: MongoFilterOperationEnum.$eq,
       value: faker.random.alphaNumeric(),
-      fieldName: undefined,
+      fieldName: undefined
     };
 
     // act & assert
     expect(() => formatMongoFilterOperation(input)).toThrow(
-      MissingRequiredParametersError,
+      MissingRequiredParametersError
     );
   });
 
@@ -124,7 +124,7 @@ describe('FormatMongoOperation', () => {
     'should return the formatted mongo operation',
     (
       input: IFormatMongooperationInput,
-      expectedResult: Record<string, any>,
+      expectedResult: Record<string, any>
     ) => {
       // arrange
 
@@ -133,6 +133,6 @@ describe('FormatMongoOperation', () => {
 
       // assert
       expect(res).toEqual(expectedResult);
-    },
+    }
   );
 });

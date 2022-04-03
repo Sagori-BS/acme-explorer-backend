@@ -1,6 +1,6 @@
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { Types } from 'mongoose';
 import { EntityNotFoundError } from '../errors/common/entity-not-found.error';
-import { FilterInput } from '../../../apps/user/src/graphql/inputs/graphql-filter.input';
 import { createDocument } from './create-document';
 
 export class CommonRepositoryTests {
@@ -13,7 +13,7 @@ export class CommonRepositoryTests {
     _entityRepository,
     _entityModel,
     _createEntityInput,
-    _createDocument?,
+    _createDocument?
   ) {
     this.entityRepository = _entityRepository;
     this.createEntityInput = _createEntityInput;
@@ -25,7 +25,7 @@ export class CommonRepositoryTests {
 
   public async getOneEntity(
     getOneEntityInput: Record<string, any>,
-    entity: any,
+    entity: any
   ) {
     //Act
     const result = await this.entityRepository.getOneEntity(getOneEntityInput);
@@ -40,7 +40,7 @@ export class CommonRepositoryTests {
 
     //Act
     const result = await this.entityRepository.getOneEntity({
-      id: entity.id,
+      id: entity.id
     });
 
     //Assert
@@ -49,8 +49,8 @@ export class CommonRepositoryTests {
 
   public async getOneEntityError(
     getOneEntityInput: Record<string, any> = {
-      id: new Types.ObjectId().toHexString(),
-    },
+      id: new Types.ObjectId().toHexString()
+    }
   ) {
     //Act
     const result = this.entityRepository.getOneEntity(getOneEntityInput);
@@ -83,7 +83,7 @@ export class CommonRepositoryTests {
   public async createEntity() {
     //Act
     const result = await this.entityRepository.createEntity(
-      this.createEntityInput,
+      this.createEntityInput
     );
 
     //Assert
@@ -93,7 +93,7 @@ export class CommonRepositoryTests {
   public async createEntityFromPayload() {
     //Act
     const result = await this.entityRepository.createEntity(
-      this.createEntityInput,
+      this.createEntityInput
     );
 
     const expectedValue: any = { ...result.toObject() };
@@ -113,7 +113,7 @@ export class CommonRepositoryTests {
 
     const updateEntityInput = {
       where: { id: entity.id },
-      data,
+      data
     };
 
     //Act
@@ -130,7 +130,7 @@ export class CommonRepositoryTests {
 
     const updateEntityInput = {
       where: { id: entity.id, version: entity.version },
-      data,
+      data
     };
 
     //Act
@@ -154,7 +154,7 @@ export class CommonRepositoryTests {
     const id = new Types.ObjectId().toHexString();
     const updateEntityInput = {
       where: { id },
-      data: input,
+      data: input
     };
 
     //Act
@@ -170,7 +170,7 @@ export class CommonRepositoryTests {
 
     const updateEntityInput = {
       where: { id: entity.id, version: 2 },
-      data,
+      data
     };
 
     //Act
@@ -184,7 +184,7 @@ export class CommonRepositoryTests {
     //Arrange
     const entity = await this.createDocument();
     const input: any = {
-      id: entity.id,
+      id: entity.id
     };
 
     if (addVersion) input.version = entity.version;
@@ -214,7 +214,7 @@ export class CommonRepositoryTests {
     //Act
     const result = this.entityRepository.deleteEntity({
       id: entity.id,
-      version: 2,
+      version: 2
     });
 
     //Assert

@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-import { FilterInput } from '../../../apps/user/src/graphql/inputs/graphql-filter.input';
 import { IUpdateEntity } from '@shared/data/interfaces/update-entity.interface';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 
 export class CommonServiceTests {
   public readonly entityService;
@@ -19,7 +19,7 @@ export class CommonServiceTests {
     expect(this.entityRepository.getOneEntity).toHaveBeenCalled();
     expect(this.entityRepository.getOneEntity).toHaveBeenCalledWith({
       id,
-      deleted: false,
+      deleted: false
     });
   }
 
@@ -47,12 +47,12 @@ export class CommonServiceTests {
     const id = new Types.ObjectId().toHexString();
     const updateEntityInput = {
       where: { id },
-      data: payload,
+      data: payload
     };
 
     const expectedUpdateEntityInput = {
       where: { id, deleted: false },
-      data: payload,
+      data: payload
     };
 
     //Act
@@ -61,7 +61,7 @@ export class CommonServiceTests {
     //Assert
     expect(this.entityRepository.updateEntity).toHaveBeenCalled();
     expect(this.entityRepository.updateEntity).toHaveBeenCalledWith(
-      expectedUpdateEntityInput,
+      expectedUpdateEntityInput
     );
   }
 
@@ -69,13 +69,13 @@ export class CommonServiceTests {
     const id = new Types.ObjectId().toHexString();
 
     await this.entityService.deleteEntity({
-      id,
+      id
     });
 
     expect(this.entityRepository.deleteEntity).toHaveBeenCalled();
     expect(this.entityRepository.deleteEntity).toHaveBeenCalledWith({
       deleted: false,
-      id,
+      id
     });
   }
 
@@ -89,38 +89,38 @@ export class CommonServiceTests {
     //Assert
     expect(this.entityRepository.getOneEntity).toHaveBeenCalled();
     expect(this.entityRepository.getOneEntity).toHaveBeenCalledWith(
-      input.where,
+      input.where
     );
   }
 
   public async addEntityTranslationTestUpdateEntityCall(
     input: IUpdateEntity,
-    entityMock,
+    entityMock
   ) {
     //Arrange
     (this.entityRepository.getOneEntity as jest.Mock).mockReturnValueOnce(
-      entityMock,
+      entityMock
     );
 
     const expectedValue = {
       where: {
         ...input.where,
-        deleted: false,
+        deleted: false
       },
-      data: {},
+      data: {}
     };
 
     for (const key in entityMock) {
       expectedValue.data[key] = {
         ...expectedValue.data[key],
-        ...entityMock[key],
+        ...entityMock[key]
       };
     }
 
     for (const key in input.data) {
       expectedValue.data[key] = {
         ...expectedValue.data[key],
-        ...input.data[key],
+        ...input.data[key]
       };
     }
 
@@ -130,7 +130,7 @@ export class CommonServiceTests {
     //Assert
     expect(this.entityRepository.updateEntity).toHaveBeenCalled();
     expect(this.entityRepository.updateEntity).toHaveBeenCalledWith(
-      expectedValue,
+      expectedValue
     );
   }
 }
