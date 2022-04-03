@@ -1,0 +1,20 @@
+
+# Node Js files
+node_modules
+dist
+*/dist
+
+# Test files
+test
+**/*.spec.ts
+
+# Config files
+.git
+.vscode
+.github
+docs
+kubernetes
+
+reports
+report
+.mega-linter.yml

@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  acme-explorer-service:
+    container_name: 'acme-explorer-service'
+    restart: 'always'
+    build:
+      context: .
+    ports:
+      - '4000:3000'
