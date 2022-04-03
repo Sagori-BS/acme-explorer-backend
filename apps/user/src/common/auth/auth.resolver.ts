@@ -33,44 +33,44 @@ export class AuthResolver {
   ) {}
 
   @Public()
-  @Mutation(_of => AuthenticationType)
+  @Mutation(() => AuthenticationType)
   public async signUpUser(
     @Args(GraphQlFieldNames.INPUT_FIELD)
     signUpUserInput: SignUpUserInput
   ): Promise<AuthenticationType> {
-    return await this.authService.signUpUser(signUpUserInput);
+    return this.authService.signUpUser(signUpUserInput);
   }
 
   @Public()
   @UseGuards(LocalAuthGuard)
-  @Mutation(_of => AuthenticationType)
+  @Mutation(() => AuthenticationType)
   public async signInUser(
     @Args(GraphQlFieldNames.INPUT_FIELD)
     signInUserInput: CreateCredentialInput,
     @CurrentUser() user: UserEntity
   ): Promise<AuthenticationType> {
-    return await this.authService.signInUser(user);
+    return this.authService.signInUser(user);
   }
 
   @Public()
-  @Mutation(_of => AuthenticationType)
+  @Mutation(() => AuthenticationType)
   public async socialSignIn(
     @Args(GraphQlFieldNames.INPUT_FIELD)
     socialSignInInput: SocialSignInInput
   ): Promise<AuthenticationType> {
-    return await this.authService.socialSignUp(socialSignInInput);
+    return this.authService.socialSignUp(socialSignInInput);
   }
 
   @Public()
-  @Mutation(_of => Boolean)
+  @Mutation(() => Boolean)
   public async resetUserPassword(
     @Args(GraphQlFieldNames.INPUT_FIELD)
     createAuthTokenInput: CreateAuthTokenInput
   ): Promise<boolean> {
-    return await this.authService.resetUserPassword(createAuthTokenInput);
+    return this.authService.resetUserPassword(createAuthTokenInput);
   }
 
-  @Mutation(_of => UpdateUserPasswordType)
+  @Mutation(() => UpdateUserPasswordType)
   public async updateSelfPassword(
     @CurrentUser()
     jwtPayload: JwtPayload,
@@ -80,20 +80,20 @@ export class AuthResolver {
     updateUserPassword.email = jwtPayload.email;
     updateUserPassword.userId = jwtPayload.id;
 
-    return await this.authService.updateUserPassword(updateUserPassword);
+    return this.authService.updateUserPassword(updateUserPassword);
   }
 
   @Public()
-  @Mutation(_of => Boolean)
+  @Mutation(() => Boolean)
   public async validateToken(
     @Args(GraphQlFieldNames.INPUT_FIELD)
     validateTokenInput: ValidateAuthTokenInput
   ): Promise<boolean> {
-    return await this.authService.validateAuthToken(validateTokenInput);
+    return this.authService.validateAuthToken(validateTokenInput);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(_of => User)
+  @Mutation(() => User)
   public async updateSelf(
     @CurrentUser()
     jwtPayload: JwtPayload,
@@ -105,24 +105,24 @@ export class AuthResolver {
       data: updateUserPayload
     };
 
-    return await this.userService.updateEntity(updateUserInput);
+    return this.userService.updateEntity(updateUserInput);
   }
 
   @AuthorizedRoles(UserRoles.ADMIN)
-  @Mutation(_of => BlockUserType)
+  @Mutation(() => BlockUserType)
   public async blockUser(
     @Args(GraphQlFieldNames.INPUT_FIELD)
     blockUserInput: BlockUserInput
   ): Promise<BlockUserType> {
-    return await this.authService.blockUser(blockUserInput);
+    return this.authService.blockUser(blockUserInput);
   }
 
   @AuthorizedRoles(UserRoles.ADMIN)
-  @Mutation(_of => BlockUserType)
+  @Mutation(() => BlockUserType)
   public async unblockUser(
     @Args(GraphQlFieldNames.INPUT_FIELD)
     unblockUserInput: BlockUserInput
   ): Promise<BlockUserType> {
-    return await this.authService.unblockUser(unblockUserInput);
+    return this.authService.unblockUser(unblockUserInput);
   }
 }
