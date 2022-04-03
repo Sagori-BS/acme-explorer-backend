@@ -7,6 +7,8 @@ import { validateName } from '@shared/validations/common/strings/name/name.valid
 import { validateEmail } from '@user/validations/email/email.validator';
 import { validateNullableUrl } from '@shared/validations/common/internet/url/url-nullable.validator';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
+import { validateTelephoneNumberNullable } from '@shared/validations/entities/user/telephone-number/telephone-number-nullable.validator';
+import { validateAddressNullable } from '@shared/validations/entities/location/address/address-nullable.validator';
 
 @Schema({
   optimisticConcurrency: true,
@@ -21,6 +23,15 @@ export class User extends Document implements IBaseEntity, IUser {
 
   @Prop({ required: true, validate: validateName })
   name: string;
+
+  @Prop({ required: true, validate: validateName })
+  lastName: string;
+
+  @Prop({ validate: validateTelephoneNumberNullable, default: null })
+  telephoneNumber?: string;
+
+  @Prop({ validate: validateAddressNullable, default: null })
+  address?: string;
 
   @Prop({
     required: true,

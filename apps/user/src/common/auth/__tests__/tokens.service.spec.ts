@@ -22,20 +22,21 @@ describe('Tokens Service', () => {
   let verifyAccessTokenOptions: JwtVerifyOptions;
 
   const userService = {
-    getOneEntity: jest.fn(),
+    getOneEntity: jest.fn()
   };
 
   const createUser = async () => {
     const entity = new userModel({
       name: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email(),
       socialProvider: AuthProviders.Local,
       authType: AuthType.PASSWORD,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     });
 
-    return await entity.save();
+    return entity.save();
   };
 
   beforeAll(async () => {
@@ -51,19 +52,19 @@ describe('Tokens Service', () => {
         MongooseModule.forFeature([
           {
             name: User.name,
-            schema: UserSchema,
-          },
+            schema: UserSchema
+          }
         ]),
         JwtModule.register({}),
-        ConfigModule,
+        ConfigModule
       ],
       providers: [
         {
           provide: UserService,
-          useValue: userService,
+          useValue: userService
         },
-        TokensService,
-      ],
+        TokensService
+      ]
     }).compile();
 
     tokensService = testModule.get<TokensService>(TokensService);
@@ -72,7 +73,7 @@ describe('Tokens Service', () => {
     userModel = testModule.get<Model<User>>(getModelToken(User.name));
 
     verifyAccessTokenOptions = {
-      secret: configService.get(CommonEnvKey.ACCESS_TOKEN_SECRET),
+      secret: configService.get(CommonEnvKey.ACCESS_TOKEN_SECRET)
     };
 
     user = await createUser();
@@ -84,7 +85,7 @@ describe('Tokens Service', () => {
 
       const accessTokenPayload = jwtService.verify(
         accessToken,
-        verifyAccessTokenOptions,
+        verifyAccessTokenOptions
       );
 
       delete accessTokenPayload.exp;
