@@ -1,0 +1,99 @@
+name: Main CI - Testing
+
+on:
+  pull_request:
+    branches:
+      - "develop"
+      - "main"
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.filter.outputs.changes }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            api-gateway:
+              - 'apps/api-gateway/**'
+            notification:
+              - 'apps/notification/**'
+            user:
+              - 'apps/user/**'
+              
+  testing:
+    needs: changes
+    if: ${{ needs.changes.outputs.apps != '[]' && needs.changes.outputs.apps != '' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        apps: ${{ fromJSON(needs.changes.outputs.apps) }}
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install --saveDev
+
+      - name: Running tests - ${{ matrix.apps }}
+        run: |
+          npm run test:force apps/${{ matrix.apps }}
+        if: matrix.apps != 'api-gateway'
+
+      - name: Running lint
+        run: npm run lint:prod
+
+  common:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            shared:
+              - 'shared/**'
+          base: "develop"
+
+      - name: Install dependencies
+        run: npm install --saveDev
+        if: steps.filter.outputs.common == 'true'
+
+      - name: Running tests - common
+        run: |
+          npm run test:force shared
+        if: steps.filter.outputs.common == 'true'
+
+  deploy:
+    needs: testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Okteto Login
+        uses: okteto/login@latest
+        with:
+          token: ${{ secrets.OKTETO_KEY }}
+      - name: Okteto Pipeline
+        uses: okteto/pipeline@latest
+        with:
+          name: ntfs-microservices
+          namespace: bujosa

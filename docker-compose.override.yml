@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  api-gateway:
+    volumes:
+      - ./:/usr/src/app
+
+  user-service:
+    volumes:
+      - ./:/usr/src/app
+  
+  notification-service:
+    volumes:
+      - ./:/usr/src/app
+
+  

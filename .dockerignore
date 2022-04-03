@@ -12,9 +12,4 @@ test
 .git
 .vscode
 .github
-docs
 kubernetes
-
-reports
-report
-.mega-linter.yml

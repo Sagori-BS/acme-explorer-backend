@@ -11,19 +11,25 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@common/common": [
-        "src/shared/"
+      "@shared": [
+        "shared/src"
       ],
-      "@common/common/*": [
-        "src/shared/*"
-      ]
+      "@shared/*": [
+        "shared/src/*"
+      ],
+      "@user/": [
+        "apps/user/src/"
+      ],
+      "@user/*": [
+        "apps/user/src/*"
+      ],
+       "@notification/": [
+        "apps/notification/src/"
+      ],
+      "@notification/*": [
+        "apps/notification/src/*"
+      ],
     }
   },
   "typeAcquisition": {
