@@ -16,6 +16,10 @@ dist
 # OS
 */.DS_Store
 
+# Vscode
+.vscode
+*/**/.vscode
+
 # Tests
 */coverage
 */.nyc_output
