@@ -1,21 +1,23 @@
 import { BaseRepositoryType } from '@common/common/data/interfaces/base-repository-type.interface';
 import { BaseServiceType } from '@common/common/data/interfaces/base-service-type.interface';
+import {
+  CreatedUserPayload,
+  UpdatedUserPayload
+} from '@common/common/events/user/user.payload';
 import { Model } from 'mongoose';
-import { DataStoreRepository } from '../../data-store.repository';
-import { DataStore } from '../../database/application.entity';
-import { CreateDataStoreInput } from '../../graphql/inputs/create-data-store.input';
-import { UpdateDataStoreInput } from '../../graphql/inputs/update-data-store.input';
+import { User } from '../../database/user.entity';
+import { UserRepository } from '../../user.repository';
 
-export interface IDataStoreRepositoryType extends BaseRepositoryType {
-  entity: DataStore;
-  entityModel: Model<DataStore>;
-  createEntityInput: CreateDataStoreInput;
-  updateEntityInput: UpdateDataStoreInput;
+export interface UserRepositoryType extends BaseRepositoryType {
+  entity: User;
+  entityModel: Model<User>;
+  createEntityInput: CreatedUserPayload;
+  updateEntityInput: UpdatedUserPayload;
 }
 
-export interface IDataStoreServiceType extends BaseServiceType {
-  entity: DataStore;
-  entityRepository: DataStoreRepository;
-  createEntityInput: CreateDataStoreInput;
-  updateEntityInput: UpdateDataStoreInput;
+export interface IUserServiceType extends BaseServiceType {
+  entity: User;
+  entityRepository: UserRepository;
+  createEntityInput: CreatedUserPayload;
+  updateEntityInput: UpdatedUserPayload;
 }
