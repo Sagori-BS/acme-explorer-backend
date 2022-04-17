@@ -16,5 +16,9 @@ services:
   notification-service:
     volumes:
       - ./:/usr/src/app
+  
+  trips-service:
+    volumes:
+      - ./:/usr/src/app
 
   

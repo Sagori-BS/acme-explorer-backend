@@ -52,6 +52,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/upload/tsconfig.app.json"
       }
+    },
+     "trips": {
+      "type": "application",
+      "root": "apps/trips",
+      "entryFile": "main",
+      "sourceRoot": "apps/trips/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/trips/tsconfig.app.json"
+      }
     }
   }
 }

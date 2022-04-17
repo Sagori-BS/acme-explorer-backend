@@ -59,6 +59,20 @@ services:
     ports:
       - '5003:3000'
 
+  trips-service:
+    container_name: 'trips-service'
+    restart: 'always'
+    build:
+      target: trips
+      context: .
+      dockerfile: ./Dockerfile
+    external_links:
+      - pubsub-emulator
+    depends_on:
+      - pubsub-emulator
+    ports:
+      - '5004:3000'
+
   pubsub-emulator:
     image: knarz/pubsub-emulator
     container_name: 'pubsub-emulator'

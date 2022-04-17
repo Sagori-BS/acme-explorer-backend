@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: trips-service
+spec:
+  type: ClusterIP
+  ports:
+  - name: trips-service
+    port: 3000
+  selector:
+    app: trips-service
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trips-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trips-service
+  template:
+    metadata:
+      labels:
+        app: trips-service
+    spec:
+      containers:
+      - image: bujosa/acme-explorer-trips
+        name: trips-service
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
