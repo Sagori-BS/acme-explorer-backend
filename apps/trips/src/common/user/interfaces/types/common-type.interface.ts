@@ -1,9 +1,9 @@
-import { BaseRepositoryType } from '@common/common/data/interfaces/base-repository-type.interface';
-import { BaseServiceType } from '@common/common/data/interfaces/base-service-type.interface';
+import { BaseRepositoryType } from '@shared/data/interfaces/base-repository-type.interface';
+import { BaseServiceType } from '@shared/data/interfaces/base-service-type.interface';
 import {
   CreatedUserPayload,
   UpdatedUserPayload
-} from '@common/common/events/user/user.payload';
+} from '@shared/events/user/user.payload';
 import { Model } from 'mongoose';
 import { User } from '../../database/user.entity';
 import { UserRepository } from '../../user.repository';

@@ -1,13 +1,13 @@
-import { DeleteFileError } from '@common/common/errors/upload/delete-file.error';
+import { DeleteFileError } from '@shared/errors/upload/delete-file.error';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EnvKey } from '../config/env-key.enum';
 import { v4 as uuid } from 'uuid';
 import { Endpoint, S3 } from 'aws-sdk';
 import { ObjectIdentifier } from 'aws-sdk/clients/s3';
-import { UploadPictureError } from '@common/common/errors/upload/upload-picture.error';
+import { UploadPictureError } from '@shared/errors/upload/upload-picture.error';
 import { config } from 'aws-sdk';
-import { Picture } from '@common/common/dtos/upload/picture.dto';
+import { Picture } from '@shared/dtos/upload/picture.dto';
 
 @Injectable()
 export class UploadService {

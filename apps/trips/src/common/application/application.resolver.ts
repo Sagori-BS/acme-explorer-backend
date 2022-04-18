@@ -1,10 +1,10 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { Application } from './graphql/types/application.type';
-import { FilterInput } from '@common/common/graphql/inputs/graphql-filter.input';
-import { graphQlIdArgOption } from '@common/common/graphql/types/graphql-delete-mutation-options.type';
-import { graphQlFindQueryOptions } from '@common/common/graphql/types/graphql-filter-options';
-import { AuthorizedRoles } from '@common/common/auth/decorators/authorized-roles.decorator';
-import { UserRoles } from '@common/common/auth/enums/user-roles.enum';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { graphQlIdArgOption } from '@shared/graphql/types/graphql-delete-mutation-options.type';
+import { graphQlFindQueryOptions } from '@shared/graphql/types/graphql-filter-options';
+import { AuthorizedRoles } from '@shared/auth/decorators/authorized-roles.decorator';
+import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { GraphQlFieldNames } from '@shared/graphql/enums/graphql-label-types.enum';
 import { ApplicationService } from './application.service';
 import { ALL_ROLES } from '@shared/auth/arrays/authorized-roles.arrays';

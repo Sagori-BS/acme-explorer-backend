@@ -24,10 +24,10 @@ jobs:
               - 'apps/api-gateway/**'
             notification:
               - 'apps/notification/**'
-            upload:
-              - 'apps/upload/**'
             user:
               - 'apps/user/**'
+            trips:
+              - 'apps/trips/**'
               
   testing:
     needs: changes
@@ -54,7 +54,7 @@ jobs:
       - name: Running tests - ${{ matrix.apps }}
         run: |
           npm run test:force apps/${{ matrix.apps }}
-        if: matrix.apps != 'api-gateway'
+        if: matrix.apps != 'api-gateway' 
 
       - name: Running lint
         run: npm run lint:prod

@@ -1,4 +1,4 @@
-import { Repository } from '@common/common/data/classes/repository.class';
+import { Repository } from '@shared/data/classes/repository.class';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';

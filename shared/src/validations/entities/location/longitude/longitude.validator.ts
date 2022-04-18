@@ -1,5 +1,5 @@
-import { IDatabaseValidator } from '@common/common/data/interfaces/database-validator.interface';
-import { errorMessageBuilder } from '@common/common/validations/error-message-builder';
+import { IDatabaseValidator } from '@shared/data/interfaces/database-validator.interface';
+import { errorMessageBuilder } from '@shared/validations/error-message-builder';
 import * as joi from 'joi';
 
 export const _validateLongitude = (value: number): boolean => {

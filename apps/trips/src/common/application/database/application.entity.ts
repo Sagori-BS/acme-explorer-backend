@@ -1,5 +1,5 @@
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import { IBaseEntity } from '@common/common/data/interfaces/base-entity.interface';
+import { IBaseEntity } from '@shared/data/interfaces/base-entity.interface';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { IApplication } from '../interfaces/entities/application.interface';
 import { validateId } from '@shared/validations/common/identification/mongo-id/id.validator';
