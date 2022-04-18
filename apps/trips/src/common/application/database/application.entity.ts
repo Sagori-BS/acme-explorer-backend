@@ -1,10 +1,11 @@
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Document, Query, Schema as MongooseSchema } from 'mongoose';
 import { IBaseEntity } from '@shared/data/interfaces/base-entity.interface';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { IApplication } from '../interfaces/entities/application.interface';
 import { validateId } from '@shared/validations/common/identification/mongo-id/id.validator';
 import { User } from '@trips/common/user/database/user.entity';
 import { ApplicationState } from '../graphql/enums/application-states.enum';
+import { Trip } from '@trips/common/trip/database/trip.entity';
 
 @Schema({
   optimisticConcurrency: true,
@@ -18,9 +19,17 @@ export class Application extends Document implements IBaseEntity, IApplication {
     required: true,
     type: MongooseSchema.Types.ObjectId,
     validate: validateId,
-    ref: 'User'
+    ref: User.name
   })
   explorer: User;
+
+  @Prop({
+    required: true,
+    type: MongooseSchema.Types.ObjectId,
+    validate: validateId,
+    ref: Trip.name
+  })
+  trip: Trip;
 
   @Prop({
     default: [],
@@ -59,3 +68,19 @@ ApplicationSchema.pre('save', function(next) {
 
   next();
 });
+
+ApplicationSchema.statics.buildProjection = (
+  query: Query<any, any, any, any>
+) => {
+  query.populate([
+    {
+      path: 'trip'
+    },
+    {
+      path: 'explorer',
+      model: User.name
+    }
+  ]);
+
+  return query;
+};

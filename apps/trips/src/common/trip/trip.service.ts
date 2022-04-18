@@ -48,6 +48,17 @@ export class TripService extends Service<ITripServiceType> {
     return this.tripRepository.updateEntity(updateEntityInput);
   }
 
+  public async listEntities(
+    filterInput: FilterInput,
+    jwtPayload?: JwtPayload
+  ): Promise<ListTrips> {
+    if (jwtPayload) {
+      filterInput.where = { ...filterInput.where, manager: jwtPayload.id };
+    }
+
+    return this.tripRepository.listEntities(filterInput);
+  }
+
   public async cancelTrip(
     filterInput: FilterInput,
     updateTripInput: UpdateTripInput
@@ -105,16 +116,5 @@ export class TripService extends Service<ITripServiceType> {
     };
 
     return this.tripRepository.updateEntity(updateEntityInput);
-  }
-
-  public async listEntities(
-    filterInput: FilterInput,
-    jwtPayload?: JwtPayload
-  ): Promise<ListTrips> {
-    if (jwtPayload) {
-      filterInput.where = { ...filterInput.where, manager: jwtPayload.id };
-    }
-
-    return this.tripRepository.listEntities(filterInput);
   }
 }
