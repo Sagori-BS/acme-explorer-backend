@@ -35,6 +35,12 @@ export class CommonServiceTests {
     expect(this.entityRepository.getAllEntities).toHaveBeenCalled();
   }
 
+  public async listEntities(filterInput: FilterInput = {}) {
+    await this.entityService.listEntities(filterInput);
+
+    expect(this.entityRepository.listEntities).toHaveBeenCalled();
+  }
+
   public async createEntity(input) {
     await this.entityService.createEntity(input);
 

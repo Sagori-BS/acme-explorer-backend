@@ -5,13 +5,7 @@ import { CreatedUserPayload } from '@shared/events/user/user.payload';
 import { UserRepository } from '../user.repository';
 import * as faker from 'faker';
 import { EntityNotFoundError } from '@shared/errors/common/entity-not-found.error';
-import {
-  InspectorNote,
-  InspectorNoteSchema
-} from '@inspection/common/inspector-note/database/inspector-note.entity';
-import { generateRole } from '@shared/test/utils/generate-role';
 import { CommonRepositoryTests } from '@shared/test/common-repository-tests';
-import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 
 const entityName = User.name;
 
@@ -24,9 +18,7 @@ describe(`${entityName} Repository`, () => {
     id: new Types.ObjectId().toHexString(),
     name: faker.name.firstName(),
     lastName: faker.name.lastName(),
-    email: faker.internet.email(),
-    deviceTokens: [],
-    roles: [generateRole(UserRoles.INSPECTOR), generateRole()]
+    email: faker.internet.email()
   };
 
   const updateEntityPayload: any = {
@@ -40,9 +32,7 @@ describe(`${entityName} Repository`, () => {
       createdAt: new Date().toISOString()
     });
 
-    await user.save();
-
-    return user;
+    return user.save();
   };
 
   beforeAll(async () => {
@@ -50,13 +40,7 @@ describe(`${entityName} Repository`, () => {
       Entity: User,
       EntitySchema: UserSchema,
       EntityRepository: UserRepository,
-      createEntityInput,
-      mongooseModels: [
-        {
-          name: InspectorNote.name,
-          schema: InspectorNoteSchema
-        }
-      ]
+      createEntityInput
     });
 
     entityModel = config.entityModel;
@@ -65,7 +49,7 @@ describe(`${entityName} Repository`, () => {
   });
 
   afterEach(async () => {
-    await entityModel.deleteMany({});
+    return entityModel.deleteMany({});
   });
 
   describe(`getOne${entityName}`, () => {
@@ -98,8 +82,6 @@ describe(`${entityName} Repository`, () => {
     it(`should create an ${entityName} entity given a valid input`, async () => {
       // Arrange
       const expectedValue = { ...createEntityInput };
-      delete expectedValue.deviceTokens;
-      delete expectedValue.roles;
 
       // Act
       const result = await entityRepository.createEntity(createEntityInput);

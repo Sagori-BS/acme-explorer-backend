@@ -15,6 +15,7 @@ import { InvalidUserInputError } from '@shared/errors/common/invalid-user-input.
 import { DuplicateKeyError } from '@shared/errors/common/duplicate-key.error';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { mongooseQueryBuilder } from '@shared/graphql/advanced-filter/mongo/mongoose-query-builder';
+import { buildGetListingBaseEntitiesPipeline } from '@shared/mongo/pipelines/get-listing-base-entities.pipeline';
 
 @Injectable()
 export abstract class Repository<T extends BaseRepositoryType> {
@@ -82,6 +83,29 @@ export abstract class Repository<T extends BaseRepositoryType> {
       return result;
     } catch (error) {
       this._logger.error(`${JSON.stringify(error)}`);
+      throw error;
+    }
+  }
+
+  public async listEntities(
+    filterInput: FilterInput
+  ): Promise<T['listEntities']> {
+    try {
+      let pipeline = [];
+
+      if (this.entityModel.getListingPipeline) {
+        pipeline = this.entityModel.getListingPipeline(filterInput);
+      } else {
+        pipeline = buildGetListingBaseEntitiesPipeline({
+          filters: filterInput
+        });
+      }
+
+      const [res] = await this.aggregateEntities(pipeline);
+
+      return res;
+    } catch (error) {
+      this._logger.log(error);
       throw error;
     }
   }

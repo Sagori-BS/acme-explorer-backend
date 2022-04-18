@@ -25,6 +25,12 @@ export abstract class Service<T extends BaseServiceType> {
     return this.entityRepository.getAllEntities(filterInput);
   }
 
+  public async listEntities(
+    filterInput: FilterInput
+  ): Promise<T['listEntities']> {
+    return this.entityRepository.listEntities(filterInput);
+  }
+
   public async createEntity(
     createEntityInput: T['createEntityInput']
   ): Promise<T['entity']> {

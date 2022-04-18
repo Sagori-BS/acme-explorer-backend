@@ -8,4 +8,5 @@ export interface BaseRepositoryType<T extends Document = any> {
   createEntityInput: any;
   updateEntityInput: any;
   deleteEntityInput: any | GetEntityByIdInput;
+  listEntities: any;
 }

@@ -80,6 +80,17 @@ export class CommonRepositoryTests {
     expect(result).toEqual([]);
   }
 
+  public async listEntities(filterInput: FilterInput = {}) {
+    //Arrange
+    await this.createDocument();
+
+    //Act
+    const result = await this.entityRepository.listEntities(filterInput);
+
+    //Assert
+    expect(result.count).toEqual(1);
+  }
+
   public async createEntity() {
     //Act
     const result = await this.entityRepository.createEntity(

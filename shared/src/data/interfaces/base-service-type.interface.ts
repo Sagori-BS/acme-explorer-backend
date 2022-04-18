@@ -7,4 +7,5 @@ export interface BaseServiceType {
   entityRepository: Repository<BaseRepositoryType>;
   createEntityInput: any;
   updateEntityInput: any;
+  listEntities: any;
 }
