@@ -9,10 +9,6 @@ import { User } from '../database/user.entity';
 import { UserRepository } from '../user.repository';
 import { UserService } from '../user.service';
 import * as faker from 'faker';
-import { DEFAULT_LANGUAGE_OPTIONS_DTO } from '@shared/language/dtos/request-language-options.dto';
-import { InspectorCommissionService } from '../../inspector-commission/inspector-commission.service';
-import { InspectorGoalService } from '@inspection/common/inspector-goal/inspector-goal.service';
-import { generateRole } from '@shared/test/utils/generate-role';
 
 const entityName = User.name;
 describe(`${entityName}Service`, () => {
@@ -24,9 +20,7 @@ describe(`${entityName}Service`, () => {
     id: new Types.ObjectId().toHexString(),
     name: faker.name.firstName(),
     lastName: faker.name.lastName(),
-    email: faker.internet.email(),
-    deviceTokens: [],
-    roles: [generateRole()]
+    email: faker.internet.email()
   };
 
   const inspectorGoalService = {
@@ -46,13 +40,7 @@ describe(`${entityName}Service`, () => {
     data: {
       name: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      deviceTokens: [],
-      roles: [generateRole()],
-      address: faker.address.streetAddress(),
-      telephoneNumber: faker.phone.phoneNumber(),
-      profilePicture: faker.image.imageUrl(),
-      documentId: faker.datatype.string(11),
-      drivingLicense: faker.datatype.string(11)
+      profilePicture: faker.image.imageUrl()
     }
   };
 
@@ -63,17 +51,7 @@ describe(`${entityName}Service`, () => {
   beforeAll(async () => {
     const config = await initializeCommonServiceTests({
       EntityService: UserService,
-      EntityRepository: UserRepository,
-      providers: [
-        {
-          provide: InspectorCommissionService,
-          useValue: inspectorCommisionService
-        },
-        {
-          provide: InspectorGoalService,
-          useValue: inspectorGoalService
-        }
-      ]
+      EntityRepository: UserRepository
     });
     commonServiceTests = config.commonServiceTests;
     entityService = config.entityService;
@@ -108,13 +86,17 @@ describe(`${entityName}Service`, () => {
     });
 
     it(`should call the createEntity method of the inspectorCommisionService`, async () => {
+      // Arrange
       const userMock = {
         id: new Types.ObjectId().toHexString()
       } as any;
+
       entityRepository.createEntity.mockReturnValueOnce(userMock);
 
+      // Act
       await commonServiceTests.createEntity(createEntityInput);
 
+      // Assert
       expect(inspectorCommisionService.createEntity).toHaveBeenCalled();
       expect(inspectorCommisionService.createEntity).toHaveBeenCalledWith({
         inspector: userMock.id,
@@ -123,13 +105,17 @@ describe(`${entityName}Service`, () => {
     });
 
     it(`should call the createEntity method of the inspectorGoalService`, async () => {
+      // Arrange
       const userMock = {
         id: new Types.ObjectId().toHexString()
       } as any;
+
       entityRepository.createEntity.mockReturnValueOnce(userMock);
 
+      // Act
       await commonServiceTests.createEntity(createEntityInput);
 
+      // Assert
       expect(inspectorGoalService.createEntity).toHaveBeenCalled();
       expect(inspectorGoalService.createEntity).toHaveBeenCalledWith({
         inspector: createEntityInput.id,
@@ -146,8 +132,7 @@ describe(`${entityName}Service`, () => {
       //Assert
       expect(entityRepository.updateEntity).toHaveBeenCalled();
       expect(entityRepository.updateEntity).toHaveBeenCalledWith(
-        updateEntityPayload,
-        DEFAULT_LANGUAGE_OPTIONS_DTO
+        updateEntityPayload
       );
     });
   });
@@ -159,10 +144,7 @@ describe(`${entityName}Service`, () => {
 
       //Assert
       expect(entityRepository.deleteEntity).toHaveBeenCalled();
-      expect(entityRepository.deleteEntity).toHaveBeenCalledWith(
-        payload,
-        DEFAULT_LANGUAGE_OPTIONS_DTO
-      );
+      expect(entityRepository.deleteEntity).toHaveBeenCalledWith(payload);
     });
   });
 });
