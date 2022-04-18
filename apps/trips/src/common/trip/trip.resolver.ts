@@ -8,9 +8,9 @@ import { UserRoles } from '@common/common/auth/enums/user-roles.enum';
 import { GraphQlFieldNames } from '@shared/graphql/enums/graphql-label-types.enum';
 import { TripService } from './trip.service';
 import { MANAGER } from '@shared/auth/arrays/authorized-roles.arrays';
+import { Public } from '@shared/auth/decorators/public-resource.decorator';
 import { CreateTripInput } from './graphql/inputs/create-trip.input';
 import { UpdateTripInput } from './graphql/inputs/update-trip.input';
-import { Public } from '@shared/auth/decorators/public-resource.decorator';
 
 @Resolver(() => Trip)
 export class TripResolver {

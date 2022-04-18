@@ -2,9 +2,9 @@ import { BaseRepositoryType } from '@common/common/data/interfaces/base-reposito
 import { BaseServiceType } from '@common/common/data/interfaces/base-service-type.interface';
 import { Model } from 'mongoose';
 import { TripRepository } from '../../trip.repository';
-import { Trip } from '../../database/Trip.entity';
-import { CreateTripInput } from '../../graphql/inputs/create-Trip.input';
-import { UpdateTripInput } from '../../graphql/inputs/update-Trip.input';
+import { Trip } from '../../database/trip.entity';
+import { CreateTripInput } from '../../graphql/inputs/create-trip.input';
+import { UpdateTripInput } from '../../graphql/inputs/update-trip.input';
 
 export interface ITripRepositoryType extends BaseRepositoryType {
   entity: Trip;
