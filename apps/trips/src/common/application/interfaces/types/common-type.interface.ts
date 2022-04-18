@@ -3,8 +3,8 @@ import { BaseServiceType } from '@common/common/data/interfaces/base-service-typ
 import { Model } from 'mongoose';
 import { ApplicationRepository } from '../../application.repository';
 import { Application } from '../../database/application.entity';
-import { CreateApplicationInput } from '../../graphql/inputs/create-data-store.input';
-import { UpdateApplicationInput } from '../../graphql/inputs/update-data-store.input';
+import { CreateApplicationInput } from '../../graphql/inputs/create-application.input';
+import { UpdateApplicationInput } from '../../graphql/inputs/update-application.input';
 
 export interface IApplicationRepositoryType extends BaseRepositoryType {
   entity: Application;

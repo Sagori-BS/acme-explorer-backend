@@ -2,27 +2,27 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtStrategy } from '@common/common/auth/strategies/jwt.strategy';
 import { GlobalJwtAuthAndRolesGuard } from '@common/common/auth/guards/global-jwt-auth-and-roles.guard';
-import { DataStore, DataStoreSchema } from './database/application.entity';
-import { DataStoreRepository } from './application.repository';
-import { DataStoreResolver } from './application.resolver';
-import { DataStoreService } from './application.service';
+import { Application, ApplicationSchema } from './database/application.entity';
+import { ApplicationRepository } from './application.repository';
+import { ApplicationResolver } from './application.resolver';
+import { ApplicationService } from './application.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: DataStore.name,
-        schema: DataStoreSchema
+        name: Application.name,
+        schema: ApplicationSchema
       }
     ])
   ],
   providers: [
-    DataStoreService,
-    DataStoreRepository,
-    DataStoreResolver,
+    ApplicationService,
+    ApplicationRepository,
+    ApplicationResolver,
     JwtStrategy,
     ...GlobalJwtAuthAndRolesGuard
   ],
   exports: [MongooseModule]
 })
-export class DataStoreModule {}
+export class ApplicationModule {}

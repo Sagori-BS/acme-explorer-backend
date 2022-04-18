@@ -5,15 +5,16 @@ import { graphQlIdArgOption } from '@common/common/graphql/types/graphql-delete-
 import { graphQlFindQueryOptions } from '@common/common/graphql/types/graphql-filter-options';
 import { AuthorizedRoles } from '@common/common/auth/decorators/authorized-roles.decorator';
 import { UserRoles } from '@common/common/auth/enums/user-roles.enum';
-import { DataStoreService } from './application.service';
 import { GraphQlFieldNames } from '@shared/graphql/enums/graphql-label-types.enum';
+import { ApplicationService } from './application.service';
+import { ALL_ROLES } from '@shared/auth/arrays/authorized-roles.arrays';
 
-@Resolver(() => DataStore)
-export class DataStoreResolver {
-  constructor(private readonly service: DataStoreService) {}
+@Resolver(() => Application)
+export class ApplicationResolver {
+  constructor(private readonly service: ApplicationService) {}
 
-  @AuthorizedRoles(...EMPLOYEES)
-  @Query(() => DataStore)
+  @AuthorizedRoles(...ALL_ROLES)
+  @Query(() => Application)
   public async getApplicationById(
     @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption)
     id: string
@@ -30,7 +31,7 @@ export class DataStoreResolver {
     return this.service.getAllEntities(filterInput);
   }
 
-  @AuthorizedRoles(...EMPLOYEES)
+  @AuthorizedRoles(...ALL_ROLES)
   @Query(() => [Application])
   public async getApplications(
     @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
@@ -39,7 +40,7 @@ export class DataStoreResolver {
     return this.service.getEntities(filterInput);
   }
 
-  @AuthorizedRoles(...UPLOADER)
+  @AuthorizedRoles(...ALL_ROLES)
   @Mutation(() => Application)
   public async createApplication(
     @Args(GraphQlFieldNames.INPUT_FIELD)
@@ -48,7 +49,7 @@ export class DataStoreResolver {
     return this.service.createEntity(createApplicationInput);
   }
 
-  @AuthorizedRoles(...UPLOADER)
+  @AuthorizedRoles(...ALL_ROLES)
   @Mutation(() => Application)
   public async updateApplication(
     @Args(GraphQlFieldNames.INPUT_FIELD)
@@ -58,10 +59,10 @@ export class DataStoreResolver {
   }
 
   @AuthorizedRoles(UserRoles.ADMIN)
-  @Mutation(() => DataStore)
-  public async deleteDataStore(
+  @Mutation(() => Application)
+  public async deleteApplication(
     @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
-  ): Promise<DataStore> {
+  ): Promise<Application> {
     return this.service.deleteEntity({ id });
   }
 }

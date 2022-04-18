@@ -7,7 +7,8 @@ import { getGcpLoggerConfigAsync } from '@shared/logger/config/gcp-logger-module
 import { LoggerModule } from '@shared/logger/logger.module';
 import { getPubSubModuleAsyncConfig } from '@shared/microservices/pub-sub/config/pub-sub-module-async-config';
 import { PubSubClientModule } from '@shared/microservices/pub-sub/pub-sub.module';
-import { DataStoreModule } from './common/data-store/data-store.module';
+import { ApplicationModule } from './common/application/application.module';
+import { UserModule } from './common/user/user.module';
 import { EnvKey } from './config/env-key.enum';
 import { validateEnv } from './config/env.validator';
 
@@ -33,7 +34,8 @@ import { validateEnv } from './config/env.validator';
     }),
     GraphQLFederationModule.forRoot(graphQLFederationOptions),
     PubSubClientModule.registerAsync(getPubSubModuleAsyncConfig('trips')),
-    DataStoreModule
+    ApplicationModule,
+    UserModule
   ]
 })
 export class AppModule {}
