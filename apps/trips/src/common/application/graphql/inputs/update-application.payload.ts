@@ -13,7 +13,7 @@ export class UpdateApplicationPayload extends PartialType(
     trip: validateMongoIdWithJoi('trip'),
     explorer: validateMongoIdWithJoi('explorer'),
     comments: joi.array().items(joi.string()),
-    state: joi.string().valid(Object.values(ApplicationState)),
+    state: joi.string().valid(...Object.values(ApplicationState)),
     reasonRejected: validateDescriptionWithJoi
   });
 }
