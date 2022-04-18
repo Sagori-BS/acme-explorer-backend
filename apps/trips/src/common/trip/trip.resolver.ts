@@ -10,7 +10,7 @@ import { TripService } from './trip.service';
 import { MANAGER } from '@shared/auth/arrays/authorized-roles.arrays';
 import { Public } from '@shared/auth/decorators/public-resource.decorator';
 import { CreateTripInput } from './graphql/inputs/trips/create-trip.input';
-import { UpdateTripInput } from './graphql/inputs/update-trip.input';
+import { UpdateTripInput } from './graphql/inputs/trips/update-trip.input';
 
 @Resolver(() => Trip)
 export class TripResolver {

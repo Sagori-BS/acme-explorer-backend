@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { TripRepository } from '../../trip.repository';
 import { Trip } from '../../database/trip.entity';
 import { CreateTripInput } from '../../graphql/inputs/trips/create-trip.input';
-import { UpdateTripInput } from '../../graphql/inputs/update-trip.input';
+import { UpdateTripInput } from '../../graphql/inputs/trips/update-trip.input';
 
 export interface ITripRepositoryType extends BaseRepositoryType {
   entity: Trip;

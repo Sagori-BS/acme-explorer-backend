@@ -1,5 +1,5 @@
 import { InputType, OmitType, PartialType } from '@nestjs/graphql';
-import { CreateTripInput } from './trips/create-trip.input';
+import { CreateTripInput } from './create-trip.input';
 import * as joi from 'joi';
 import { validateUrlsWithJoi } from '@shared/validations/common/internet/urls/urls.validator';
 import { validateIsoDateWithJoi } from '@shared/validations/common/iso-date/iso-date.validator';
