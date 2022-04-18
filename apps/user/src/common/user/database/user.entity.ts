@@ -4,7 +4,7 @@ import { IUser } from '../interfaces/entities/user-entity.interface';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { AuthProviders, AuthType } from '../../auth/utils/auth-providers.enum';
 import { validateName } from '@shared/validations/common/strings/name/name.validator';
-import { validateEmail } from '@user/validations/email/email.validator';
+import { validateEmail } from '@shared/validations/entities/user/email/email.validator';
 import { validateNullableUrl } from '@shared/validations/common/internet/url/url-nullable.validator';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { validateTelephoneNumberNullable } from '@shared/validations/entities/user/telephone-number/telephone-number-nullable.validator';

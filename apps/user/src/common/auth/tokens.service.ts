@@ -22,8 +22,6 @@ export class TokensService {
       secret: this.configService.get(CommonEnvKey.ACCESS_TOKEN_SECRET)
     };
 
-    const accessToken = this.jwtService.sign(payload, signOptions);
-
-    return accessToken;
+    return this.jwtService.sign(payload, signOptions);
   }
 }

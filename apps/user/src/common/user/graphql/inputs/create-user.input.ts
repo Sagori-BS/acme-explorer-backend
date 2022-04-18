@@ -6,7 +6,7 @@ import {
   AuthProviders,
   AuthType
 } from 'apps/user/src/common/auth/utils/auth-providers.enum';
-import { validateEmailWithJoi } from '@user/validations/email/email.validator';
+import { validateEmailWithJoi } from '@shared/validations/entities/user/email/email.validator';
 import { validatePasswordWithJoi } from '@user/validations/password/password.validator';
 import { validateUrlWithJoi } from '@shared/validations/common/internet/url/url.validator';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';

@@ -3,7 +3,7 @@ import { GetCredentialByIdOrEmailInput } from './get-credential-by-id-or-email.i
 import { UpdateCredentialPasswordPayload } from './update-credential-password.payload';
 import * as joi from 'joi';
 import { validateIdWithJoi } from '@shared/validations/common/mongo-id/id.validator';
-import { validateEmailWithJoi } from '@user/validations/email/email.validator';
+import { validateEmailWithJoi } from '@shared/validations/entities/user/email/email.validator';
 
 @InputType()
 export class UpdateCredentialPasswordInput {
@@ -16,8 +16,8 @@ export class UpdateCredentialPasswordInput {
   public static validationSchema = joi.object<UpdateCredentialPasswordInput>({
     where: {
       id: validateIdWithJoi,
-      email: validateEmailWithJoi,
+      email: validateEmailWithJoi
     },
-    data: UpdateCredentialPasswordPayload.validationSchema.required(),
+    data: UpdateCredentialPasswordPayload.validationSchema.required()
   });
 }

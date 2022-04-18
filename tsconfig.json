@@ -19,7 +19,7 @@
         "shared/src/*"
       ],
       "@common/common": [
-        "common/common/src"
+        "shared/src/*"
       ],
       "@common/common/*": [
         "shared/src/*"
@@ -35,6 +35,12 @@
       ],
       "@notification/*": [
         "apps/notification/src/*"
+      ],
+      "@trips/": [
+        "apps/trips/src/"
+      ],
+      "@trips/*": [
+        "apps/trips/src/*"
       ],
     }
   },

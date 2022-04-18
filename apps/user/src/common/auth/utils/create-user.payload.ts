@@ -3,17 +3,17 @@ import { User } from '../../user/database/user.entity';
 
 export const createUserPayload = (
   user: User,
-  token?: string,
+  token?: string
 ): CreatedUserPayload => {
-  const { id, name, email, profilePicture } = user;
+  const { id, name, email, profilePicture, lastName } = user;
 
   const createdUser: CreatedUserPayload = {
     id,
     name,
     email,
     profilePicture,
-    //TODO: Fix this url
-    url: token,
+    lastName,
+    url: token
   };
 
   return createdUser;

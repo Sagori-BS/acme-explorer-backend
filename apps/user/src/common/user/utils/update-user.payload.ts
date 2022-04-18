@@ -2,17 +2,18 @@ import { UpdatedUserPayload } from '@shared/events/user/user.payload';
 import { User } from '../database/user.entity';
 
 export const updateUserPayload = (user: User): UpdatedUserPayload => {
-  const { profilePicture, name, version, id } = user;
+  const { profilePicture, name, version, id, lastName } = user;
 
   const updatedUser: UpdatedUserPayload = {
     where: {
       version,
-      id,
+      id
     },
     data: {
       profilePicture,
       name,
-    },
+      lastName
+    }
   };
 
   return updatedUser;

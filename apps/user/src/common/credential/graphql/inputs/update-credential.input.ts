@@ -4,7 +4,7 @@ import { GetCredentialByIdOrEmailInput } from './get-credential-by-id-or-email.i
 import { UpdateCredentialPayload } from './update-credential.payload';
 import * as joi from 'joi';
 import { validateIdWithJoi } from '@shared/validations/common/mongo-id/id.validator';
-import { validateEmailWithJoi } from '@user/validations/email/email.validator';
+import { validateEmailWithJoi } from '@shared/validations/entities/user/email/email.validator';
 
 @InputType()
 export class UpdateCredentialInput extends ValidationInput {
@@ -17,11 +17,11 @@ export class UpdateCredentialInput extends ValidationInput {
   public static validationSchema = joi.object<UpdateCredentialInput>({
     where: {
       id: validateIdWithJoi,
-      email: validateEmailWithJoi,
+      email: validateEmailWithJoi
     },
     data: {
       confirmed: joi.boolean(),
-      blocked: joi.boolean(),
-    },
+      blocked: joi.boolean()
+    }
   });
 }

@@ -38,3 +38,9 @@ WORKDIR /usr/src/app
 COPY --from=base /usr/src/app/ .
 COPY --from=base /usr/apps/upload ./apps/upload
 CMD ["npm","run","start:dev", "upload"]
+
+FROM node:14-alpine AS trips
+WORKDIR /usr/src/app
+COPY --from=base /usr/src/app/ .
+COPY --from=base /usr/apps/trips ./apps/trips
+CMD ["npm","run","start:dev", "trips"]

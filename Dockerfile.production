@@ -71,5 +71,17 @@ COPY --from=upload-pre-build /usr/src/app/env/ ./env/
 COPY --from=upload-pre-build /usr/src/app/dist/apps/upload/ ./dist/apps/upload/
 CMD ["dist/apps/upload/main.js"]
 
+# BUILD TRIPS-SERVICE
+FROM node:14-alpine AS trips-pre-build
+WORKDIR /usr/src/app
+COPY --from=base /usr/src/app/ .
+COPY --from=base /usr/apps/trips ./apps/trips
+RUN ["npm", "run", "build", "trips"]
 
+FROM gcr.io/distroless/nodejs AS trips
+WORKDIR /usr/src/app
+COPY --from=prod_node_modules /usr/src/app/node_modules/ ./node_modules/
+COPY --from=trips-pre-build /usr/src/app/env/ ./env/
+COPY --from=trips-pre-build /usr/src/app/dist/apps/trips/ ./dist/apps/trips/
+CMD ["dist/apps/trips/main.js"]
 

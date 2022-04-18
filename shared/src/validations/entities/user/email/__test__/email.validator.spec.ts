@@ -25,7 +25,7 @@ describe('ValidateEmail', () => {
       const res = _validateEmail(val);
 
       expect(res).toEqual(false);
-    },
+    }
   );
 
   it.each([['test@gmail.com'], ['comida@yahoo.com']])(
@@ -33,6 +33,6 @@ describe('ValidateEmail', () => {
     val => {
       const res = _validateEmail(val);
       expect(res).toEqual(true);
-    },
+    }
   );
 });
