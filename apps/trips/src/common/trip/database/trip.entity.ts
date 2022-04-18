@@ -114,3 +114,18 @@ TripSchema.pre('save', function(next) {
 
   next();
 });
+
+TripSchema.index(
+  {
+    ticker: 'text',
+    title: 'text',
+    description: 'text'
+  },
+  {
+    weights: {
+      ticker: 10,
+      title: 5,
+      description: 1
+    }
+  }
+);
