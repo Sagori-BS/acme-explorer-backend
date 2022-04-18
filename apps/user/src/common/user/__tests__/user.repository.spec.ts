@@ -93,7 +93,7 @@ describe(`${entityName}Repository`, () => {
   });
 
   afterEach(async () => {
-    await entityModel.deleteMany({});
+    return entityModel.deleteMany({});
   });
 
   describe(`getOne${entityName}`, () => {

@@ -52,10 +52,13 @@ describe(`${entityName}Service`, () => {
 
   describe(`getOne${entityName}`, () => {
     it(`should call the getOne${entityName} method of the userRepositor`, async () => {
+      // Arrange
       const id = new Types.ObjectId().toHexString();
 
+      // Act
       await userService.getOneEntity({ id });
 
+      // Assert
       expect(userRepository.getOneEntity).toHaveBeenCalled();
       const methodCallParam = userRepository.getOneEntity.mock.calls[0][0];
       expect(methodCallParam.id).toEqual(id);
@@ -204,7 +207,6 @@ describe(`${entityName}Service`, () => {
       //Assert
       expect(pubSubClient.send).toHaveBeenCalled();
       const params = userRepository.deleteEntity.mock.calls[0];
-
       expect(params[0].id).toEqual(userMock.id);
     });
   });
