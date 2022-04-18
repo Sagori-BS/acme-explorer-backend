@@ -8,6 +8,7 @@ import { LoggerModule } from '@shared/logger/logger.module';
 import { getPubSubModuleAsyncConfig } from '@shared/microservices/pub-sub/config/pub-sub-module-async-config';
 import { PubSubClientModule } from '@shared/microservices/pub-sub/pub-sub.module';
 import { ApplicationModule } from './common/application/application.module';
+import { TripModule } from './common/trip/trip.module';
 import { UserModule } from './common/user/user.module';
 import { EnvKey } from './config/env-key.enum';
 import { validateEnv } from './config/env.validator';
@@ -35,7 +36,8 @@ import { validateEnv } from './config/env.validator';
     GraphQLFederationModule.forRoot(graphQLFederationOptions),
     PubSubClientModule.registerAsync(getPubSubModuleAsyncConfig('trips')),
     ApplicationModule,
-    UserModule
+    UserModule,
+    TripModule
   ]
 })
 export class AppModule {}
