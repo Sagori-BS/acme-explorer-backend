@@ -8,6 +8,8 @@ import { UserRoles } from '@common/common/auth/enums/user-roles.enum';
 import { GraphQlFieldNames } from '@shared/graphql/enums/graphql-label-types.enum';
 import { ApplicationService } from './application.service';
 import { ALL_ROLES } from '@shared/auth/arrays/authorized-roles.arrays';
+import { CreateApplicationInput } from './graphql/inputs/create-application.input';
+import { UpdateApplicationInput } from './graphql/inputs/update-application.input';
 
 @Resolver(() => Application)
 export class ApplicationResolver {
