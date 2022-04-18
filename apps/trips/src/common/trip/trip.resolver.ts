@@ -48,27 +48,6 @@ export class TripResolver {
   }
 
   @AuthorizedRoles(...MANAGER)
-  @Query(() => Trip)
-  public async getSelfTripById(
-    @CurrentUser()
-    jwtPayload: JwtPayload,
-    @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
-  ): Promise<Trip> {
-    return this.service.getOneEntity({ manager: jwtPayload.id, id });
-  }
-
-  @AuthorizedRoles(...MANAGER)
-  @Query(() => ListTrips)
-  public async getSelfTrips(
-    @CurrentUser()
-    jwtPayload: JwtPayload,
-    @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
-    filterInput: FilterInput
-  ): Promise<ListTrips> {
-    return this.service.listEntities(filterInput, jwtPayload);
-  }
-
-  @AuthorizedRoles(...MANAGER)
   @Query(() => ListTrips)
   public async listTrips(
     @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
@@ -90,15 +69,6 @@ export class TripResolver {
 
   @AuthorizedRoles(UserRoles.ADMIN)
   @Mutation(() => Trip)
-  public async createCustomTrip(
-    @Args(GraphQlFieldNames.INPUT_FIELD)
-    createInternalTripInput: CreateInternalTripInput
-  ): Promise<Trip> {
-    return this.service.createEntity(createInternalTripInput);
-  }
-
-  @AuthorizedRoles(UserRoles.ADMIN)
-  @Mutation(() => Trip)
   public async updateTrip(
     @Args(GraphQlFieldNames.INPUT_FIELD)
     updateTripInput: UpdateTripInput
@@ -112,5 +82,77 @@ export class TripResolver {
     @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
   ): Promise<Trip> {
     return this.service.deleteEntity({ id });
+  }
+
+  // Business logic
+  @AuthorizedRoles(...MANAGER)
+  @Query(() => Trip)
+  public async getSelfTrip(
+    @CurrentUser()
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
+  ): Promise<Trip> {
+    return this.service.getOneEntity({ manager: jwtPayload.id, id });
+  }
+
+  @AuthorizedRoles(...MANAGER)
+  @Query(() => ListTrips)
+  public async getSelfTrips(
+    @CurrentUser()
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
+    filterInput: FilterInput
+  ): Promise<ListTrips> {
+    return this.service.listEntities(filterInput, jwtPayload);
+  }
+
+  @AuthorizedRoles(UserRoles.ADMIN)
+  @Query(() => Trip)
+  public async publishTrip(
+    @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
+  ): Promise<Trip> {
+    return this.service.publishTrip({ where: { id } });
+  }
+
+  @AuthorizedRoles(...MANAGER)
+  @Query(() => Trip)
+  public async publishSelfTrip(
+    @CurrentUser()
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
+  ): Promise<Trip> {
+    return this.service.publishTrip({ where: { manager: jwtPayload.id, id } });
+  }
+
+  @AuthorizedRoles(UserRoles.ADMIN)
+  @Mutation(() => Trip)
+  public async cancelTrip(
+    @Args(GraphQlFieldNames.INPUT_FIELD)
+    updateTripInput: UpdateTripInput
+  ): Promise<Trip> {
+    return this.service.cancelTrip({}, updateTripInput);
+  }
+
+  @AuthorizedRoles(...MANAGER)
+  @Mutation(() => Trip)
+  public async cancelSelfTrip(
+    @CurrentUser()
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.INPUT_FIELD)
+    updateTripInput: UpdateTripInput
+  ): Promise<Trip> {
+    return this.service.cancelTrip(
+      { where: { manager: jwtPayload.id } },
+      updateTripInput
+    );
+  }
+
+  @AuthorizedRoles(UserRoles.ADMIN)
+  @Mutation(() => Trip)
+  public async createCustomTrip(
+    @Args(GraphQlFieldNames.INPUT_FIELD)
+    createInternalTripInput: CreateInternalTripInput
+  ): Promise<Trip> {
+    return this.service.createEntity(createInternalTripInput);
   }
 }

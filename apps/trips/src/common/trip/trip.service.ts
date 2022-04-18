@@ -10,10 +10,16 @@ import { calculatePriceFromStages } from './utils/calculate-price-from-stages';
 import { UpdateTripInput } from './graphql/inputs/trips/update-trip.input';
 import { ListTrips } from './graphql/types/list-trips.type';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { TripState } from './graphql/enums/trip-states.enum';
+import { InvalidOperationError } from '@shared/errors/common/invalid-operation.error';
+import { ApplicationService } from '../application/application.service';
 
 @Injectable()
 export class TripService extends Service<ITripServiceType> {
-  constructor(private readonly tripRepository: TripRepository) {
+  constructor(
+    private readonly tripRepository: TripRepository,
+    private readonly applicationService: ApplicationService
+  ) {
     super(tripRepository);
   }
 
@@ -38,6 +44,65 @@ export class TripService extends Service<ITripServiceType> {
     if (data.stages) {
       data.price = calculatePriceFromStages(data.stages);
     }
+
+    return this.tripRepository.updateEntity(updateEntityInput);
+  }
+
+  public async cancelTrip(
+    filterInput: FilterInput,
+    updateTripInput: UpdateTripInput
+  ): Promise<Trip> {
+    filterInput.where = { ...filterInput.where, ...updateTripInput.where };
+
+    const trip = await this.tripRepository.getOneEntity(filterInput);
+    const { state } = trip;
+
+    const { reasonCancelled } = updateTripInput.data;
+
+    const applications = await this.applicationService.getEntities({
+      where: { trip: trip.id }
+    });
+
+    if (applications.length > 0) {
+      throw new InvalidOperationError('Cannot cancel trip with applications');
+    }
+
+    if (trip.startDate < new Date().toISOString()) {
+      throw new InvalidOperationError(
+        'You cannot cancel a trip that has already started'
+      );
+    }
+
+    if (state === TripState.CANCELLED) {
+      throw new InvalidOperationError('This Trip is already cancelled');
+    }
+
+    if (!reasonCancelled) {
+      throw new InvalidOperationError('Reason for cancellation is required');
+    }
+
+    const updateEntityInput: UpdateTripInput = {
+      where: { id: trip.id },
+      data: { state: TripState.CANCELLED, reasonCancelled }
+    };
+
+    return this.tripRepository.updateEntity(updateEntityInput);
+  }
+
+  public async publishTrip(filterInput: FilterInput): Promise<Trip> {
+    filterInput.where = { ...filterInput.where };
+
+    const trip = await this.tripRepository.getOneEntity(filterInput);
+    const { state } = trip;
+
+    if (state === TripState.ACTIVE) {
+      throw new InvalidOperationError('This Trip is already actived');
+    }
+
+    const updateEntityInput: UpdateTripInput = {
+      where: { id: trip.id },
+      data: { state: TripState.ACTIVE }
+    };
 
     return this.tripRepository.updateEntity(updateEntityInput);
   }

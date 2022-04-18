@@ -6,9 +6,11 @@ import { Trip, TripSchema } from './database/trip.entity';
 import { TripRepository } from './trip.repository';
 import { TripResolver } from './trip.resolver';
 import { TripService } from './trip.service';
+import { ApplicationModule } from '../application/application.module';
 
 @Module({
   imports: [
+    ApplicationModule,
     MongooseModule.forFeature([
       {
         name: Trip.name,
