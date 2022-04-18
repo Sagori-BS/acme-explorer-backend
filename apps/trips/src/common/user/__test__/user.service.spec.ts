@@ -11,6 +11,7 @@ import { UserService } from '../user.service';
 import * as faker from 'faker';
 
 const entityName = User.name;
+
 describe(`${entityName}Service`, () => {
   let commonServiceTests: CommonServiceTests;
   let entityService: UserService;
