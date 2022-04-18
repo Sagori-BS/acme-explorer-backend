@@ -9,7 +9,7 @@ import { CommonRepositoryTests } from '@shared/test/common-repository-tests';
 
 const entityName = User.name;
 
-describe(`${entityName} Repository`, () => {
+describe(`${entityName}Repository`, () => {
   let entityModel: Model<User>;
   let commonRepositoryTests: CommonRepositoryTests;
   let entityRepository: any;
@@ -93,6 +93,7 @@ describe(`${entityName} Repository`, () => {
 
   describe(`update${entityName}`, () => {
     it(`should throw an error if an id of a not existing ${entityName} entity is provided`, async () => {
+      // Arrange
       const entity = await createUserSetup();
 
       const updateEntityInput = {
@@ -100,11 +101,15 @@ describe(`${entityName} Repository`, () => {
         data: updateEntityPayload
       };
 
+      // Act
       const result = entityRepository.updateEntity(updateEntityInput);
+
+      // Assert
       await expect(result).rejects.toThrow(EntityNotFoundError);
     });
 
     it(`should update the ${entityName} entity that match the given id, if valid fields are provided`, async () => {
+      // Arrange
       const entity = await createUserSetup();
 
       const updateEntityInput = {
@@ -112,8 +117,10 @@ describe(`${entityName} Repository`, () => {
         data: updateEntityPayload
       };
 
+      // Act
       const result = await entityRepository.updateEntity(updateEntityInput);
 
+      // Assert
       expect(entity.toObject()).not.toMatchObject(updateEntityPayload);
       expect(result).toMatchObject(updateEntityPayload);
     });
@@ -121,24 +128,30 @@ describe(`${entityName} Repository`, () => {
 
   describe(`delete${entityName}`, () => {
     it(`should throw an error if an id of a non-existing ${entityName} entity is provided`, async () => {
+      // Arrange
       const entity = await createUserSetup();
 
+      // Act
       const result = entityRepository.deleteEntity({
         id: entity.id,
         version: 2
       });
 
+      // Assert
       await expect(result).rejects.toThrow(EntityNotFoundError);
     });
 
     it(`should mark as deleted the ${entityName} entity that match with the given id`, async () => {
+      // Arrange
       const entity = await createUserSetup();
 
+      // Act
       const result = await entityRepository.deleteEntity({
         id: entity.id,
         version: entity.version
       });
 
+      // Assert
       expect(result.deleted).toBe(true);
     });
   });

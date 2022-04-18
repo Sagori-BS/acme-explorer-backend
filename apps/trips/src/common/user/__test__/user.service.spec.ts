@@ -23,10 +23,6 @@ describe(`${entityName}Service`, () => {
     email: faker.internet.email()
   };
 
-  const inspectorGoalService = {
-    createEntity: jest.fn()
-  };
-
   const payload = {
     id: new Types.ObjectId().toHexString(),
     version: 0,
@@ -42,10 +38,6 @@ describe(`${entityName}Service`, () => {
       lastName: faker.name.lastName(),
       profilePicture: faker.image.imageUrl()
     }
-  };
-
-  const inspectorCommisionService = {
-    createEntity: jest.fn()
   };
 
   beforeAll(async () => {
@@ -83,44 +75,6 @@ describe(`${entityName}Service`, () => {
       } as any);
 
       await commonServiceTests.createEntity(createEntityInput);
-    });
-
-    it(`should call the createEntity method of the inspectorCommisionService`, async () => {
-      // Arrange
-      const userMock = {
-        id: new Types.ObjectId().toHexString()
-      } as any;
-
-      entityRepository.createEntity.mockReturnValueOnce(userMock);
-
-      // Act
-      await commonServiceTests.createEntity(createEntityInput);
-
-      // Assert
-      expect(inspectorCommisionService.createEntity).toHaveBeenCalled();
-      expect(inspectorCommisionService.createEntity).toHaveBeenCalledWith({
-        inspector: userMock.id,
-        amount: 0
-      });
-    });
-
-    it(`should call the createEntity method of the inspectorGoalService`, async () => {
-      // Arrange
-      const userMock = {
-        id: new Types.ObjectId().toHexString()
-      } as any;
-
-      entityRepository.createEntity.mockReturnValueOnce(userMock);
-
-      // Act
-      await commonServiceTests.createEntity(createEntityInput);
-
-      // Assert
-      expect(inspectorGoalService.createEntity).toHaveBeenCalled();
-      expect(inspectorGoalService.createEntity).toHaveBeenCalledWith({
-        inspector: createEntityInput.id,
-        inspections: 6
-      });
     });
   });
 
