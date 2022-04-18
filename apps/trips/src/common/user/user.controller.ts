@@ -1,4 +1,4 @@
-import { UserEvents } from '@common/common/events/user/user.events';
+import { UserEvents } from '@shared/events/user/user.events';
 import { Controller } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
 import { UserService } from './user.service';
@@ -6,7 +6,7 @@ import {
   CreatedUserPayload,
   DeletedUserPayload,
   UpdatedUserPayload
-} from '@common/common/events/user/user.payload';
+} from '@shared/events/user/user.payload';
 import { User } from './database/user.entity';
 
 @Controller('user')

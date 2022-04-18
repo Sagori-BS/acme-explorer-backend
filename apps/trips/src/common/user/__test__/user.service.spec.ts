@@ -1,18 +1,18 @@
 import {
   CreatedUserPayload,
   UpdatedUserPayload
-} from '@common/common/events/user/user.payload';
-import { CommonServiceTests } from '@common/common/test/common-service-tests';
-import { initializeCommonServiceTests } from '@common/common/test/initialize-common-service-test';
+} from '@shared/events/user/user.payload';
+import { CommonServiceTests } from '@shared/test/common-service-tests';
+import { initializeCommonServiceTests } from '@shared/test/initialize-common-service-test';
 import { Types } from 'mongoose';
 import { User } from '../database/user.entity';
 import { UserRepository } from '../user.repository';
 import { UserService } from '../user.service';
 import * as faker from 'faker';
-import { DEFAULT_LANGUAGE_OPTIONS_DTO } from '@common/common/language/dtos/request-language-options.dto';
+import { DEFAULT_LANGUAGE_OPTIONS_DTO } from '@shared/language/dtos/request-language-options.dto';
 import { InspectorCommissionService } from '../../inspector-commission/inspector-commission.service';
 import { InspectorGoalService } from '@inspection/common/inspector-goal/inspector-goal.service';
-import { generateRole } from '@common/common/test/utils/generate-role';
+import { generateRole } from '@shared/test/utils/generate-role';
 
 const entityName = User.name;
 describe(`${entityName}Service`, () => {

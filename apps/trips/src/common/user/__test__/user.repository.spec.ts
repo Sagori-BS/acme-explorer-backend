@@ -1,17 +1,17 @@
 import { Model, Types } from 'mongoose';
-import { initializeCommonRepositoryTests } from '@common/common/test/initialize-common-repository-test';
+import { initializeCommonRepositoryTests } from '@shared/test/initialize-common-repository-test';
 import { User, UserSchema } from '../database/user.entity';
-import { CreatedUserPayload } from '@common/common/events/user/user.payload';
+import { CreatedUserPayload } from '@shared/events/user/user.payload';
 import { UserRepository } from '../user.repository';
 import * as faker from 'faker';
-import { EntityNotFoundError } from '@common/common/errors/common/entity-not-found.error';
+import { EntityNotFoundError } from '@shared/errors/common/entity-not-found.error';
 import {
   InspectorNote,
   InspectorNoteSchema
 } from '@inspection/common/inspector-note/database/inspector-note.entity';
-import { generateRole } from '@common/common/test/utils/generate-role';
-import { CommonRepositoryTests } from '@common/common/test/common-repository-tests';
-import { UserRoles } from '@common/common/auth/enums/user-roles.enum';
+import { generateRole } from '@shared/test/utils/generate-role';
+import { CommonRepositoryTests } from '@shared/test/common-repository-tests';
+import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 
 const entityName = User.name;
 

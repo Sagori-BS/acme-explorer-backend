@@ -1,9 +1,9 @@
-import { CustomExceptionsFilter } from '@common/common/errors/exception-filters/custom.exception-filter';
-import { HttpExceptionHandler } from '@common/common/errors/http-exception-handler';
-import { LoggerService } from '@common/common/logger/logger.service';
-import { PUB_SUB_CLIENT_TOKEN } from '@common/common/microservices/pub-sub/constants/pub-sub-client.constants';
-import { PubSubClient } from '@common/common/microservices/pub-sub/pub-sub-client';
-import { GoogleCloudPubSubServer } from '@common/common/microservices/pub-sub/pub-sub-server';
+import { CustomExceptionsFilter } from '@shared/errors/exception-filters/custom.exception-filter';
+import { HttpExceptionHandler } from '@shared/errors/http-exception-handler';
+import { LoggerService } from '@shared/logger/logger.service';
+import { PUB_SUB_CLIENT_TOKEN } from '@shared/microservices/pub-sub/constants/pub-sub-client.constants';
+import { PubSubClient } from '@shared/microservices/pub-sub/pub-sub-client';
+import { GoogleCloudPubSubServer } from '@shared/microservices/pub-sub/pub-sub-server';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { MongoSanitizeInterceptor } from '@shared/mongo/interceptors/mongo-sanitize.interceptor';

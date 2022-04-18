@@ -1,4 +1,4 @@
-import { Service } from '@common/common/data/classes/service.class';
+import { Service } from '@shared/data/classes/service.class';
 import { Injectable } from '@nestjs/common';
 import { TripRepository } from './trip.repository';
 import { ITripServiceType } from './interfaces/types/common-type.interface';

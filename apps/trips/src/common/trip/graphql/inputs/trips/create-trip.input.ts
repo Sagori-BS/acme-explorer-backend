@@ -5,7 +5,7 @@ import { validateIsoDateWithJoi } from '@shared/validations/common/iso-date/iso-
 import { validateDescriptionWithJoi } from '@shared/validations/common/strings/description/description.validator';
 import { validateTitleWithJoi } from '@shared/validations/common/strings/title/title.validator';
 import * as joi from 'joi';
-import { CreateStageInput } from './stages/create-stage.input';
+import { CreateStageInput } from '../stages/create-stage.input';
 
 @InputType()
 export class CreateTripInput extends ValidationInput {

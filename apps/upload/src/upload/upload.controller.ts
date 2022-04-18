@@ -1,5 +1,5 @@
-import { AuthorizedRoles } from '@common/common/auth/decorators/authorized-roles.decorator';
-import { Picture } from '@common/common/dtos/upload/picture.dto';
+import { AuthorizedRoles } from '@shared/auth/decorators/authorized-roles.decorator';
+import { Picture } from '@shared/dtos/upload/picture.dto';
 import {
   Body,
   Controller,

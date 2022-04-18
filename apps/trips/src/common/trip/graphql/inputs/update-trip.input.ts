@@ -1,6 +1,6 @@
-import { IUpdateEntity } from '@common/common/data/interfaces/update-entity.interface';
+import { IUpdateEntity } from '@shared/data/interfaces/update-entity.interface';
 import { InputType, Field } from '@nestjs/graphql';
-import { GetEntityByIdInput } from '@common/common/data/classes/get-entity-by-id.class';
+import { GetEntityByIdInput } from '@shared/data/classes/get-entity-by-id.class';
 import { UpdateTripPayload } from './update-trip.payload';
 
 @InputType()

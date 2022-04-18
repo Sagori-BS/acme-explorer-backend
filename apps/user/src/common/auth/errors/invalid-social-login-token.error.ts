@@ -1,5 +1,5 @@
-import { BaseError } from '@common/common/errors/base-error.abstract';
-import { ErrorCode } from '@common/common/errors/enums/error-code.enum';
+import { BaseError } from '@shared/errors/base-error.abstract';
+import { ErrorCode } from '@shared/errors/enums/error-code.enum';
 
 export class InvalidSocialLoginTokenError extends BaseError {
   public readonly code = ErrorCode.INVALID_CREDENTIALS;

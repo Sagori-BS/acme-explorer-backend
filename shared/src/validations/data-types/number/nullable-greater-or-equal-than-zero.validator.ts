@@ -1,4 +1,4 @@
-import { IDatabaseValidator } from '@common/common/data/interfaces/database-validator.interface';
+import { IDatabaseValidator } from '@shared/data/interfaces/database-validator.interface';
 import { errorMessageBuilder } from '../../error-message-builder';
 import { _validateGreaterOrEqualThan0 } from './greater-or-equal-than-zero.validator';
 

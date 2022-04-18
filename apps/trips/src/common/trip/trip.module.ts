@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JwtStrategy } from '@common/common/auth/strategies/jwt.strategy';
-import { GlobalJwtAuthAndRolesGuard } from '@common/common/auth/guards/global-jwt-auth-and-roles.guard';
+import { JwtStrategy } from '@shared/auth/strategies/jwt.strategy';
+import { GlobalJwtAuthAndRolesGuard } from '@shared/auth/guards/global-jwt-auth-and-roles.guard';
 import { Trip, TripSchema } from './database/trip.entity';
 import { TripRepository } from './trip.repository';
 import { TripResolver } from './trip.resolver';

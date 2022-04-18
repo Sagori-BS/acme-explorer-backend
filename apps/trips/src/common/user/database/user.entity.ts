@@ -1,7 +1,7 @@
-import { IBaseEntity } from '@common/common/data/interfaces/base-entity.interface';
-import { validateId } from '@common/common/validations/common/identification/mongo-id/id.validator';
-import { validateNullableUrl } from '@common/common/validations/common/internet/url/url-nullable.validator';
-import { validateName } from '@common/common/validations/common/strings/name/name.validator';
+import { IBaseEntity } from '@shared/data/interfaces/base-entity.interface';
+import { validateId } from '@shared/validations/common/identification/mongo-id/id.validator';
+import { validateNullableUrl } from '@shared/validations/common/internet/url/url-nullable.validator';
+import { validateName } from '@shared/validations/common/strings/name/name.validator';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { validateEmail } from '@shared/validations/entities/user/email/email.validator';
 import { Document } from 'mongoose';
