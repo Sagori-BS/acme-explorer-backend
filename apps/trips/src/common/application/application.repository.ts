@@ -2,15 +2,17 @@ import { Repository } from '@common/common/data/classes/repository.class';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { DataStore } from './database/application.entity';
+import { Application } from './database/application.entity';
 import { IDataStoreRepositoryType } from './interfaces/types/common-type.interface';
 
 @Injectable()
-export class DataStoreRepository extends Repository<IDataStoreRepositoryType> {
+export class ApplicationRepository extends Repository<
+  IDataStoreRepositoryType
+> {
   constructor(
-    @InjectModel(DataStore.name)
-    private readonly dataStoreModel: Model<DataStore>
+    @InjectModel(Application.name)
+    private readonly applicationModel: Model<Application>
   ) {
-    super(dataStoreModel, DataStore.name);
+    super(applicationModel, Application.name);
   }
 }
