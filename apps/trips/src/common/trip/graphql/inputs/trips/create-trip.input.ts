@@ -32,6 +32,10 @@ export class CreateTripInput extends ValidationInput {
 
   manager?: string;
 
+  ticket?: string;
+
+  price?: number;
+
   public static validationSchema = joi.object<CreateTripInput>({
     startDate: validateIsoDateWithJoi.required(),
     endDate: validateIsoDateWithJoi.required(),

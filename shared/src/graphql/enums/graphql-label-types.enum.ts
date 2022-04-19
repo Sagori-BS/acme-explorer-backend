@@ -4,5 +4,5 @@ export enum GraphQlFieldNames {
   INPUT_FIELD = 'input',
   EMAIL_FIELD = 'email',
   PAYLOAD = 'payload',
-  SLUG = 'slug',
+  SLUG = 'slug'
 }

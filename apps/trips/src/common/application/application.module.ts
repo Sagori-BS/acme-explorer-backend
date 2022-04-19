@@ -23,6 +23,6 @@ import { ApplicationService } from './application.service';
     JwtStrategy,
     ...GlobalJwtAuthAndRolesGuard
   ],
-  exports: [MongooseModule]
+  exports: [MongooseModule, ApplicationService]
 })
 export class ApplicationModule {}
