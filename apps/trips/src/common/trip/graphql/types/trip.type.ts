@@ -16,7 +16,7 @@ export class Trip implements ITrip {
   title: string;
 
   @Field()
-  ticker: string;
+  ticket: string;
 
   @Field()
   description: string;

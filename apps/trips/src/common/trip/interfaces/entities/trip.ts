@@ -4,7 +4,7 @@ import { IStage } from './stage';
 export interface ITrip {
   id: string;
   title: string;
-  ticker: string;
+  ticket: string;
   description: string;
   price: number;
   requirements: string[];

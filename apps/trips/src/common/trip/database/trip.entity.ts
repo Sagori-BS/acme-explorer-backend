@@ -22,7 +22,7 @@ export class Trip extends Document implements IBaseEntity, ITrip {
   title: string;
 
   @Prop({ required: true, validate: validateTitle })
-  ticker: string;
+  ticket: string;
 
   @Prop({ required: true })
   description: string;
@@ -117,13 +117,13 @@ TripSchema.pre('save', function(next) {
 
 TripSchema.index(
   {
-    ticker: 'text',
+    ticket: 'text',
     title: 'text',
     description: 'text'
   },
   {
     weights: {
-      ticker: 10,
+      ticket: 10,
       title: 5,
       description: 1
     }
