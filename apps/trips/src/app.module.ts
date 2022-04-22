@@ -35,9 +35,9 @@ import { validateEnv } from './config/env.validator';
     }),
     GraphQLFederationModule.forRoot(graphQLFederationOptions),
     PubSubClientModule.registerAsync(getPubSubModuleAsyncConfig('trips')),
+    TripModule,
     ApplicationModule,
-    UserModule,
-    TripModule
+    UserModule
   ]
 })
 export class AppModule {}

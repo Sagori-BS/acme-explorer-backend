@@ -1,5 +1,5 @@
 import { Service } from '@shared/data/classes/service.class';
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { TripRepository } from './trip.repository';
 import { ITripServiceType } from './interfaces/types/common-type.interface';
 import { Trip } from './database/trip.entity';
@@ -18,6 +18,7 @@ import { ApplicationService } from '../application/application.service';
 export class TripService extends Service<ITripServiceType> {
   constructor(
     private readonly tripRepository: TripRepository,
+    @Inject(forwardRef(() => ApplicationService))
     private readonly applicationService: ApplicationService
   ) {
     super(tripRepository);

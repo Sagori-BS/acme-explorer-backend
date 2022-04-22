@@ -25,6 +25,6 @@ import { TripModule } from '../trip/trip.module';
     JwtStrategy,
     ...GlobalJwtAuthAndRolesGuard
   ],
-  exports: [MongooseModule, ApplicationService]
+  exports: [MongooseModule, ApplicationService, ApplicationRepository]
 })
 export class ApplicationModule {}
