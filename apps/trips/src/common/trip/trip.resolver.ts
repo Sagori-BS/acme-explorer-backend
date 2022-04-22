@@ -47,7 +47,7 @@ export class TripResolver {
     return this.service.getEntities(filterInput);
   }
 
-  @AuthorizedRoles(...MANAGER)
+  @Public()
   @Query(() => ListTrips)
   public async listTrips(
     @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
