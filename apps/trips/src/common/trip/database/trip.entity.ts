@@ -1,4 +1,4 @@
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Document, Query, Schema as MongooseSchema } from 'mongoose';
 import { IBaseEntity } from '@shared/data/interfaces/base-entity.interface';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { ITrip } from '../interfaces/entities/trip';
@@ -9,6 +9,9 @@ import { validateTitle } from '@shared/validations/common/strings/title/title.va
 import { validatePositiveNumber } from '@shared/validations/data-types/number/number.validator';
 import { validateIsoDate } from '@shared/validations/common/iso-date/iso-date.validator';
 import { IStage } from '../interfaces/entities/stage';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { buildGetListingBaseEntitiesPipeline } from '@shared/mongo/pipelines/get-listing-base-entities.pipeline';
+import { getListingTripLookupStages } from './pipelines/get-listing-trip-lookup-stages.utils';
 
 @Schema({
   optimisticConcurrency: true,
@@ -129,3 +132,21 @@ TripSchema.index(
     }
   }
 );
+
+TripSchema.statics.buildProjection = (query: Query<any, any, any, any>) => {
+  query.populate([
+    {
+      path: 'manager',
+      model: User.name
+    }
+  ]);
+
+  return query;
+};
+
+TripSchema.statics.getListingPipeline = (filters: FilterInput) => {
+  return buildGetListingBaseEntitiesPipeline({
+    filters,
+    getListingLookupStages: getListingTripLookupStages()
+  });
+};
