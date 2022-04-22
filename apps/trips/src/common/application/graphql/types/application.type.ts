@@ -12,6 +12,9 @@ export class Application implements IApplication {
   @Field(() => TripsUser)
   explorer: TripsUser;
 
+  @Field(() => TripsUser)
+  manager: TripsUser;
+
   @Field(() => Trip)
   trip: Trip;
 
