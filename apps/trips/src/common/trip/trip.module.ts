@@ -7,6 +7,7 @@ import { TripService } from './trip.service';
 import { ApplicationModule } from '../application/application.module';
 import { GlobalJwtAuthAndRolesGuard } from '@shared/auth/guards/global-jwt-auth-and-roles.guard';
 import { JwtStrategy } from '@shared/auth/strategies/jwt.strategy';
+import { StageResolver } from './resolvers/stages.resolver';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { JwtStrategy } from '@shared/auth/strategies/jwt.strategy';
     TripService,
     TripRepository,
     TripResolver,
+    StageResolver,
     JwtStrategy,
     ...GlobalJwtAuthAndRolesGuard
   ],
