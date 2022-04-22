@@ -8,3 +8,4 @@ deploy:
     - k8s/api-gateway.yml
     - k8s/upload.yml
     - k8s/pubsub.yml
+    - k8s/trips.yml

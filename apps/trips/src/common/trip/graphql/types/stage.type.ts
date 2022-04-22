@@ -1,11 +1,8 @@
-import { ObjectType, ID, Field, Float } from '@nestjs/graphql';
+import { ObjectType, Field, Float } from '@nestjs/graphql';
 import { IStage } from '../../interfaces/entities/stage';
 
 @ObjectType()
 export class Stage implements IStage {
-  @Field(() => ID)
-  id: string;
-
   @Field()
   title: string;
 
@@ -14,4 +11,6 @@ export class Stage implements IStage {
 
   @Field(() => Float)
   price: number;
+
+  _id: string;
 }

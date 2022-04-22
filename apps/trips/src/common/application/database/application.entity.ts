@@ -27,6 +27,14 @@ export class Application extends Document implements IBaseEntity, IApplication {
     required: true,
     type: MongooseSchema.Types.ObjectId,
     validate: validateId,
+    ref: User.name
+  })
+  manager: User;
+
+  @Prop({
+    required: true,
+    type: MongooseSchema.Types.ObjectId,
+    validate: validateId,
     ref: Trip.name
   })
   trip: Trip;
@@ -78,6 +86,10 @@ ApplicationSchema.statics.buildProjection = (
     },
     {
       path: 'explorer',
+      model: User.name
+    },
+    {
+      path: 'manager',
       model: User.name
     }
   ]);

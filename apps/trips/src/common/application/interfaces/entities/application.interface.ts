@@ -5,6 +5,7 @@ import { ApplicationState } from '../../graphql/enums/application-states.enum';
 export interface IApplication {
   id: string;
   explorer: IUser;
+  manager: IUser;
   trip: ITrip;
   comments: string[];
   state: ApplicationState;

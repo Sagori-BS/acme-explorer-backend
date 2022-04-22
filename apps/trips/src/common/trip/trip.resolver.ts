@@ -15,6 +15,8 @@ import { CreateInternalTripInput } from './graphql/inputs/trips/create-internal-
 import { CurrentUser } from '@shared/auth/decorators/current-user.decorator';
 import { JwtPayload } from '@shared/auth/interfaces/jwt-payload.interface';
 import { ListTrips } from './graphql/types/list-trips.type';
+import { DeleteStageInput } from './graphql/inputs/stages/delete-stage.input';
+import { AddStageInput } from './graphql/inputs/stages/add-stage.input';
 
 @Resolver(() => Trip)
 export class TripResolver {
@@ -47,7 +49,7 @@ export class TripResolver {
     return this.service.getEntities(filterInput);
   }
 
-  @AuthorizedRoles(...MANAGER)
+  @Public()
   @Query(() => ListTrips)
   public async listTrips(
     @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
@@ -154,5 +156,27 @@ export class TripResolver {
     createInternalTripInput: CreateInternalTripInput
   ): Promise<Trip> {
     return this.service.createEntity(createInternalTripInput);
+  }
+
+  @AuthorizedRoles(...MANAGER)
+  @Mutation(() => Trip)
+  public async deleteStageFromATrip(
+    @CurrentUser()
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.INPUT_FIELD)
+    deleteStageInput: DeleteStageInput
+  ): Promise<Trip> {
+    return this.service.deleteStageFromATrip(deleteStageInput, jwtPayload);
+  }
+
+  @AuthorizedRoles(...MANAGER)
+  @Mutation(() => Trip)
+  public async addStageFromATrip(
+    @CurrentUser()
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.INPUT_FIELD)
+    addStageInput: AddStageInput
+  ): Promise<Trip> {
+    return this.service.addStageFromATrip(addStageInput, jwtPayload);
   }
 }
