@@ -13,6 +13,9 @@ import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { TripState } from './graphql/enums/trip-states.enum';
 import { InvalidOperationError } from '@shared/errors/common/invalid-operation.error';
 import { ApplicationService } from '../application/application.service';
+import { DeleteStageInput } from './graphql/inputs/stages/delete-stage.input';
+import { AddStageInput } from './graphql/inputs/stages/add-stage.input';
+import { CreateStageInput } from './graphql/inputs/stages/create-stage.input';
 
 @Injectable()
 export class TripService extends Service<ITripServiceType> {
@@ -114,6 +117,60 @@ export class TripService extends Service<ITripServiceType> {
     const updateEntityInput: UpdateTripInput = {
       where: { id: trip.id },
       data: { state: TripState.ACTIVE }
+    };
+
+    return this.tripRepository.updateEntity(updateEntityInput);
+  }
+
+  public async deleteStageFromATrip(
+    deleteStageInput: DeleteStageInput,
+    jwtPayload: JwtPayload
+  ): Promise<Trip> {
+    const trip = await this.tripRepository.getOneEntity({
+      trip: deleteStageInput.trip,
+      manager: jwtPayload.id
+    });
+
+    const { state, stages } = trip;
+
+    if (state === TripState.ACTIVE) {
+      throw new InvalidOperationError('This Trip is already actived');
+    }
+
+    const updateEntityInput: UpdateTripInput = {
+      where: { id: trip.id },
+      data: {
+        stages: stages.filter(stage => stage._id !== deleteStageInput.stage)
+      }
+    };
+
+    return this.tripRepository.updateEntity(updateEntityInput);
+  }
+
+  public async addStageFromATrip(
+    addStageInput: AddStageInput,
+    jwtPayload: JwtPayload
+  ): Promise<Trip> {
+    const trip = await this.tripRepository.getOneEntity({
+      trip: addStageInput.trip,
+      manager: jwtPayload.id
+    });
+
+    const { state, stages } = trip;
+
+    const createStageInput: CreateStageInput = {
+      ...addStageInput
+    };
+
+    if (state === TripState.INACTIVE) {
+      throw new InvalidOperationError('This Trip is already inactived');
+    }
+
+    const updateEntityInput: UpdateTripInput = {
+      where: { id: trip.id },
+      data: {
+        stages: [...stages, createStageInput]
+      }
     };
 
     return this.tripRepository.updateEntity(updateEntityInput);
