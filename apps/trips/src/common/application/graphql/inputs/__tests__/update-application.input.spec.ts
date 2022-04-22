@@ -4,7 +4,6 @@ import { generateValidInputTest } from '@common/common/test/shared/valid-input/g
 import { generateSuccessTestCases } from '@common/common/test/utils/generate-success-test-cases';
 import * as faker from 'faker';
 import { Types } from 'mongoose';
-import { ApplicationState } from '../../enums/application-states.enum';
 import { UpdateApplicationInput as UpdateEntityInput } from '../update-application.input';
 
 describe('UpdateApplicationInput', () => {
@@ -13,11 +12,7 @@ describe('UpdateApplicationInput', () => {
       id: new Types.ObjectId().toHexString()
     },
     data: {
-      explorer: new Types.ObjectId().toHexString(),
-      trip: new Types.ObjectId().toHexString(),
-      reasonRejected: faker.lorem.word(5),
-      comments: [faker.lorem.word()],
-      state: faker.random.arrayElement(Object.values(ApplicationState))
+      comments: [faker.lorem.word()]
     }
   };
 
@@ -40,22 +35,19 @@ describe('UpdateApplicationInput', () => {
   });
 
   describe('Invalid inputs', () => {
-    describe.each([
-      ['trip', faker.lorem.word(3)],
-      ['explorer', faker.lorem.word(3)],
-      ['reasonRejected', faker.lorem.paragraphs(51)],
-      ['comments', [faker.datatype.number()]],
-      ['state', faker.lorem.word(5), 'state']
-    ])('%s', (key, value, contain = key) => {
-      it(`should return an error if given an invalid ${key} with value ${value}`, () => {
-        generateInvalidUpdateInputWithParams(
-          updateEntityInput,
-          UpdateEntityInput,
-          key,
-          value,
-          contain
-        );
-      });
-    });
+    describe.each([['comments', [faker.datatype.number()]]])(
+      '%s',
+      (key, value, contain = key) => {
+        it(`should return an error if given an invalid ${key} with value ${value}`, () => {
+          generateInvalidUpdateInputWithParams(
+            updateEntityInput,
+            UpdateEntityInput,
+            key,
+            value,
+            contain
+          );
+        });
+      }
+    );
   });
 });
