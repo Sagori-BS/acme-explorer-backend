@@ -1,91 +1,74 @@
 import { Service } from '@shared/data/classes/service.class';
 import { Injectable } from '@nestjs/common';
-import { ApplicationRepository } from './application.repository';
-import { IApplicationServiceType } from './interfaces/types/common-type.interface';
-import { Application } from './database/application.entity';
-import { TripService } from '../trip/trip.service';
-import { CreateCustomApplicationInput } from './graphql/inputs/create-custom-application.input';
+import { ISponsorshipServiceType } from './interfaces/types/common-type.interface';
+import { Sponsorship } from './database/sponsorship.entity';
 import { JwtPayload } from '@shared/auth/interfaces/jwt-payload.interface';
-import { UpdateCustomApplicationInput } from './graphql/inputs/update-custom-application.input';
-import { ListApplications } from './graphql/types/list-applications.type';
-import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { UpdateCustomSponsorshipInput } from './graphql/inputs/update-custom-sponsorship.input';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { ListSponsorships } from './graphql/types/list-sponsorships.type';
+import { SponsorshipRepository } from './sponsorship.repository';
+import { CreateSponsorshipInput } from './graphql/inputs/create-sponsorship.input';
+import { CreateCustomSponsorshipInput } from './graphql/inputs/create-custom-sponsorship.input';
 
 @Injectable()
-export class ApplicationService extends Service<IApplicationServiceType> {
-  constructor(
-    private readonly applicationRepository: ApplicationRepository,
-    private readonly tripService: TripService
-  ) {
-    super(applicationRepository);
+export class SponsorshipService extends Service<ISponsorshipServiceType> {
+  constructor(private readonly sponsorshipRepository: SponsorshipRepository) {
+    super(sponsorshipRepository);
   }
 
   public async listEntities(
     filterInput: FilterInput,
     jwtPayload?: JwtPayload
-  ): Promise<ListApplications> {
+  ): Promise<ListSponsorships> {
     if (jwtPayload) {
       const { id, role } = jwtPayload;
-      if (role === UserRoles.EXPLORER) {
+      if (role === UserRoles.SPONSOR) {
         filterInput.where = {
           ...filterInput.where,
-          explorer: id
+          sponsor: id
         };
       } else {
         filterInput.where = {
-          ...filterInput.where,
-          manager: id
+          ...filterInput.where
         };
       }
     }
-    return this.applicationRepository.listEntities(filterInput);
+    return this.sponsorshipRepository.listEntities(filterInput);
   }
 
-  public async createEntity(
-    createCustomApplicationInput: CreateCustomApplicationInput
-  ): Promise<Application> {
-    if (!createCustomApplicationInput.manager) {
-      const trip = await this.tripService.getOneEntity({
-        id: createCustomApplicationInput.trip
-      });
-
-      createCustomApplicationInput.manager = trip.manager.id;
-    }
-
-    return this.applicationRepository.createEntity(
-      createCustomApplicationInput
-    );
-  }
-
-  public async updateSelfApplication(
+  public async updateSelfSponsorship(
     jwtPayload: JwtPayload,
-    updateCustomApplicationInput: UpdateCustomApplicationInput
-  ): Promise<Application> {
-    const { id } = updateCustomApplicationInput.where;
+    updateCustomSponsorshipInput: UpdateCustomSponsorshipInput
+  ): Promise<Sponsorship> {
+    const { id } = updateCustomSponsorshipInput.where;
 
-    await this.applicationRepository.getOneEntity({
+    await this.sponsorshipRepository.getOneEntity({
       explorer: jwtPayload.id,
       id
     });
 
-    return this.applicationRepository.updateEntity(
-      updateCustomApplicationInput
+    return this.sponsorshipRepository.updateEntity(
+      updateCustomSponsorshipInput
     );
   }
 
-  public async acceptOrRejectApplication(
+  public async createSelfSponsorship(
     jwtPayload: JwtPayload,
-    updateCustomApplicationInput: UpdateCustomApplicationInput
-  ): Promise<Application> {
-    const { id } = updateCustomApplicationInput.where;
+    createSponsorshipInput: CreateSponsorshipInput
+  ): Promise<Sponsorship> {
+    const createCustomSponsorshipInput: CreateCustomSponsorshipInput = {
+      ...createSponsorshipInput,
+      sponsor: jwtPayload.id
+    };
 
-    await this.applicationRepository.getOneEntity({
-      manager: jwtPayload.id,
+    await this.sponsorshipRepository.getOneEntity({
+      explorer: jwtPayload.id,
       id
     });
 
-    return this.applicationRepository.updateEntity(
-      updateCustomApplicationInput
+    return this.sponsorshipRepository.updateEntity(
+      updateCustomSponsorshipInput
     );
   }
 }

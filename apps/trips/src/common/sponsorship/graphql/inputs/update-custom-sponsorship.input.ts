@@ -3,19 +3,19 @@ import { InputType, Field } from '@nestjs/graphql';
 import { GetEntityByIdInput } from '@shared/data/classes/get-entity-by-id.class';
 import * as joi from 'joi';
 import { ValidationInput } from '@shared/data/classes/validation-input.class';
-import { UpdateCustomApplicationPayload } from './update-custom-application.payload';
+import { UpdateCustomSponsorshipPayload } from './update-custom-sponsorship.payload';
 
 @InputType()
-export class UpdateCustomApplicationInput extends ValidationInput
+export class UpdateCustomSponsorshipInput extends ValidationInput
   implements IUpdateEntity {
   @Field()
   where: GetEntityByIdInput;
 
   @Field()
-  data: UpdateCustomApplicationPayload;
+  data: UpdateCustomSponsorshipPayload;
 
-  public static validationSchema = joi.object<UpdateCustomApplicationInput>({
+  public static validationSchema = joi.object<UpdateCustomSponsorshipInput>({
     where: GetEntityByIdInput.validationSchema.required(),
-    data: UpdateCustomApplicationPayload.validationSchema.required()
+    data: UpdateCustomSponsorshipPayload.validationSchema.required()
   });
 }

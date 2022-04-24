@@ -1,21 +1,21 @@
 import { BaseRepositoryType } from '@shared/data/interfaces/base-repository-type.interface';
 import { BaseServiceType } from '@shared/data/interfaces/base-service-type.interface';
 import { Model } from 'mongoose';
-import { ApplicationRepository } from '../../application.repository';
-import { Application } from '../../database/application.entity';
-import { CreateCustomApplicationInput } from '../../graphql/inputs/create-custom-application.input';
-import { UpdateCustomApplicationInput } from '../../graphql/inputs/update-custom-application.input';
+import { Sponsorship } from '../../database/sponsorship.entity';
+import { CreateCustomSponsorshipInput } from '../../graphql/inputs/create-custom-sponsorship.input';
+import { UpdateCustomSponsorshipInput } from '../../graphql/inputs/update-custom-sponsorship.input';
+import { SponsorshipRepository } from '../../sponsorship.repository';
 
-export interface IApplicationRepositoryType extends BaseRepositoryType {
-  entity: Application;
-  entityModel: Model<Application>;
-  createEntityInput: CreateCustomApplicationInput;
-  updateEntityInput: UpdateCustomApplicationInput;
+export interface ISponsorshipRepositoryType extends BaseRepositoryType {
+  entity: Sponsorship;
+  entityModel: Model<Sponsorship>;
+  createEntityInput: CreateCustomSponsorshipInput;
+  updateEntityInput: UpdateCustomSponsorshipInput;
 }
 
-export interface IApplicationServiceType extends BaseServiceType {
-  entity: Application;
-  entityRepository: ApplicationRepository;
-  createEntityInput: CreateCustomApplicationInput;
-  updateEntityInput: UpdateCustomApplicationInput;
+export interface ISponsorshipServiceType extends BaseServiceType {
+  entity: Sponsorship;
+  entityRepository: SponsorshipRepository;
+  createEntityInput: CreateCustomSponsorshipInput;
+  updateEntityInput: UpdateCustomSponsorshipInput;
 }

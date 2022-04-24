@@ -1,6 +1,6 @@
 import { ObjectType } from '@nestjs/graphql';
 import { ListEntity } from '@shared/graphql/types/base-list-entity.type';
-import { Application } from './application.type';
+import { Sponsorship } from './sponsorship.type';
 
 @ObjectType()
-export class ListApplications extends ListEntity(Application) {}
+export class ListSponsorships extends ListEntity(Sponsorship) {}
