@@ -6,11 +6,9 @@ import { Sponsorship, SponsorshipSchema } from './database/sponsorship.entity';
 import { SponsorshipRepository } from './sponsorship.repository';
 import { SponsorshipResolver } from './sponsorship.resolver';
 import { SponsorshipService } from './sponsorship.service';
-import { TripModule } from '../trip/trip.module';
 
 @Module({
   imports: [
-    TripModule,
     MongooseModule.forFeature([
       {
         name: Sponsorship.name,

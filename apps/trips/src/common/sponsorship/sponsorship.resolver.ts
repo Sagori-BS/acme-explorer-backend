@@ -1,12 +1,12 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
-import { Sponsorship } from './graphql/types/Sponsorship.type';
+import { Sponsorship } from './graphql/types/sponsorship.type';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { graphQlIdArgOption } from '@shared/graphql/types/graphql-delete-mutation-options.type';
 import { graphQlFindQueryOptions } from '@shared/graphql/types/graphql-filter-options';
 import { AuthorizedRoles } from '@shared/auth/decorators/authorized-roles.decorator';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { GraphQlFieldNames } from '@shared/graphql/enums/graphql-label-types.enum';
-import { SponsorshipService } from './Sponsorship.service';
+import { SponsorshipService } from './sponsorship.service';
 import {
   EXPLORER,
   MANAGER,
