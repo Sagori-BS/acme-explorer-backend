@@ -6,6 +6,9 @@ import { validateId } from '@shared/validations/common/identification/mongo-id/i
 import { User } from '@trips/common/user/database/user.entity';
 import { ApplicationState } from '../graphql/enums/application-states.enum';
 import { Trip } from '@trips/common/trip/database/trip.entity';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { buildGetListingBaseEntitiesPipeline } from '@shared/mongo/pipelines/get-listing-base-entities.pipeline';
+import { getListingApplicationLookupStages } from './pipelines/get-listing-application-lookup-stages.utils';
 
 @Schema({
   optimisticConcurrency: true,
@@ -95,4 +98,11 @@ ApplicationSchema.statics.buildProjection = (
   ]);
 
   return query;
+};
+
+ApplicationSchema.statics.getListingPipeline = (filters: FilterInput) => {
+  return buildGetListingBaseEntitiesPipeline({
+    filters,
+    getListingLookupStages: getListingApplicationLookupStages()
+  });
 };

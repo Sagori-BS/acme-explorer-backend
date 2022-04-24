@@ -13,7 +13,6 @@ import {
   SPONSOR
 } from '@shared/auth/arrays/authorized-roles.arrays';
 import { CreateSponsorshipInput } from './graphql/inputs/create-sponsorship.input';
-import { UpdateSponsorshipInput } from './graphql/inputs/update-sponsorship.input';
 import { ListSponsorships } from './graphql/types/list-sponsorships.type';
 import { CurrentUser } from '@shared/auth/decorators/current-user.decorator';
 import { JwtPayload } from '@shared/auth/interfaces/jwt-payload.interface';
@@ -107,7 +106,10 @@ export class SponsorshipResolver {
     @Args(GraphQlFieldNames.INPUT_FIELD)
     createSponsorshipInput: CreateSponsorshipInput
   ): Promise<Sponsorship> {
-    return this.service.createEntity(createSponsorshipInput);
+    return this.service.createSelfSponsorship(
+      createSponsorshipInput,
+      jwtPayload
+    );
   }
 
   @AuthorizedRoles(...SPONSOR)
@@ -123,7 +125,7 @@ export class SponsorshipResolver {
     });
   }
 
-  @AuthorizedRoles(...EXPLORER)
+  @AuthorizedRoles(...SPONSOR)
   @Mutation(() => Sponsorship)
   public async paySelfSponsorship(
     @CurrentUser()
@@ -132,33 +134,7 @@ export class SponsorshipResolver {
   ): Promise<Sponsorship> {
     return this.service.updateSelfSponsorship(jwtPayload, {
       where: { id },
-      data: { state: SponsorshipState.ACCEPTED }
-    });
-  }
-
-  @AuthorizedRoles(...MANAGER)
-  @Mutation(() => Sponsorship)
-  public async acceptSponsorship(
-    @CurrentUser()
-    jwtPayload: JwtPayload,
-    @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
-  ): Promise<Sponsorship> {
-    return this.service.updateSelfSponsorship(jwtPayload, {
-      where: { id },
-      data: { state: SponsorshipState.ACCEPTED }
-    });
-  }
-
-  @AuthorizedRoles(...MANAGER)
-  @Mutation(() => Sponsorship)
-  public async rejectSponsorship(
-    @CurrentUser()
-    jwtPayload: JwtPayload,
-    @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
-  ): Promise<Sponsorship> {
-    return this.service.updateSelfSponsorship(jwtPayload, {
-      where: { id },
-      data: { state: SponsorshipState.REJECTED }
+      data: { state: SponsorshipState.ACTIVE }
     });
   }
 }

@@ -8,6 +8,9 @@ import { SponsorshipState } from '../graphql/enums/sponsorship-states.enum';
 import { Trip } from '@trips/common/trip/database/trip.entity';
 import { validateUrl } from '@shared/validations/common/internet/url/url.validator';
 import { validateRefsPlugin } from '@shared/mongo/plugins/validate-refs-plugin';
+import { getListingSponsorshipLookupStages } from './pipelines/get-listing-sponsorship-lookup-stages.utils';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { buildGetListingBaseEntitiesPipeline } from '@shared/mongo/pipelines/get-listing-base-entities.pipeline';
 
 @Schema({
   optimisticConcurrency: true,
@@ -84,14 +87,17 @@ SponsorshipSchema.statics.buildProjection = (
       path: 'trip'
     },
     {
-      path: 'explorer',
-      model: User.name
-    },
-    {
-      path: 'manager',
+      path: 'sponsor',
       model: User.name
     }
   ]);
 
   return query;
+};
+
+SponsorshipSchema.statics.getListingPipeline = (filters: FilterInput) => {
+  return buildGetListingBaseEntitiesPipeline({
+    filters,
+    getListingLookupStages: getListingSponsorshipLookupStages()
+  });
 };

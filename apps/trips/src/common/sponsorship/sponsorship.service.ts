@@ -44,7 +44,7 @@ export class SponsorshipService extends Service<ISponsorshipServiceType> {
     const { id } = updateCustomSponsorshipInput.where;
 
     await this.sponsorshipRepository.getOneEntity({
-      explorer: jwtPayload.id,
+      sponsor: jwtPayload.id,
       id
     });
 
@@ -54,21 +54,14 @@ export class SponsorshipService extends Service<ISponsorshipServiceType> {
   }
 
   public async createSelfSponsorship(
-    jwtPayload: JwtPayload,
-    createSponsorshipInput: CreateSponsorshipInput
+    createSponsorshipInput: CreateSponsorshipInput,
+    jwtPayload: JwtPayload
   ): Promise<Sponsorship> {
     const createCustomSponsorshipInput: CreateCustomSponsorshipInput = {
       ...createSponsorshipInput,
       sponsor: jwtPayload.id
     };
 
-    await this.sponsorshipRepository.getOneEntity({
-      explorer: jwtPayload.id,
-      id
-    });
-
-    return this.sponsorshipRepository.updateEntity(
-      updateCustomSponsorshipInput
-    );
+    return this.createEntity(createCustomSponsorshipInput);
   }
 }
