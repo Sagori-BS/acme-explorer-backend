@@ -22,7 +22,7 @@ import { AddStageInput } from './graphql/inputs/stages/add-stage.input';
 export class TripResolver {
   constructor(private readonly service: TripService) {}
 
-  @AuthorizedRoles(UserRoles.ADMIN)
+  @Public()
   @Query(() => Trip)
   public async getTripById(
     @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption)

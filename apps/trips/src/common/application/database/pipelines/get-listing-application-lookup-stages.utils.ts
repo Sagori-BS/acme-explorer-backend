@@ -1,4 +1,4 @@
-export const getListingTripLookupStages = (): any[] => {
+export const getListingApplicationLookupStages = (): any[] => {
   return [
     {
       $lookup: {

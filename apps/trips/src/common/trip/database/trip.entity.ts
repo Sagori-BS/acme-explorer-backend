@@ -12,6 +12,7 @@ import { IStage } from '../interfaces/entities/stage';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { buildGetListingBaseEntitiesPipeline } from '@shared/mongo/pipelines/get-listing-base-entities.pipeline';
 import { getListingTripLookupStages } from './pipelines/get-listing-trip-lookup-stages.utils';
+import { validateRefsPlugin } from '@shared/mongo/plugins/validate-refs-plugin';
 
 @Schema({
   optimisticConcurrency: true,
@@ -132,6 +133,8 @@ TripSchema.index(
     }
   }
 );
+
+TripSchema.plugin(validateRefsPlugin);
 
 TripSchema.statics.buildProjection = (query: Query<any, any, any, any>) => {
   query.populate([
