@@ -25,7 +25,7 @@ export const getListingSponsorshipLookupStages = (): any[] => {
     },
     {
       $addFields: {
-        explorer: {
+        trip: {
           $first: '$trip'
         }
       }
