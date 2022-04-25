@@ -48,7 +48,7 @@ export class ApplicationResolver {
     return this.service.getEntities(filterInput);
   }
 
-  @AuthorizedRoles(...MANAGER)
+  @AuthorizedRoles(UserRoles.ADMIN)
   @Query(() => ListApplications)
   public async listApplications(
     @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
