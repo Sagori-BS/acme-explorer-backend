@@ -27,15 +27,15 @@ export class ApplicationService extends Service<IApplicationServiceType> {
   ): Promise<ListApplications> {
     if (jwtPayload) {
       const { id, role } = jwtPayload;
-      if (role === UserRoles.EXPLORER) {
+      if (role === UserRoles.MANAGER) {
         filterInput.where = {
           ...filterInput.where,
-          explorer: id
+          manager: id
         };
       } else {
         filterInput.where = {
           ...filterInput.where,
-          manager: id
+          explorer: id
         };
       }
     }
