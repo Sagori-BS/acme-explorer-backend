@@ -40,7 +40,7 @@ export const getListingApplicationLookupStages = (): any[] => {
     },
     {
       $addFields: {
-        explorer: {
+        trip: {
           $first: '$trip'
         }
       }
