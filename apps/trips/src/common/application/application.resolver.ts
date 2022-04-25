@@ -103,7 +103,10 @@ export class ApplicationResolver {
     @Args(GraphQlFieldNames.INPUT_FIELD)
     createApplicationInput: CreateApplicationInput
   ): Promise<Application> {
-    return this.service.createEntity(createApplicationInput);
+    return this.service.createSelfApplication(
+      jwtPayload,
+      createApplicationInput
+    );
   }
 
   @AuthorizedRoles(...EXPLORER)
