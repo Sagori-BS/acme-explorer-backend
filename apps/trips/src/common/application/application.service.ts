@@ -10,6 +10,7 @@ import { UpdateCustomApplicationInput } from './graphql/inputs/update-custom-app
 import { ListApplications } from './graphql/types/list-applications.type';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
+import { CreateApplicationInput } from './graphql/inputs/create-application.input';
 
 @Injectable()
 export class ApplicationService extends Service<IApplicationServiceType> {
@@ -51,6 +52,25 @@ export class ApplicationService extends Service<IApplicationServiceType> {
 
       createCustomApplicationInput.manager = trip.manager.id;
     }
+
+    return this.applicationRepository.createEntity(
+      createCustomApplicationInput
+    );
+  }
+
+  public async createSelfApplication(
+    jwtPayload: JwtPayload,
+    createApplicationInput: CreateApplicationInput
+  ): Promise<Application> {
+    const trip = await this.tripService.getOneEntity({
+      id: createApplicationInput.trip
+    });
+
+    const createCustomApplicationInput: CreateCustomApplicationInput = {
+      ...createApplicationInput,
+      explorer: jwtPayload.id,
+      manager: trip.manager.id
+    };
 
     return this.applicationRepository.createEntity(
       createCustomApplicationInput
