@@ -12,12 +12,12 @@ async function bootstrap() {
   app.enableCors();
 
   app.use(
-    '/profilePicture',
+    '/picture',
     createProxyMiddleware({
       target: configService.get(EnvKey.UPLOAD),
       changeOrigin: true,
       pathRewrite: {
-        '^/profilePicture': ''
+        '^/picture': ''
       }
     })
   );
