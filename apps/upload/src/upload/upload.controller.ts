@@ -18,7 +18,7 @@ export class UploadController {
   constructor(private readonly service: UploadService) {}
 
   @AuthorizedRoles(...ALL_ROLES)
-  @Post('profilePicture')
+  @Post('picture')
   @UseInterceptors(FileInterceptor('file', uploadOptions))
   async uploadPicture(@UploadedFile() file: Express.Multer.File) {
     return this.service.uploadFile(file);
