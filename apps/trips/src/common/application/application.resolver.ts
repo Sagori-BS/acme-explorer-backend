@@ -16,6 +16,7 @@ import { JwtPayload } from '@shared/auth/interfaces/jwt-payload.interface';
 import { CreateCustomApplicationInput } from './graphql/inputs/create-custom-application.input';
 import { UpdateCustomApplicationInput } from './graphql/inputs/update-custom-application.input';
 import { ApplicationState } from './graphql/enums/application-states.enum';
+import { RejectApplicationInput } from './graphql/inputs/reject-application.input';
 
 @Resolver(() => Application)
 export class ApplicationResolver {
@@ -167,11 +168,15 @@ export class ApplicationResolver {
   public async rejectApplication(
     @CurrentUser()
     jwtPayload: JwtPayload,
-    @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
+    @Args(GraphQlFieldNames.INPUT_FIELD)
+    rejectApplicationInput: RejectApplicationInput
   ): Promise<Application> {
     return this.service.updateSelfApplication(jwtPayload, {
-      where: { id },
-      data: { state: ApplicationState.REJECTED }
+      where: { id: rejectApplicationInput.id },
+      data: {
+        state: ApplicationState.REJECTED,
+        reasonRejected: rejectApplicationInput.reasonRejected
+      }
     });
   }
 }
