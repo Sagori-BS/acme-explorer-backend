@@ -2,8 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { BaseServiceType } from '../interfaces/base-service-type.interface';
 
+export interface IBaseService {
+  getOneEntity(getOneEntityInput: Record<string, any>): Promise<any>;
+  getEntities(filterInput: FilterInput): Promise<any>;
+  getAllEntities(filterInput: FilterInput): Promise<any>;
+  createEntity(createEntityInput: Record<string, any>): Promise<any>;
+  updateEntity(updateEntityInput: Record<string, any>): Promise<any>;
+  deleteEntity(getOneEntityInput: Record<string, any>): Promise<any>;
+}
+
 @Injectable()
-export abstract class Service<T extends BaseServiceType> {
+export abstract class Service<T extends BaseServiceType>
+  implements IBaseService {
   constructor(private readonly entityRepository: T['entityRepository']) {}
 
   public async getOneEntity(
