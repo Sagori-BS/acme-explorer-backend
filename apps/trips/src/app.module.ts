@@ -10,6 +10,7 @@ import { PubSubClientModule } from '@shared/microservices/pub-sub/pub-sub.module
 import { ApplicationModule } from './common/application/application.module';
 import { SponsorshipModule } from './common/sponsorship/sponsorship.module';
 import { TripModule } from './common/trip/trip.module';
+import { UserPreferencesModule } from './common/user-preferences/user-preferences.module';
 import { UserModule } from './common/user/user.module';
 import { EnvKey } from './config/env-key.enum';
 import { validateEnv } from './config/env.validator';
@@ -39,7 +40,8 @@ import { validateEnv } from './config/env.validator';
     TripModule,
     ApplicationModule,
     UserModule,
-    SponsorshipModule
+    SponsorshipModule,
+    UserPreferencesModule
   ]
 })
 export class AppModule {}
