@@ -1,6 +1,6 @@
-import { IServiceLoader } from '../interfaces/service-loader.interface';
+import { IBaseService } from '@shared/data/classes/service.class';
 
 export type BaseDataLoaderBuilderOptions = {
-  service: IServiceLoader;
+  service: IBaseService;
   fieldName: string;
 };

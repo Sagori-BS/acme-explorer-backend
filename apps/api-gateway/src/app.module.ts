@@ -10,24 +10,23 @@ import { formatGqlApiGatewayError } from './graphql/format-api-gateway-error';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `./env/.api-gateway.env`,
-      validationSchema: validateEnv,
+      validationSchema: validateEnv
     }),
     GraphQLGatewayModule.forRootAsync({
       useFactory: async () => ({
         server: {
           cors: true,
-          uploads: false,
           engine: {
             apiKey: process.env.APOLLO_KEY,
-            graphVariant: process.env.GRAPH_VARIANT,
+            graphVariant: process.env.GRAPH_VARIANT
           },
           context: ({ req }) => ({ headers: req.headers }),
-          formatError: formatGqlApiGatewayError,
-        },
+          formatError: formatGqlApiGatewayError
+        }
       }),
       imports: [BuildServiceModule],
-      inject: [GATEWAY_BUILD_SERVICE],
-    }),
-  ],
+      inject: [GATEWAY_BUILD_SERVICE]
+    })
+  ]
 })
 export class AppModule {}
