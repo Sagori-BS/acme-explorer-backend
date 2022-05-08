@@ -16,7 +16,24 @@ export class UserPreferencesService extends Service<
     super(userPreferencesRepository);
   }
 
-  public updateSelfUserPreferences(
+  public async getOneEntity(
+    getOneEntityInput: Record<string, any>
+  ): Promise<UserPreferences> {
+    getOneEntityInput = { ...getOneEntityInput, deleted: false };
+    try {
+      const userPreferences = await this.userPreferencesRepository.getOneEntity(
+        getOneEntityInput
+      );
+
+      return userPreferences;
+    } catch (e) {
+      return await this.createEntity({
+        user: getOneEntityInput.user
+      });
+    }
+  }
+
+  public async updateSelfUserPreferences(
     jwtPayload: JwtPayload,
     updateUserPreferencesPayload: UpdateUserPreferencesPayload
   ) {
