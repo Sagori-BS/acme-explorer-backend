@@ -122,7 +122,7 @@ export class TripService extends Service<ITripServiceType> {
   public async publishTrip(filterInput: FilterInput): Promise<Trip> {
     filterInput.where = { ...filterInput.where };
 
-    const trip = await this.tripRepository.getOneEntity(filterInput);
+    const trip = await this.tripRepository.getOneEntity(filterInput.where);
     const { state } = trip;
 
     if (state === TripState.ACTIVE) {
