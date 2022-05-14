@@ -29,6 +29,21 @@ export const getListingSponsorshipLookupStages = (): any[] => {
           $first: '$trip'
         }
       }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'trip.manager',
+        foreignField: '_id',
+        as: 'manager'
+      }
+    },
+    {
+      $addFields: {
+        'trip.manager': {
+          $first: '$manager'
+        }
+      }
     }
   ];
 };
