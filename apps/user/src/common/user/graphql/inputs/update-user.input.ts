@@ -2,9 +2,8 @@ import { InputType, Field } from '@nestjs/graphql';
 import { UpdateUserPayload } from './update-user.payload';
 import { GetEntityByIdInput } from '@shared/data/classes/get-entity-by-id.class';
 import { IUpdateEntity } from '@shared/data/interfaces/update-entity.interface';
-import * as joi from 'joi';
-import { validateIdWithJoi } from '@shared/validations/common/mongo-id/id.validator';
 import { ValidationInput } from '@shared/data/classes/validation-input.class';
+import * as joi from 'joi';
 
 @InputType()
 export class UpdateUserInput extends ValidationInput implements IUpdateEntity {
@@ -15,9 +14,7 @@ export class UpdateUserInput extends ValidationInput implements IUpdateEntity {
   data: UpdateUserPayload;
 
   public static validationSchema = joi.object<UpdateUserInput>({
-    where: {
-      id: validateIdWithJoi.required(),
-    },
-    data: UpdateUserPayload.validationSchema,
+    where: GetEntityByIdInput.validationSchema,
+    data: UpdateUserPayload.validationSchema
   });
 }

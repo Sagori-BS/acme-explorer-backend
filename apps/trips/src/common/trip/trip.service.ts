@@ -52,6 +52,18 @@ export class TripService extends Service<ITripServiceType> {
     return this.tripRepository.updateEntity(updateEntityInput);
   }
 
+  public async updateSelfTrip(
+    updateEntityInput: UpdateTripInput,
+    jwtPayload: JwtPayload
+  ): Promise<Trip> {
+    await this.getOneEntity({
+      id: updateEntityInput.where.id,
+      manager: jwtPayload.id
+    });
+
+    return this.updateEntity(updateEntityInput);
+  }
+
   public async listEntities(
     filterInput: FilterInput,
     jwtPayload?: JwtPayload
