@@ -84,7 +84,13 @@ SponsorshipSchema.statics.buildProjection = (
 ) => {
   query.populate([
     {
-      path: 'trip'
+      path: 'trip',
+      populate: [
+        {
+          path: 'manager',
+          model: User.name
+        }
+      ]
     },
     {
       path: 'sponsor',
