@@ -160,6 +160,17 @@ export class TripResolver {
 
   @AuthorizedRoles(...MANAGER)
   @Mutation(() => Trip)
+  public async updateSelfTrip(
+    @CurrentUser()
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.INPUT_FIELD)
+    updateTripInput: UpdateTripInput
+  ): Promise<Trip> {
+    return this.service.updateSelfTrip(updateTripInput, jwtPayload);
+  }
+
+  @AuthorizedRoles(...MANAGER)
+  @Mutation(() => Trip)
   public async deleteStageFromATrip(
     @CurrentUser()
     jwtPayload: JwtPayload,
