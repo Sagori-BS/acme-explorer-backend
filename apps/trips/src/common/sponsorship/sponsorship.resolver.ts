@@ -7,11 +7,7 @@ import { AuthorizedRoles } from '@shared/auth/decorators/authorized-roles.decora
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { GraphQlFieldNames } from '@shared/graphql/enums/graphql-label-types.enum';
 import { SponsorshipService } from './sponsorship.service';
-import {
-  EXPLORER,
-  MANAGER,
-  SPONSOR
-} from '@shared/auth/arrays/authorized-roles.arrays';
+import { SPONSOR } from '@shared/auth/arrays/authorized-roles.arrays';
 import { CreateSponsorshipInput } from './graphql/inputs/create-sponsorship.input';
 import { ListSponsorships } from './graphql/types/list-sponsorships.type';
 import { CurrentUser } from '@shared/auth/decorators/current-user.decorator';
@@ -19,12 +15,13 @@ import { JwtPayload } from '@shared/auth/interfaces/jwt-payload.interface';
 import { CreateCustomSponsorshipInput } from './graphql/inputs/create-custom-sponsorship.input';
 import { UpdateCustomSponsorshipInput } from './graphql/inputs/update-custom-sponsorship.input';
 import { SponsorshipState } from './graphql/enums/sponsorship-states.enum';
+import { Public } from '@shared/auth/decorators/public-resource.decorator';
 
 @Resolver(() => Sponsorship)
 export class SponsorshipResolver {
   constructor(private readonly service: SponsorshipService) {}
 
-  @AuthorizedRoles(...MANAGER)
+  @Public()
   @Query(() => Sponsorship)
   public async getSponsorshipById(
     @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption)
@@ -42,7 +39,7 @@ export class SponsorshipResolver {
     return this.service.getAllEntities(filterInput);
   }
 
-  @AuthorizedRoles(UserRoles.ADMIN)
+  @Public()
   @Query(() => [Sponsorship])
   public async getSponsorships(
     @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
@@ -51,7 +48,7 @@ export class SponsorshipResolver {
     return this.service.getEntities(filterInput);
   }
 
-  @AuthorizedRoles(UserRoles.ADMIN)
+  @Public()
   @Query(() => ListSponsorships)
   public async listSponsorships(
     @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
@@ -98,7 +95,7 @@ export class SponsorshipResolver {
     return this.service.listEntities(filterInput, jwtPayload);
   }
 
-  @AuthorizedRoles(...EXPLORER)
+  @AuthorizedRoles(...SPONSOR)
   @Mutation(() => Sponsorship)
   public async createSelfSponsorship(
     @CurrentUser()
