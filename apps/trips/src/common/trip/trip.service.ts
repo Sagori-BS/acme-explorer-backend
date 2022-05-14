@@ -82,8 +82,8 @@ export class TripService extends Service<ITripServiceType> {
   ): Promise<Trip> {
     filterInput.where = { ...filterInput.where, ...updateTripInput.where };
 
-    const trip = await this.tripRepository.getOneEntity(filterInput);
-    const { state } = trip;
+    const trip = await this.tripRepository.getOneEntity(filterInput.where);
+    const { state, startDate } = trip;
 
     const { reasonCancelled } = updateTripInput.data;
 
@@ -97,7 +97,7 @@ export class TripService extends Service<ITripServiceType> {
       );
     }
 
-    if (new Date(trip.startDate) < new Date()) {
+    if (new Date(startDate) < new Date()) {
       throw new InvalidOperationError(
         'You cannot cancel a trip that has already started'
       );
