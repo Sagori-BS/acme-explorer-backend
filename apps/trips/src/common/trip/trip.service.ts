@@ -16,6 +16,7 @@ import { ApplicationService } from '../application/application.service';
 import { DeleteStageInput } from './graphql/inputs/stages/delete-stage.input';
 import { AddStageInput } from './graphql/inputs/stages/add-stage.input';
 import { CreateStageInput } from './graphql/inputs/stages/create-stage.input';
+import { ApplicationState } from '../application/graphql/enums/application-states.enum';
 
 @Injectable()
 export class TripService extends Service<ITripServiceType> {
@@ -87,11 +88,13 @@ export class TripService extends Service<ITripServiceType> {
     const { reasonCancelled } = updateTripInput.data;
 
     const applications = await this.applicationService.getEntities({
-      where: { trip: trip.id }
+      where: { trip: trip.id, state: ApplicationState.PAID }
     });
 
     if (applications.length > 0) {
-      throw new InvalidOperationError('Cannot cancel trip with applications');
+      throw new InvalidOperationError(
+        'Cannot cancel trip with applications paid'
+      );
     }
 
     if (trip.startDate < new Date().toISOString()) {
