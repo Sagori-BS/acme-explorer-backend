@@ -97,7 +97,7 @@ export class TripService extends Service<ITripServiceType> {
       );
     }
 
-    if (trip.startDate < new Date().toISOString()) {
+    if (new Date(trip.startDate) < new Date()) {
       throw new InvalidOperationError(
         'You cannot cancel a trip that has already started'
       );
