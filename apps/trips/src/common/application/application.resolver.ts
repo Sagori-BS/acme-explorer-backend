@@ -146,7 +146,7 @@ export class ApplicationResolver {
   ): Promise<Application> {
     return this.service.updateSelfApplication(jwtPayload, {
       where: { id },
-      data: { state: ApplicationState.ACCEPTED }
+      data: { state: ApplicationState.PAID }
     });
   }
 
@@ -159,7 +159,7 @@ export class ApplicationResolver {
   ): Promise<Application> {
     return this.service.updateSelfApplication(jwtPayload, {
       where: { id },
-      data: { state: ApplicationState.ACCEPTED }
+      data: { state: ApplicationState.DUE }
     });
   }
 
