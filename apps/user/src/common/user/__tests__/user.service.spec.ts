@@ -9,8 +9,9 @@ import { UpdateUserInput } from '../graphql/inputs/update-user.input';
 import { pubSubClient } from '@shared/config/clients/mock/pub-sub-client';
 import { User } from '../database/user.entity';
 import { PUB_SUB_CLIENT_TOKEN } from '@shared/microservices/pub-sub/constants/pub-sub-client.constants';
-import * as faker from 'faker';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { AuthService } from '@user/common/auth/auth.service';
+import * as faker from 'faker';
 
 const userMock = {
   id: new Types.ObjectId().toHexString(),
@@ -25,6 +26,11 @@ const userRepository = {
   updateEntity: jest.fn().mockReturnValue(userMock),
   deleteEntity: jest.fn().mockReturnValue(userMock),
   getOneEntity: jest.fn().mockReturnValue(userMock)
+};
+
+const authService = {
+  blockUser: jest.fn(),
+  unblockUser: jest.fn()
 };
 
 const entityName = User.name;
@@ -43,6 +49,10 @@ describe(`${entityName}Service`, () => {
         {
           provide: UserRepository,
           useValue: userRepository
+        },
+        {
+          provide: AuthService,
+          useValue: authService
         }
       ]
     }).compile();

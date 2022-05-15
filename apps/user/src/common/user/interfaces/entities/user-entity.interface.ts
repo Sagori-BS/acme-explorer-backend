@@ -1,4 +1,5 @@
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
+import { UserStatus } from '../../graphql/enum/user-status.enum';
 
 export interface IUser {
   id: string;
@@ -9,4 +10,5 @@ export interface IUser {
   telephoneNumber?: string;
   address?: string;
   email: string;
+  status: UserStatus;
 }

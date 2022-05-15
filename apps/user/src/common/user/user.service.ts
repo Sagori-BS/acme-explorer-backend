@@ -12,12 +12,15 @@ import { PUB_SUB_CLIENT_TOKEN } from '@shared/microservices/pub-sub/constants/pu
 import { User } from './database/user.entity';
 import { Service } from '@shared/data/classes/service.class';
 import { IUserServiceType } from './interfaces/types/user-service-type.interface';
+import { UserStatus } from './graphql/enum/user-status.enum';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class UserService extends Service<IUserServiceType> {
   constructor(
     private readonly userRepository: UserRepository,
-    @Inject(PUB_SUB_CLIENT_TOKEN) private readonly client: PubSubClient,
+    private readonly authService: AuthService,
+    @Inject(PUB_SUB_CLIENT_TOKEN) private readonly client: PubSubClient
   ) {
     super(userRepository);
   }
@@ -42,8 +45,30 @@ export class UserService extends Service<IUserServiceType> {
     return user;
   }
 
+  public async lockUser(id: string): Promise<User> {
+    const user = await this.updateEntity({
+      where: { id },
+      data: { status: UserStatus.LOCK }
+    });
+
+    await this.authService.blockUser({ email: user.email });
+
+    return user;
+  }
+
+  public async unlockUser(id: string): Promise<User> {
+    const user = await this.updateEntity({
+      where: { id },
+      data: { status: UserStatus.UNLOCK }
+    });
+
+    await this.authService.unblockUser({ email: user.email });
+
+    return user;
+  }
+
   public async deleteEntity(
-    deleteUserInput: GetEntityByIdInput,
+    deleteUserInput: GetEntityByIdInput
   ): Promise<User> {
     const user = await super.deleteEntity(deleteUserInput);
 

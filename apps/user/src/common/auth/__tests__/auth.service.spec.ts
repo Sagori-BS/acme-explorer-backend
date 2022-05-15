@@ -74,7 +74,7 @@ describe(`AuthService`, () => {
       updatedAt: new Date().toISOString()
     });
 
-    return await entity.save();
+    return entity.save();
   };
 
   beforeAll(async () => {

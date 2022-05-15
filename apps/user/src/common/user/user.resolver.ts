@@ -95,4 +95,22 @@ export class UserResolver {
   ): Promise<User> {
     return this.service.deleteEntity({ id });
   }
+
+  @AuthorizedRoles(UserRoles.ADMIN)
+  @Mutation(() => User)
+  public async lockUser(
+    @Args(GraphQlFieldNames.ID_FIELD)
+    id: string
+  ): Promise<User> {
+    return this.service.lockUser(id);
+  }
+
+  @AuthorizedRoles(UserRoles.ADMIN)
+  @Mutation(() => User)
+  public async unlockUser(
+    @Args(GraphQlFieldNames.ID_FIELD)
+    id: string
+  ): Promise<User> {
+    return this.service.unlockUser(id);
+  }
 }

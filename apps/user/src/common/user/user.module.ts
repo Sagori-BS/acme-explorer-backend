@@ -18,17 +18,17 @@ import { CredentialModule } from '../credential/credential.module';
     MongooseModule.forFeature([
       {
         name: User.name,
-        schema: UserSchema,
-      },
-    ]),
+        schema: UserSchema
+      }
+    ])
   ],
   providers: [
     UserResolver,
     UserService,
     UserRepository,
     JwtStrategy,
-    ...GlobalJwtAuthAndRolesGuard,
+    ...GlobalJwtAuthAndRolesGuard
   ],
-  exports: [MongooseModule, UserService, UserRepository],
+  exports: [MongooseModule, UserService, UserRepository]
 })
 export class UserModule {}

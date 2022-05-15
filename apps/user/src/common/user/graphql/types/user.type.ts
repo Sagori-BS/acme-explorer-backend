@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { IUser } from '../../interfaces/entities/user-entity.interface';
+import { UserStatus } from '../enum/user-status.enum';
 
 @ObjectType()
 export class User implements IUser {
@@ -27,4 +28,7 @@ export class User implements IUser {
 
   @Field(() => UserRoles)
   role: UserRoles;
+
+  @Field(() => UserStatus)
+  status: UserStatus;
 }
