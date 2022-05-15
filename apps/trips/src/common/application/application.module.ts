@@ -5,10 +5,12 @@ import { ApplicationRepository } from './application.repository';
 import { ApplicationResolver } from './application.resolver';
 import { ApplicationService } from './application.service';
 import { TripModule } from '../trip/trip.module';
+import { ConfigurationModule } from '../configuration/configuration.module';
 
 @Module({
   imports: [
     TripModule,
+    ConfigurationModule,
     MongooseModule.forFeature([
       {
         name: Application.name,
