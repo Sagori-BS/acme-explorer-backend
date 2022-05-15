@@ -1,4 +1,11 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Args,
+  Mutation,
+  ResolveField,
+  Float
+} from '@nestjs/graphql';
 import { Application } from './graphql/types/application.type';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { graphQlIdArgOption } from '@shared/graphql/types/graphql-delete-mutation-options.type';
@@ -178,5 +185,11 @@ export class ApplicationResolver {
         reasonRejected: rejectApplicationInput.reasonRejected
       }
     });
+  }
+
+  // Field resolvers
+  @ResolveField(() => Float)
+  public async flatRate() {
+    return this.service.flatRate();
   }
 }

@@ -14,12 +14,14 @@ import { CreateApplicationInput } from './graphql/inputs/create-application.inpu
 import { TripState } from '../trip/graphql/enums/trip-states.enum';
 import { InvalidOperationException } from '@shared/errors/errors';
 import { Trip } from '../trip/database/trip.entity';
+import { ConfigurationService } from '../configuration/configuration.service';
 
 @Injectable()
 export class ApplicationService extends Service<IApplicationServiceType> {
   constructor(
     private readonly applicationRepository: ApplicationRepository,
-    private readonly tripService: TripService
+    private readonly tripService: TripService,
+    private readonly configurationService: ConfigurationService
   ) {
     super(applicationRepository);
   }
@@ -118,6 +120,11 @@ export class ApplicationService extends Service<IApplicationServiceType> {
     return this.applicationRepository.updateEntity(
       updateCustomApplicationInput
     );
+  }
+
+  public async flatRate(): Promise<number> {
+    const flatRate = await this.configurationService.getOneEntity({});
+    return flatRate.flatRate;
   }
 
   private checkIfTripIsStarted(trip: Trip) {
