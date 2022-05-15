@@ -10,10 +10,14 @@ import { ListSponsorships } from './graphql/types/list-sponsorships.type';
 import { SponsorshipRepository } from './sponsorship.repository';
 import { CreateSponsorshipInput } from './graphql/inputs/create-sponsorship.input';
 import { CreateCustomSponsorshipInput } from './graphql/inputs/create-custom-sponsorship.input';
+import { ConfigurationService } from '../configuration/configuration.service';
 
 @Injectable()
 export class SponsorshipService extends Service<ISponsorshipServiceType> {
-  constructor(private readonly sponsorshipRepository: SponsorshipRepository) {
+  constructor(
+    private readonly sponsorshipRepository: SponsorshipRepository,
+    private readonly configurationService: ConfigurationService
+  ) {
     super(sponsorshipRepository);
   }
 
@@ -63,5 +67,10 @@ export class SponsorshipService extends Service<ISponsorshipServiceType> {
     };
 
     return this.createEntity(createCustomSponsorshipInput);
+  }
+
+  public async flatRate(): Promise<number> {
+    const flatRate = await this.configurationService.getOneEntity({});
+    return flatRate.flatRate;
   }
 }

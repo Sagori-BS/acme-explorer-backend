@@ -6,9 +6,11 @@ import { Sponsorship, SponsorshipSchema } from './database/sponsorship.entity';
 import { SponsorshipRepository } from './sponsorship.repository';
 import { SponsorshipResolver } from './sponsorship.resolver';
 import { SponsorshipService } from './sponsorship.service';
+import { ConfigurationModule } from '../configuration/configuration.module';
 
 @Module({
   imports: [
+    ConfigurationModule,
     MongooseModule.forFeature([
       {
         name: Sponsorship.name,

@@ -1,4 +1,11 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Args,
+  Mutation,
+  Float,
+  ResolveField
+} from '@nestjs/graphql';
 import { Sponsorship } from './graphql/types/sponsorship.type';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { graphQlIdArgOption } from '@shared/graphql/types/graphql-delete-mutation-options.type';
@@ -133,5 +140,11 @@ export class SponsorshipResolver {
       where: { id },
       data: { state: SponsorshipState.ACTIVE }
     });
+  }
+
+  // Field resolvers
+  @ResolveField(() => Float)
+  public async flatRate() {
+    return this.service.flatRate();
   }
 }
