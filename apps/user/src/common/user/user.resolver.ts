@@ -48,7 +48,7 @@ export class UserResolver {
 
   @AuthorizedRoles(UserRoles.ADMIN)
   @Query(() => ListUsers)
-  public async listUser(
+  public async listUsers(
     @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
     filterInput: FilterInput
   ): Promise<ListUsers> {
