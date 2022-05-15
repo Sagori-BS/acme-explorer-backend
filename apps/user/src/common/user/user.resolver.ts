@@ -14,6 +14,7 @@ import { GraphQlFieldNames } from '@shared/graphql/enums/graphql-label-types.enu
 import { graphQlIdArgOption } from '@shared/graphql/types/graphql-delete-mutation-options.type';
 import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
 import { graphQlFindQueryOptions } from '@shared/graphql/types/graphql-filter-options';
+import { ListUsers } from './graphql/types/list-users.type';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -43,6 +44,15 @@ export class UserResolver {
     filterInput: FilterInput
   ): Promise<User[]> {
     return this.service.getAllEntities(filterInput);
+  }
+
+  @AuthorizedRoles(UserRoles.ADMIN)
+  @Query(() => ListUsers)
+  public async listUsers(
+    @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
+    filterInput: FilterInput
+  ): Promise<ListUsers> {
+    return this.service.listEntities(filterInput);
   }
 
   @AuthorizedRoles(UserRoles.ADMIN)
@@ -84,5 +94,23 @@ export class UserResolver {
     @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
   ): Promise<User> {
     return this.service.deleteEntity({ id });
+  }
+
+  @AuthorizedRoles(UserRoles.ADMIN)
+  @Mutation(() => User)
+  public async lockUser(
+    @Args(GraphQlFieldNames.ID_FIELD)
+    id: string
+  ): Promise<User> {
+    return this.service.lockUser(id);
+  }
+
+  @AuthorizedRoles(UserRoles.ADMIN)
+  @Mutation(() => User)
+  public async unlockUser(
+    @Args(GraphQlFieldNames.ID_FIELD)
+    id: string
+  ): Promise<User> {
+    return this.service.unlockUser(id);
   }
 }

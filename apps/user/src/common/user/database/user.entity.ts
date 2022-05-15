@@ -9,6 +9,7 @@ import { validateNullableUrl } from '@shared/validations/common/internet/url/url
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { validateTelephoneNumberNullable } from '@shared/validations/entities/user/telephone-number/telephone-number-nullable.validator';
 import { validateAddressNullable } from '@shared/validations/entities/location/address/address-nullable.validator';
+import { UserStatus } from '../graphql/enum/user-status.enum';
 
 @Schema({
   optimisticConcurrency: true,
@@ -58,6 +59,14 @@ export class User extends Document implements IBaseEntity, IUser {
 
   @Prop({ required: true, type: String, enum: Object.values(AuthType) })
   authType: AuthType;
+
+  @Prop({
+    required: true,
+    type: String,
+    enum: Object.values(UserStatus),
+    default: UserStatus.UNLOCK
+  })
+  status: UserStatus;
 
   version: number;
 

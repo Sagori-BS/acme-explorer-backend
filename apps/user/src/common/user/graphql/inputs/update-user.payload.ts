@@ -4,6 +4,7 @@ import { validateNameWithJoi } from '@shared/validations/common/strings/name/nam
 import { validateAddressWithJoi } from '@shared/validations/entities/location/address/address.validator';
 import { validateTelephoneNumberWithJoi } from '@shared/validations/entities/user/telephone-number/telephone-number.validator';
 import * as joi from 'joi';
+import { UserStatus } from '../enum/user-status.enum';
 
 @InputType()
 export class UpdateUserPayload {
@@ -21,6 +22,8 @@ export class UpdateUserPayload {
 
   @Field({ nullable: true })
   address?: string;
+
+  status?: UserStatus;
 
   public static validationSchema = joi.object<UpdateUserPayload>({
     name: validateNameWithJoi,

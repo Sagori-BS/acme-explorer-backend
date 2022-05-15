@@ -157,7 +157,7 @@ export class ApplicationResolver {
     jwtPayload: JwtPayload,
     @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
   ): Promise<Application> {
-    return this.service.updateSelfApplication(jwtPayload, {
+    return this.service.acceptOrRejectApplication(jwtPayload, {
       where: { id },
       data: { state: ApplicationState.DUE }
     });
@@ -171,7 +171,7 @@ export class ApplicationResolver {
     @Args(GraphQlFieldNames.INPUT_FIELD)
     rejectApplicationInput: RejectApplicationInput
   ): Promise<Application> {
-    return this.service.updateSelfApplication(jwtPayload, {
+    return this.service.acceptOrRejectApplication(jwtPayload, {
       where: { id: rejectApplicationInput.id },
       data: {
         state: ApplicationState.REJECTED,
