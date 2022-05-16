@@ -9,6 +9,7 @@ import { getPubSubModuleAsyncConfig } from '@shared/microservices/pub-sub/config
 import { PubSubClientModule } from '@shared/microservices/pub-sub/pub-sub.module';
 import { ApplicationModule } from './common/application/application.module';
 import { ConfigurationModule } from './common/configuration/configuration.module';
+import { DashboardModule } from './common/dashboard/dashboard.module';
 import { SponsorshipModule } from './common/sponsorship/sponsorship.module';
 import { TripModule } from './common/trip/trip.module';
 import { UserPreferencesModule } from './common/user-preferences/user-preferences.module';
@@ -40,6 +41,7 @@ import { validateEnv } from './config/env.validator';
     PubSubClientModule.registerAsync(getPubSubModuleAsyncConfig('trips')),
     TripModule,
     ApplicationModule,
+    DashboardModule,
     ConfigurationModule,
     UserModule,
     SponsorshipModule,

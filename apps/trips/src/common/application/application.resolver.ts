@@ -7,7 +7,11 @@ import { AuthorizedRoles } from '@shared/auth/decorators/authorized-roles.decora
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { GraphQlFieldNames } from '@shared/graphql/enums/graphql-label-types.enum';
 import { ApplicationService } from './application.service';
-import { EXPLORER, MANAGER } from '@shared/auth/arrays/authorized-roles.arrays';
+import {
+  ALL_ROLES,
+  EXPLORER,
+  MANAGER
+} from '@shared/auth/arrays/authorized-roles.arrays';
 import { CreateApplicationInput } from './graphql/inputs/create-application.input';
 import { UpdateApplicationInput } from './graphql/inputs/update-application.input';
 import { ListApplications } from './graphql/types/list-applications.type';
@@ -22,7 +26,7 @@ import { RejectApplicationInput } from './graphql/inputs/reject-application.inpu
 export class ApplicationResolver {
   constructor(private readonly service: ApplicationService) {}
 
-  @AuthorizedRoles(...MANAGER)
+  @AuthorizedRoles(...ALL_ROLES)
   @Query(() => Application)
   public async getApplicationById(
     @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption)
