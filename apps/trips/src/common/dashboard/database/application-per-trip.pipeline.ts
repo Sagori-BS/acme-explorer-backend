@@ -1,4 +1,4 @@
-export const applicationsPerTripPipeline = [
+export const applicationPerTripPipeline = [
   {
     $group: {
       _id: '$trip',

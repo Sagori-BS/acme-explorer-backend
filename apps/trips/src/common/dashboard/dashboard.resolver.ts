@@ -5,6 +5,7 @@ import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { DashboardService } from './dashboard.service';
 import { ApplicationPerTrip } from './graphql/types/application-per-trip.type';
 import { PricePerTrip } from './graphql/types/price-per-trip.type';
+import { RatioOfApplicationGroupByState } from './graphql/types/ratio-of-application-group-by-state.type';
 
 @Resolver(() => Dashboard)
 export class DashboardResolver {
@@ -25,5 +26,12 @@ export class DashboardResolver {
   @ResolveField(() => PricePerTrip)
   public async pricePerTrip() {
     return this.service.pricePerTrip();
+  }
+
+  @ResolveField(() => [RatioOfApplicationGroupByState])
+  public async ratioOfApplicationGroupByState(): Promise<
+    RatioOfApplicationGroupByState[]
+  > {
+    return this.service.ratioOfApplicationGroupByState();
   }
 }

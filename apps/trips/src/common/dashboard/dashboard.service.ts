@@ -8,6 +8,8 @@ import { Dashboard } from './graphql/types/dashboard.type';
 import { TripManagedPerManager } from './graphql/types/trips-managed-per-manager.type';
 import { PricePerTrip } from './graphql/types/price-per-trip.type';
 import { pricePerTripPipeline } from './database/price-per-trip.pipeline';
+import { RatioOfApplicationGroupByState } from './graphql/types/ratio-of-application-group-by-state.type';
+import { ratioOfApplicationGroupByStatePipeline } from './database/ratio-of-application-group-by-state.pipeline';
 
 @Injectable()
 export class DashboardService {
@@ -40,5 +42,15 @@ export class DashboardService {
     >(pricePerTripPipeline);
 
     return pricePerTrip[0];
+  }
+
+  async ratioOfApplicationGroupByState(): Promise<
+    RatioOfApplicationGroupByState[]
+  > {
+    const ratioOfApplicationGroupByState = await this.applicationRepository.aggregateEntities<
+      RatioOfApplicationGroupByState
+    >(ratioOfApplicationGroupByStatePipeline);
+
+    return ratioOfApplicationGroupByState;
   }
 }
