@@ -14,6 +14,8 @@ import { CreateApplicationInput } from './graphql/inputs/create-application.inpu
 import { TripState } from '../trip/graphql/enums/trip-states.enum';
 import { InvalidOperationException } from '@shared/errors/errors';
 import { Trip } from '../trip/database/trip.entity';
+import { EntityNotFoundError } from '@shared/errors/common/entity-not-found.error';
+import { InvalidOperationError } from '@shared/errors/common/invalid-operation.error';
 
 @Injectable()
 export class ApplicationService extends Service<IApplicationServiceType> {
@@ -67,25 +69,40 @@ export class ApplicationService extends Service<IApplicationServiceType> {
     jwtPayload: JwtPayload,
     createApplicationInput: CreateApplicationInput
   ): Promise<Application> {
-    const trip = await this.tripService.getOneEntity({
-      id: createApplicationInput.trip
-    });
+    try {
+      await this.applicationRepository.getOneEntity({
+        trip: createApplicationInput.trip,
+        explorer: jwtPayload.id
+      });
 
-    if (trip.state !== TripState.ACTIVE) {
-      throw new InvalidOperationException('Trip is not active');
+      throw new Error();
+    } catch (e) {
+      if (e instanceof EntityNotFoundError) {
+        const trip = await this.tripService.getOneEntity({
+          id: createApplicationInput.trip
+        });
+
+        if (trip.state !== TripState.ACTIVE) {
+          throw new InvalidOperationException('Trip is not active');
+        }
+
+        this.checkIfTripIsStarted(trip);
+
+        const createCustomApplicationInput: CreateCustomApplicationInput = {
+          ...createApplicationInput,
+          explorer: jwtPayload.id,
+          manager: trip.manager.id
+        };
+
+        return await this.applicationRepository.createEntity(
+          createCustomApplicationInput
+        );
+      } else {
+        throw new InvalidOperationError(
+          'You can not apply for this trip twice'
+        );
+      }
     }
-
-    this.checkIfTripIsStarted(trip);
-
-    const createCustomApplicationInput: CreateCustomApplicationInput = {
-      ...createApplicationInput,
-      explorer: jwtPayload.id,
-      manager: trip.manager.id
-    };
-
-    return this.applicationRepository.createEntity(
-      createCustomApplicationInput
-    );
   }
 
   public async updateSelfApplication(
@@ -128,7 +145,9 @@ export class ApplicationService extends Service<IApplicationServiceType> {
     const days = Math.ceil(diff / (1000 * 3600 * 24));
 
     if (diff < 0 || days < 7) {
-      throw new InvalidOperationException('You can not apply for this trip');
+      throw new InvalidOperationException(
+        'You can not apply for this trip cause it is too close to start'
+      );
     }
   }
 }
