@@ -15,7 +15,7 @@ import { TripState } from '../trip/graphql/enums/trip-states.enum';
 import { InvalidOperationException } from '@shared/errors/errors';
 import { Trip } from '../trip/database/trip.entity';
 import { EntityNotFoundError } from '@shared/errors/common/entity-not-found.error';
-import { InternalServerError } from '@shared/errors/common/internal-server.error';
+import { InvalidOperationError } from '@shared/errors/common/invalid-operation.error';
 
 @Injectable()
 export class ApplicationService extends Service<IApplicationServiceType> {
@@ -70,10 +70,12 @@ export class ApplicationService extends Service<IApplicationServiceType> {
     createApplicationInput: CreateApplicationInput
   ): Promise<Application> {
     try {
-      await this.tripService.getOneEntity({
-        id: createApplicationInput.trip,
+      await this.applicationRepository.getOneEntity({
+        trip: createApplicationInput.trip,
         explorer: jwtPayload.id
       });
+
+      throw new Error();
     } catch (e) {
       if (e instanceof EntityNotFoundError) {
         const trip = await this.tripService.getOneEntity({
@@ -92,16 +94,14 @@ export class ApplicationService extends Service<IApplicationServiceType> {
           manager: trip.manager.id
         };
 
-        return this.applicationRepository.createEntity(
+        return await this.applicationRepository.createEntity(
           createCustomApplicationInput
         );
       } else {
-        throw InternalServerError;
+        throw new InvalidOperationError(
+          'You can not apply for this trip twice'
+        );
       }
-    } finally {
-      throw new InvalidOperationException(
-        'You can not apply for this trip twice'
-      );
     }
   }
 
@@ -145,7 +145,9 @@ export class ApplicationService extends Service<IApplicationServiceType> {
     const days = Math.ceil(diff / (1000 * 3600 * 24));
 
     if (diff < 0 || days < 7) {
-      throw new InvalidOperationException('You can not apply for this trip');
+      throw new InvalidOperationException(
+        'You can not apply for this trip cause it is too close to start'
+      );
     }
   }
 }
