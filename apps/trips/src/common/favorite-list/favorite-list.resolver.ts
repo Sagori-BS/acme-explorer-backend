@@ -15,7 +15,7 @@ export class FavoriteListResolver {
   constructor(private readonly service: FavoriteListService) {}
 
   @Query(() => [FavoriteList])
-  public async selfFavoriteLists(
+  public async selfFavoritesList(
     @CurrentUser()
     jwtPayload: JwtPayload
   ): Promise<FavoriteList[]> {
