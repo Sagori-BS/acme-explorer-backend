@@ -32,6 +32,18 @@ export class FavoriteListResolver {
     });
   }
 
+  @Query(() => FavoriteList)
+  public async getSelfFavoriteListById(
+    @CurrentUser()
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
+  ): Promise<FavoriteList> {
+    return this.service.getOneEntity({
+      id,
+      user: jwtPayload.id
+    });
+  }
+
   @Mutation(() => FavoriteList)
   public async addFavoriteTrip(
     @CurrentUser()
