@@ -44,6 +44,10 @@ export class FavoriteList extends Document
 
 export const FavoriteListSchema = SchemaFactory.createForClass(FavoriteList);
 
+FavoriteListSchema.index({
+  name: 'text'
+});
+
 FavoriteListSchema.pre('save', function(next) {
   this.id = this._id;
 
