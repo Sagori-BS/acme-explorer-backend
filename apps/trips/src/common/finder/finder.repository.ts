@@ -13,4 +13,8 @@ export class FinderRepository extends Repository<IFinderRepositoryType> {
   ) {
     super(finderModel, Finder.name);
   }
+
+  public async deleteFinder(deleteEntityInput: Record<string, any>) {
+    return this.finderModel.deleteOne(deleteEntityInput);
+  }
 }
