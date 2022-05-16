@@ -16,7 +16,7 @@ export class Finder extends Document implements IBaseEntity, IFinder {
     required: true,
     validate: validateId
   })
-  explorer: string;
+  user: string;
 
   @Prop({ default: null })
   keyword: string;

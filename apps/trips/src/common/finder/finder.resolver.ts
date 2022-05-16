@@ -99,4 +99,14 @@ export class FinderResolver {
   ): Promise<Finder> {
     return this.service.updateSelfFinder(updateFinderInput, jwtPayload);
   }
+
+  @AuthorizedRoles(...EXPLORER)
+  @Mutation(() => Finder)
+  public async deleteSelfFinder(
+    @CurrentUser()
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.ID_FIELD, graphQlIdArgOption) id: string
+  ): Promise<Finder> {
+    return this.service.deleteSelfFinder(id, jwtPayload);
+  }
 }

@@ -2,20 +2,24 @@ import { Document, Query, Schema as MongooseSchema } from 'mongoose';
 import { IBaseEntity } from '@common/common/data/interfaces/base-entity.interface';
 import { validateId } from '@common/common/validations/common/identification/mongo-id/id.validator';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IUserPreferences } from '../interfaces/entities/user-preferences.interface';
 import { validateIds } from '@common/common/validations/common/identification/mongo-ids/ids.validator';
 import { Trip } from '@trips/common/trip/database/trip.entity';
+import { validateName } from '@shared/validations/common/strings/name/name.validator';
+import { IFavoriteList } from '../interfaces/entities/favorite-list.interface';
 
 @Schema({
   optimisticConcurrency: true,
   versionKey: 'version'
 })
-export class UserPreferences extends Document
-  implements IUserPreferences, IBaseEntity {
+export class FavoriteList extends Document
+  implements IFavoriteList, IBaseEntity {
   @Prop()
   id: string;
 
-  @Prop({ required: true, unique: true, validate: validateId })
+  @Prop({ required: true, validate: validateName })
+  name: string;
+
+  @Prop({ required: true, validate: validateId })
   user: string;
 
   @Prop({
@@ -38,23 +42,27 @@ export class UserPreferences extends Document
   createdAt: string;
 }
 
-export const UserPreferencesSchema = SchemaFactory.createForClass(
-  UserPreferences
-);
+export const FavoriteListSchema = SchemaFactory.createForClass(FavoriteList);
 
-UserPreferencesSchema.pre('save', function(next) {
+FavoriteListSchema.pre('save', function(next) {
   this.id = this._id;
 
   next();
 });
 
-UserPreferencesSchema.statics.buildProjection = (
+FavoriteListSchema.statics.buildProjection = (
   query: Query<any, any, any, any>
 ) => {
   query.populate([
     {
       path: 'trips',
-      model: Trip.name
+      model: Trip.name,
+      populate: [
+        {
+          path: 'manager',
+          model: 'User'
+        }
+      ]
     }
   ]);
 

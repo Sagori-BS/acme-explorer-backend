@@ -7,7 +7,7 @@ export class Finder implements IFinder {
   id: string;
 
   @Field()
-  explorer: string;
+  user: string;
 
   @Field({ nullable: true })
   keyword: string;

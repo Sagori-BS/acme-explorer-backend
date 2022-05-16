@@ -19,7 +19,7 @@ export class CreateFinderInput extends ValidationInput {
   @Field({ nullable: true })
   maxDate?: string;
 
-  explorer?: string;
+  user?: string;
 
   public static validationSchema = joi
     .object<CreateFinderInput>({

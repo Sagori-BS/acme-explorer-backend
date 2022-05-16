@@ -19,7 +19,7 @@ export class FinderService extends Service<IFinderServiceType> {
     createEntityInput: CreateFinderInput,
     jwtPayload: JwtPayload
   ): Promise<Finder> {
-    createEntityInput.explorer = jwtPayload.id;
+    createEntityInput.user = jwtPayload.id;
     return this.finderRepository.createEntity(createEntityInput);
   }
 
@@ -31,7 +31,7 @@ export class FinderService extends Service<IFinderServiceType> {
       const { id } = jwtPayload;
       filterInput.where = {
         ...filterInput.where,
-        explorer: id
+        user: id
       };
     }
 
@@ -45,10 +45,24 @@ export class FinderService extends Service<IFinderServiceType> {
     const { id } = updateFinderInput.where;
 
     await this.finderRepository.getOneEntity({
-      explorer: jwtPayload.id,
+      user: jwtPayload.id,
       id
     });
 
     return this.finderRepository.updateEntity(updateFinderInput);
+  }
+
+  public async deleteSelfFinder(
+    id: string,
+    jwtPayload: JwtPayload
+  ): Promise<Finder> {
+    const finder = this.finderRepository.getOneEntity({
+      user: jwtPayload.id,
+      id
+    });
+
+    await this.finderRepository.deleteFinder({ id });
+
+    return finder;
   }
 }

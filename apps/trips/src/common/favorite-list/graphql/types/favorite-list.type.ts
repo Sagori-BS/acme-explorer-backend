@@ -1,11 +1,14 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Trip } from '@trips/common/trip/graphql/types/trip.type';
-import { IUserPreferences } from '../../interfaces/entities/user-preferences.interface';
+import { IFavoriteList } from '../../interfaces/entities/favorite-list.interface';
 
 @ObjectType()
-export class UserPreferences implements IUserPreferences {
+export class FavoriteList implements IFavoriteList {
   @Field(() => ID)
   id: string;
+
+  @Field()
+  name: string;
 
   @Field(() => ID)
   user: string;

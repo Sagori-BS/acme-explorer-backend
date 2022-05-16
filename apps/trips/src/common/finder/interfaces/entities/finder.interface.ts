@@ -1,6 +1,6 @@
 export interface IFinder {
   id: string;
-  explorer: string;
+  user: string;
   keyword: string;
   minPrice: number;
   maxPrice: number;
