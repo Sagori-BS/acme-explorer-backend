@@ -65,6 +65,36 @@ export class TripService extends Service<ITripServiceType> {
     return this.updateEntity(updateEntityInput);
   }
 
+  public async deleteSelfTrip(
+    jwtPayload: JwtPayload,
+    id: string
+  ): Promise<Trip> {
+    const trip = await this.getOneEntity({
+      id,
+      manager: jwtPayload.id
+    });
+
+    if (trip.state !== TripState.INACTIVE) {
+      throw new InvalidOperationError(
+        'Cannot delete a trip that is not inactive'
+      );
+    }
+
+    this.checkIfTripIsStarted(trip);
+
+    const applications = await this.applicationService.getEntities({
+      where: { trip: trip.id, state: ApplicationState.PAID }
+    });
+
+    if (applications.length > 0) {
+      throw new InvalidOperationError(
+        'Cannot delete trip with applications paid'
+      );
+    }
+
+    return this.deleteEntity({ id });
+  }
+
   public async listEntities(
     filterInput: FilterInput,
     jwtPayload?: JwtPayload
@@ -99,7 +129,7 @@ export class TripService extends Service<ITripServiceType> {
 
     if (new Date(startDate) < new Date()) {
       throw new InvalidOperationError(
-        'You cannot cancel a trip that has already started'
+        'Cannot cancel a trip that has already started'
       );
     }
 
@@ -189,5 +219,19 @@ export class TripService extends Service<ITripServiceType> {
     };
 
     return this.tripRepository.updateEntity(updateEntityInput);
+  }
+
+  private checkIfTripIsStarted(trip: Trip) {
+    // Check if trip start date and today the difference is less than 7 days
+    const tripStartDate = new Date(trip.startDate);
+    const today = new Date();
+    const diff = tripStartDate.getTime() - today.getTime();
+    const days = Math.ceil(diff / (1000 * 3600 * 24));
+
+    if (diff < 0 || days < 7) {
+      throw new InvalidOperationError(
+        'Cannot delete a trip if it has already started or it is less than 7 days'
+      );
+    }
   }
 }

@@ -145,7 +145,7 @@ export class ApplicationService extends Service<IApplicationServiceType> {
     const days = Math.ceil(diff / (1000 * 3600 * 24));
 
     if (diff < 0 || days < 7) {
-      throw new InvalidOperationException(
+      throw new InvalidOperationError(
         'You can not apply for this trip cause it is too close to start'
       );
     }
