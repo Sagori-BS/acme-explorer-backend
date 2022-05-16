@@ -138,15 +138,13 @@ export class ApplicationService extends Service<IApplicationServiceType> {
   }
 
   private checkIfTripIsStarted(trip: Trip) {
-    // Check if trip start date and today the difference is less than 7 days
     const tripStartDate = new Date(trip.startDate);
     const today = new Date();
     const diff = tripStartDate.getTime() - today.getTime();
-    const days = Math.ceil(diff / (1000 * 3600 * 24));
 
-    if (diff < 0 || days < 7) {
+    if (diff < 0) {
       throw new InvalidOperationError(
-        'You can not apply for this trip cause it is too close to start'
+        'Cannot apply for this trip cause it has already started'
       );
     }
   }
