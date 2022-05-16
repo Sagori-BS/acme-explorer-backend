@@ -9,6 +9,8 @@ import { FavoriteListService } from './favorite-list.service';
 import { graphQlIdArgOption } from '@shared/graphql/types/graphql-delete-mutation-options.type';
 import { UpdateFavoriteListInput } from './graphql/inputs/update-favorite-list.input';
 import { CreateFavoriteListInput } from './graphql/inputs/create-favorite-list.input';
+import { FilterInput } from '@shared/graphql/inputs/graphql-filter.input';
+import { graphQlFindQueryOptions } from '@shared/graphql/types/graphql-filter-options';
 
 @Resolver(() => FavoriteList)
 export class FavoriteListResolver {
@@ -17,11 +19,15 @@ export class FavoriteListResolver {
   @Query(() => [FavoriteList])
   public async selfFavoritesList(
     @CurrentUser()
-    jwtPayload: JwtPayload
+    jwtPayload: JwtPayload,
+    @Args(GraphQlFieldNames.INPUT_FIELD, graphQlFindQueryOptions)
+    filterInput: FilterInput
   ): Promise<FavoriteList[]> {
     return this.service.getEntities({
+      ...filterInput,
       where: {
-        user: jwtPayload.id
+        user: jwtPayload.id,
+        ...filterInput.where
       }
     });
   }
