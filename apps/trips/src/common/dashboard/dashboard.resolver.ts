@@ -3,7 +3,8 @@ import { Dashboard } from './graphql/types/dashboard.type';
 import { AuthorizedRoles } from '@shared/auth/decorators/authorized-roles.decorator';
 import { UserRoles } from '@shared/auth/enums/user-roles.enum';
 import { DashboardService } from './dashboard.service';
-import { ApplicationsPerTrip } from './graphql/types/applications-per-trip.type';
+import { ApplicationPerTrip } from './graphql/types/application-per-trip.type';
+import { PricePerTrip } from './graphql/types/price-per-trip.type';
 
 @Resolver(() => Dashboard)
 export class DashboardResolver {
@@ -16,8 +17,13 @@ export class DashboardResolver {
   }
 
   // Field resolvers
-  @ResolveField(() => ApplicationsPerTrip)
-  public async applicationsPerTrip() {
-    return this.service.applicationsPerTrip();
+  @ResolveField(() => ApplicationPerTrip)
+  public async applicationPerTrip() {
+    return this.service.applicationPerTrip();
+  }
+
+  @ResolveField(() => PricePerTrip)
+  public async pricePerTrip() {
+    return this.service.pricePerTrip();
   }
 }
