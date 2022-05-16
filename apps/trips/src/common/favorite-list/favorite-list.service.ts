@@ -49,7 +49,7 @@ export class FavoriteListService extends Service<IFavoriteListServiceType> {
       id: addFavoriteTrip.id
     });
 
-    const trips = new Set(favoriteTrip.trips.map(trip => trip.toString()));
+    const trips = new Set(favoriteTrip.trips.map(trip => trip.id.toString()));
     trips.add(addFavoriteTrip.trip);
 
     return this.updateEntity({
@@ -68,7 +68,7 @@ export class FavoriteListService extends Service<IFavoriteListServiceType> {
     });
 
     const trips = favoriteTrip.trips.filter(
-      trip => trip.toString() !== removeFavoriteTripInput.trip
+      trip => trip.id.toString() !== removeFavoriteTripInput.trip
     );
 
     return this.updateEntity({
