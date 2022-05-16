@@ -13,6 +13,8 @@ import { ratioOfApplicationGroupByStatePipeline } from './database/ratio-of-appl
 import { FinderRepository } from '../finder/finder.repository';
 import { top10KeywordsPipeline } from './database/top-10-keywords.pipeline';
 import { TopKeywords } from './graphql/types/top-keywords';
+import { averageRangePricePipeline } from './database/average-range-price.pipeline';
+import { AverageRangePrice } from './graphql/types/average-range-price';
 
 @Injectable()
 export class DashboardService {
@@ -64,5 +66,13 @@ export class DashboardService {
     );
 
     return keywords;
+  }
+
+  async averageRangePrice(): Promise<AverageRangePrice> {
+    const averageRangePrice = await this.finderRepository.aggregateEntities(
+      averageRangePricePipeline
+    );
+
+    return averageRangePrice[0];
   }
 }

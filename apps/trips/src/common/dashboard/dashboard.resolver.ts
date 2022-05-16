@@ -7,6 +7,7 @@ import { ApplicationPerTrip } from './graphql/types/application-per-trip.type';
 import { PricePerTrip } from './graphql/types/price-per-trip.type';
 import { RatioOfApplicationGroupByState } from './graphql/types/ratio-of-application-group-by-state.type';
 import { TopKeywords } from './graphql/types/top-keywords';
+import { AverageRangePrice } from './graphql/types/average-range-price';
 
 @Resolver(() => Dashboard)
 export class DashboardResolver {
@@ -39,5 +40,10 @@ export class DashboardResolver {
   @ResolveField(() => [TopKeywords])
   public async topKeywords(): Promise<TopKeywords[]> {
     return this.service.keywords();
+  }
+
+  @ResolveField(() => AverageRangePrice)
+  public async averageRangePrice(): Promise<AverageRangePrice> {
+    return this.service.averageRangePrice();
   }
 }
