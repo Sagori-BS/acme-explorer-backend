@@ -16,6 +16,7 @@ import { InvalidOperationException } from '@shared/errors/errors';
 import { Trip } from '../trip/database/trip.entity';
 import { EntityNotFoundError } from '@shared/errors/common/entity-not-found.error';
 import { InvalidOperationError } from '@shared/errors/common/invalid-operation.error';
+import { ApplicationState } from './graphql/enums/application-states.enum';
 
 @Injectable()
 export class ApplicationService extends Service<IApplicationServiceType> {
@@ -72,6 +73,9 @@ export class ApplicationService extends Service<IApplicationServiceType> {
     try {
       await this.applicationRepository.getOneEntity({
         trip: createApplicationInput.trip,
+        state: {
+          $nin: [ApplicationState.CANCELLED]
+        },
         explorer: jwtPayload.id
       });
 
