@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { IBaseEntity } from '@shared/data/interfaces/base-entity.interface';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { validateId } from '@shared/validations/common/identification/mongo-id/id.validator';
@@ -14,7 +14,9 @@ export class Finder extends Document implements IBaseEntity, IFinder {
 
   @Prop({
     required: true,
-    validate: validateId
+    type: MongooseSchema.Types.ObjectId,
+    validate: validateId,
+    ref: 'User'
   })
   user: string;
 
