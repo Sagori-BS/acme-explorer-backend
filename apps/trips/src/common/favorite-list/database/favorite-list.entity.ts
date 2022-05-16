@@ -56,7 +56,13 @@ FavoriteListSchema.statics.buildProjection = (
   query.populate([
     {
       path: 'trips',
-      model: Trip.name
+      model: Trip.name,
+      populate: [
+        {
+          path: 'manager',
+          model: 'User'
+        }
+      ]
     }
   ]);
 
