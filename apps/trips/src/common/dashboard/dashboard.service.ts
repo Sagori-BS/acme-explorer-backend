@@ -10,12 +10,16 @@ import { PricePerTrip } from './graphql/types/price-per-trip.type';
 import { pricePerTripPipeline } from './database/price-per-trip.pipeline';
 import { RatioOfApplicationGroupByState } from './graphql/types/ratio-of-application-group-by-state.type';
 import { ratioOfApplicationGroupByStatePipeline } from './database/ratio-of-application-group-by-state.pipeline';
+import { FinderRepository } from '../finder/finder.repository';
+import { top10KeywordsPipeline } from './database/top-10-keywords.pipeline';
+import { TopKeywords } from './graphql/types/top-keywords';
 
 @Injectable()
 export class DashboardService {
   constructor(
     private readonly tripRepository: TripRepository,
-    private readonly applicationRepository: ApplicationRepository
+    private readonly applicationRepository: ApplicationRepository,
+    private readonly finderRepository: FinderRepository
   ) {}
 
   async getAnalitycs(): Promise<Dashboard> {
@@ -52,5 +56,13 @@ export class DashboardService {
     >(ratioOfApplicationGroupByStatePipeline);
 
     return ratioOfApplicationGroupByState;
+  }
+
+  async keywords(): Promise<TopKeywords[]> {
+    const keywords = await this.finderRepository.aggregateEntities(
+      top10KeywordsPipeline
+    );
+
+    return keywords;
   }
 }

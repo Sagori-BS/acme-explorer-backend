@@ -6,6 +6,7 @@ import { DashboardService } from './dashboard.service';
 import { ApplicationPerTrip } from './graphql/types/application-per-trip.type';
 import { PricePerTrip } from './graphql/types/price-per-trip.type';
 import { RatioOfApplicationGroupByState } from './graphql/types/ratio-of-application-group-by-state.type';
+import { TopKeywords } from './graphql/types/top-keywords';
 
 @Resolver(() => Dashboard)
 export class DashboardResolver {
@@ -33,5 +34,10 @@ export class DashboardResolver {
     RatioOfApplicationGroupByState[]
   > {
     return this.service.ratioOfApplicationGroupByState();
+  }
+
+  @ResolveField(() => [TopKeywords])
+  public async topKeywords(): Promise<TopKeywords[]> {
+    return this.service.keywords();
   }
 }
