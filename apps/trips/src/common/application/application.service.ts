@@ -14,6 +14,8 @@ import { CreateApplicationInput } from './graphql/inputs/create-application.inpu
 import { TripState } from '../trip/graphql/enums/trip-states.enum';
 import { InvalidOperationException } from '@shared/errors/errors';
 import { Trip } from '../trip/database/trip.entity';
+import { EntityNotFoundError } from '@shared/errors/common/entity-not-found.error';
+import { InternalServerError } from '@shared/errors/common/internal-server.error';
 
 @Injectable()
 export class ApplicationService extends Service<IApplicationServiceType> {
@@ -72,29 +74,33 @@ export class ApplicationService extends Service<IApplicationServiceType> {
         id: createApplicationInput.trip,
         explorer: jwtPayload.id
       });
+    } catch (e) {
+      if (e instanceof EntityNotFoundError) {
+        const trip = await this.tripService.getOneEntity({
+          id: createApplicationInput.trip
+        });
 
+        if (trip.state !== TripState.ACTIVE) {
+          throw new InvalidOperationException('Trip is not active');
+        }
+
+        this.checkIfTripIsStarted(trip);
+
+        const createCustomApplicationInput: CreateCustomApplicationInput = {
+          ...createApplicationInput,
+          explorer: jwtPayload.id,
+          manager: trip.manager.id
+        };
+
+        return this.applicationRepository.createEntity(
+          createCustomApplicationInput
+        );
+      } else {
+        throw InternalServerError;
+      }
+    } finally {
       throw new InvalidOperationException(
         'You can not apply for this trip twice'
-      );
-    } catch (e) {
-      const trip = await this.tripService.getOneEntity({
-        id: createApplicationInput.trip
-      });
-
-      if (trip.state !== TripState.ACTIVE) {
-        throw new InvalidOperationException('Trip is not active');
-      }
-
-      this.checkIfTripIsStarted(trip);
-
-      const createCustomApplicationInput: CreateCustomApplicationInput = {
-        ...createApplicationInput,
-        explorer: jwtPayload.id,
-        manager: trip.manager.id
-      };
-
-      return this.applicationRepository.createEntity(
-        createCustomApplicationInput
       );
     }
   }
