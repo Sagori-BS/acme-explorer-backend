@@ -67,25 +67,36 @@ export class ApplicationService extends Service<IApplicationServiceType> {
     jwtPayload: JwtPayload,
     createApplicationInput: CreateApplicationInput
   ): Promise<Application> {
-    const trip = await this.tripService.getOneEntity({
-      id: createApplicationInput.trip
-    });
+    try {
+      await this.tripService.getOneEntity({
+        id: createApplicationInput.trip,
+        explorer: jwtPayload.id
+      });
 
-    if (trip.state !== TripState.ACTIVE) {
-      throw new InvalidOperationException('Trip is not active');
+      throw new InvalidOperationException(
+        'You can not apply for this trip twice'
+      );
+    } catch (e) {
+      const trip = await this.tripService.getOneEntity({
+        id: createApplicationInput.trip
+      });
+
+      if (trip.state !== TripState.ACTIVE) {
+        throw new InvalidOperationException('Trip is not active');
+      }
+
+      this.checkIfTripIsStarted(trip);
+
+      const createCustomApplicationInput: CreateCustomApplicationInput = {
+        ...createApplicationInput,
+        explorer: jwtPayload.id,
+        manager: trip.manager.id
+      };
+
+      return this.applicationRepository.createEntity(
+        createCustomApplicationInput
+      );
     }
-
-    this.checkIfTripIsStarted(trip);
-
-    const createCustomApplicationInput: CreateCustomApplicationInput = {
-      ...createApplicationInput,
-      explorer: jwtPayload.id,
-      manager: trip.manager.id
-    };
-
-    return this.applicationRepository.createEntity(
-      createCustomApplicationInput
-    );
   }
 
   public async updateSelfApplication(
