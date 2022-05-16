@@ -13,7 +13,7 @@ import { DashboardModule } from './common/dashboard/dashboard.module';
 import { FinderModule } from './common/finder/finder.module';
 import { SponsorshipModule } from './common/sponsorship/sponsorship.module';
 import { TripModule } from './common/trip/trip.module';
-import { UserPreferencesModule } from './common/user-preferences/user-preferences.module';
+import { FavoriteListModule } from './common/user-preferences/favorite-list.module';
 import { UserModule } from './common/user/user.module';
 import { EnvKey } from './config/env-key.enum';
 import { validateEnv } from './config/env.validator';
@@ -46,7 +46,7 @@ import { validateEnv } from './config/env.validator';
     ConfigurationModule,
     UserModule,
     SponsorshipModule,
-    UserPreferencesModule,
+    FavoriteListModule,
     FinderModule
   ]
 })
