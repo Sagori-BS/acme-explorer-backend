@@ -80,8 +80,6 @@ export class TripService extends Service<ITripServiceType> {
       );
     }
 
-    this.checkIfTripIsStarted(trip);
-
     const applications = await this.applicationService.getEntities({
       where: { trip: trip.id, state: ApplicationState.PAID }
     });
