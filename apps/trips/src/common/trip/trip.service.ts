@@ -187,7 +187,7 @@ export class TripService extends Service<ITripServiceType> {
       }
     };
 
-    return this.tripRepository.updateEntity(updateEntityInput);
+    return this.updateEntity(updateEntityInput);
   }
 
   public async addStageFromATrip(
@@ -212,7 +212,7 @@ export class TripService extends Service<ITripServiceType> {
       }
     };
 
-    return this.tripRepository.updateEntity(updateEntityInput);
+    return this.updateEntity(updateEntityInput);
   }
 
   private checkIfTripIsStarted(trip: Trip) {
