@@ -170,7 +170,7 @@ export class TripService extends Service<ITripServiceType> {
     jwtPayload: JwtPayload
   ): Promise<Trip> {
     const trip = await this.tripRepository.getOneEntity({
-      trip: deleteStageInput.trip,
+      id: deleteStageInput.trip,
       manager: jwtPayload.id
     });
 
@@ -195,7 +195,7 @@ export class TripService extends Service<ITripServiceType> {
     jwtPayload: JwtPayload
   ): Promise<Trip> {
     const trip = await this.tripRepository.getOneEntity({
-      trip: addStageInput.trip,
+      id: addStageInput.trip,
       manager: jwtPayload.id
     });
 
