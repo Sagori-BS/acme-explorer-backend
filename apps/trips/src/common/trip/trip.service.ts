@@ -199,15 +199,11 @@ export class TripService extends Service<ITripServiceType> {
       manager: jwtPayload.id
     });
 
-    const { state, stages } = trip;
+    const { stages } = trip;
 
     const createStageInput: CreateStageInput = {
       ...addStageInput
     };
-
-    if (state === TripState.INACTIVE) {
-      throw new InvalidOperationError('This Trip is already inactived');
-    }
 
     const updateEntityInput: UpdateTripInput = {
       where: { id: trip.id },
